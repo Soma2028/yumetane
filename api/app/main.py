@@ -37,11 +37,21 @@ def get_questions(seed: str | None = None) -> QuestionsResponse:
     return QuestionsResponse(seed=seed, questions=[QuestionOut(**q) for q in questions])
 
 
+RECOMMEND_POOL_SIZE = 20
+"""上位5件だけでなく多めに返す。結果画面で「知ってる」と答えた職業を除いた後、
+追加の通信をせずに次点の職業を出せるようにするため（docs/design.mdの
+「静的スコアは初期の並べ替えのみ、実際の出し分けは対話で決める」設計）。"""
+
+
 @app.post("/answers", response_model=RecommendResponse)
 def post_answers(body: AnswersRequest) -> RecommendResponse:
-    """10問の回答を受け取り、推薦職業と理由を返す。"""
+    """10問の回答を受け取り、推薦職業と理由を返す。
+
+    jobsは類似度上位から最大 RECOMMEND_POOL_SIZE 件を返す。クライアント側は
+    先頭5件を表示し、「知ってる」と答えたものを除いて後続の職業で埋める。
+    """
     try:
-        riasec_z, jobs = recommend(body.answers, n=5)
+        riasec_z, jobs = recommend(body.answers, n=RECOMMEND_POOL_SIZE)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
 

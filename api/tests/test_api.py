@@ -33,11 +33,12 @@ def test_get_questions_same_seed_reproducible():
     assert r1.json()["questions"] == r2.json()["questions"]
 
 
-def test_post_answers_returns_five_jobs_and_explanation():
+def test_post_answers_returns_job_pool_and_explanation():
     r = client.post("/answers", json={"seed": "abc", "answers": SESSION1_ANSWERS})
     assert r.status_code == 200
     body = r.json()
-    assert len(body["jobs"]) == 5
+    # 結果画面で「知ってる」除外後に埋め合わせできるよう、上位5件より多く返す
+    assert len(body["jobs"]) > 5
     assert body["jobs"][0]["job_name"] == "計器組立"
     assert body["explanation"]
     assert body["riasec"]["現実的"] == pytest.approx(1.89, abs=0.02)
