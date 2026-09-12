@@ -1,22 +1,17 @@
 """APIのリクエスト/レスポンスの型。"""
 
+from typing import Literal
+
 from pydantic import BaseModel
 
 
-class QuestionOut(BaseModel):
-    id: str
-    choice_1: str
-    choice_2: str
+class SwipeEntry(BaseModel):
+    job_id: int
+    direction: Literal["left", "right"]
 
 
-class QuestionsResponse(BaseModel):
-    seed: str
-    questions: list[QuestionOut]
-
-
-class AnswersRequest(BaseModel):
-    seed: str
-    answers: dict[str, str]
+class HistoryRequest(BaseModel):
+    history: list[SwipeEntry]
 
 
 class JobOut(BaseModel):
@@ -26,6 +21,11 @@ class JobOut(BaseModel):
     riasec_source: str
     awareness_label: str
     similarity: float | None = None
+
+
+class NextCardResponse(BaseModel):
+    card: JobOut | None
+    done: bool
 
 
 class RecommendResponse(BaseModel):

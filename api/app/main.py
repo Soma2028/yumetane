@@ -1,19 +1,22 @@
 """夢のタネ API。
 
-10問の質問を出し、回答を採点してRIASEC空間に配置し、類似度の高い職業を推薦する。
-推薦ロジックの実体は scoring.py / explain.py（notebooks/07・08で検証済み）。
+職業カードを1枚ずつ提示し、スワイプ（気になる/ちがう）の反応から
+ユーザーの興味の位置を推定して、次のカードと推薦結果を返す。
+
+10問クイズ形式（旧 GET /questions, POST /answers）は設計・検証の上で、
+体験として目的に合わないと判断し廃止した。経緯はdocs/design.md参照。
+推薦ロジックの実体は scoring.py / explain.py。
 """
 
 import os
-import uuid
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .data import load_jobs
 from .explain import explain
-from .schemas import AnswersRequest, JobOut, QuestionOut, QuestionsResponse, RecommendResponse
-from .scoring import recommend, render_questions
+from .schemas import HistoryRequest, JobOut, NextCardResponse, RecommendResponse
+from .scoring import next_card, result_from_history
 
 app = FastAPI(title="夢のタネ API")
 
@@ -31,36 +34,32 @@ app.add_middleware(
 )
 
 
-@app.get("/questions", response_model=QuestionsResponse)
-def get_questions(seed: str | None = None) -> QuestionsResponse:
-    """10問を表示順ランダム化した状態で返す。
+@app.get("/health")
+def get_health() -> dict:
+    """Renderの無料枠がスリープしていても起こせるよう、フロントの
+    ウォームアップ用リクエスト先として使う（web/src/api.tsのwarmupApi）。"""
+    return {"status": "ok"}
 
-    seedを省略すると新しく発行する。同じseedを渡せば同じ並びが再現される
-    （クライアントは発行されたseedを保持し、POST /answers に渡す）。
+
+@app.post("/cards/next", response_model=NextCardResponse)
+def post_next_card(body: HistoryRequest) -> NextCardResponse:
+    """次に見せるカードを1枚返す。
+
+    候補が尽きた場合、またはMAX_CARDS枚（scoring.MAX_CARDS）に達した場合は
+    done=Trueとcard=Noneを返す。クライアントは結果画面に誘導する。
     """
-    seed = seed or uuid.uuid4().hex
-    questions = render_questions(seed)
-    return QuestionsResponse(seed=seed, questions=[QuestionOut(**q) for q in questions])
+    history = [h.model_dump() for h in body.history]
+    card = next_card(history)
+    if card is None:
+        return NextCardResponse(card=None, done=True)
+    return NextCardResponse(card=JobOut(**card), done=False)
 
 
-RECOMMEND_POOL_SIZE = 20
-"""上位5件だけでなく多めに返す。結果画面で「知ってる」と答えた職業を除いた後、
-追加の通信をせずに次点の職業を出せるようにするため（docs/design.mdの
-「静的スコアは初期の並べ替えのみ、実際の出し分けは対話で決める」設計）。"""
-
-
-@app.post("/answers", response_model=RecommendResponse)
-def post_answers(body: AnswersRequest) -> RecommendResponse:
-    """10問の回答を受け取り、推薦職業と理由を返す。
-
-    jobsは類似度上位から最大 RECOMMEND_POOL_SIZE 件を返す。クライアント側は
-    先頭5件を表示し、「知ってる」と答えたものを除いて後続の職業で埋める。
-    """
-    try:
-        riasec_z, jobs = recommend(body.answers, n=RECOMMEND_POOL_SIZE)
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e)) from e
-
+@app.post("/result", response_model=RecommendResponse)
+def post_result(body: HistoryRequest) -> RecommendResponse:
+    """スワイプ履歴から推薦職業と理由を返す。中間結果・最終結果で共用する。"""
+    history = [h.model_dump() for h in body.history]
+    riasec_z, jobs = result_from_history(history)
     return RecommendResponse(
         riasec=riasec_z,
         explanation=explain(riasec_z),

@@ -1,14 +1,3 @@
-export interface Question {
-  id: string
-  choice_1: string
-  choice_2: string
-}
-
-export interface QuestionsResponse {
-  seed: string
-  questions: Question[]
-}
-
 export interface Job {
   job_id: number
   job_name: string
@@ -16,6 +5,18 @@ export interface Job {
   riasec_source: "observed" | "predicted"
   awareness_label: string
   similarity?: number
+}
+
+export type SwipeDirection = "left" | "right"
+
+export interface SwipeEntry {
+  job_id: number
+  direction: SwipeDirection
+}
+
+export interface NextCardResponse {
+  card: Job | null
+  done: boolean
 }
 
 export interface RecommendResponse {

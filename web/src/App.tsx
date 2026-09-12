@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react"
-import { fetchQuestions, submitAnswers, warmupApi } from "./api"
+import { fetchNextCard, fetchResult, warmupApi } from "./api"
 import { JobDetailScreen } from "./components/JobDetailScreen"
-import { QuestionScreen } from "./components/QuestionScreen"
+import { MidResultScreen } from "./components/MidResultScreen"
 import { ResultScreen } from "./components/ResultScreen"
+import { SwipeScreen } from "./components/SwipeScreen"
 import { TopScreen } from "./components/TopScreen"
-import type { Job, Question, RecommendResponse } from "./types"
+import type { Job, RecommendResponse, SwipeDirection, SwipeEntry } from "./types"
 
-type Screen = "top" | "question" | "result" | "detail"
+type Screen = "top" | "swipe" | "midResult" | "result" | "detail"
+
+const MID_RESULT_AT = 10
 
 function App() {
   const [screen, setScreen] = useState<Screen>("top")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const [seed, setSeed] = useState("")
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [history, setHistory] = useState<SwipeEntry[]>([])
+  const [currentCard, setCurrentCard] = useState<Job | null>(null)
+  const [likeButtonSide, setLikeButtonSide] = useState<"left" | "right">("right")
+  const [midShown, setMidShown] = useState(false)
 
-  const [result, setResult] = useState<RecommendResponse | null>(null)
+  const [resultData, setResultData] = useState<RecommendResponse | null>(null)
   const [knownJobIds, setKnownJobIds] = useState<number[]>([])
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
 
@@ -27,46 +30,87 @@ function App() {
     warmupApi()
   }, [])
 
+  async function goToResult(finalHistory: SwipeEntry[]) {
+    const data = await fetchResult(finalHistory)
+    setResultData(data)
+    setKnownJobIds([])
+    setScreen("result")
+  }
+
   async function handleStart() {
     setLoading(true)
     setError(null)
     try {
-      const data = await fetchQuestions()
-      setSeed(data.seed)
-      setQuestions(data.questions)
-      setCurrentIndex(0)
-      setAnswers({})
-      setScreen("question")
+      setHistory([])
+      setMidShown(false)
+      setLikeButtonSide(Math.random() < 0.5 ? "left" : "right")
+      const { card, done } = await fetchNextCard([])
+      if (done || !card) {
+        setError("紹介できる職業がありませんでした。")
+        return
+      }
+      setCurrentCard(card)
+      setScreen("swipe")
     } catch {
-      setError("質問を取得できませんでした。しばらくしてからもう一度お試しください。")
+      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
     } finally {
       setLoading(false)
     }
   }
 
-  async function handleAnswer(choiceText: string) {
-    const question = questions[currentIndex]
-    const nextAnswers = { ...answers, [question.id]: choiceText }
-    setAnswers(nextAnswers)
-
-    if (currentIndex + 1 < questions.length) {
-      setCurrentIndex(currentIndex + 1)
-      return
-    }
+  async function handleReact(direction: SwipeDirection) {
+    if (!currentCard) return
+    const newHistory = [...history, { job_id: currentCard.job_id, direction }]
+    setHistory(newHistory)
+    setCurrentCard(null)
 
     setLoading(true)
     setError(null)
     try {
-      const data = await submitAnswers(seed, nextAnswers)
-      setResult(data)
-      setKnownJobIds([])
-      setScreen("result")
+      if (newHistory.length === MID_RESULT_AT && !midShown) {
+        setMidShown(true)
+        const data = await fetchResult(newHistory)
+        setResultData(data)
+        setScreen("midResult")
+        return
+      }
+
+      const { card, done } = await fetchNextCard(newHistory)
+      if (done || !card) {
+        await goToResult(newHistory)
+        return
+      }
+      setCurrentCard(card)
     } catch {
-      setError("結果を取得できませんでした。しばらくしてからもう一度お試しください。")
+      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
       setScreen("top")
     } finally {
       setLoading(false)
     }
+  }
+
+  async function handleContinueFromMid() {
+    setLoading(true)
+    setError(null)
+    try {
+      const { card, done } = await fetchNextCard(history)
+      if (done || !card) {
+        await goToResult(history)
+        return
+      }
+      setCurrentCard(card)
+      setScreen("swipe")
+    } catch {
+      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function handleSeeResultFromMid() {
+    if (!resultData) return
+    setKnownJobIds([])
+    setScreen("result")
   }
 
   function handleMarkKnown(jobId: number) {
@@ -82,22 +126,33 @@ function App() {
     return <TopScreen loading={loading} error={error} onStart={handleStart} />
   }
 
-  if (screen === "question") {
+  if (screen === "swipe") {
     return (
-      <QuestionScreen
-        question={questions[currentIndex]}
-        currentIndex={currentIndex}
-        total={questions.length}
-        onAnswer={handleAnswer}
+      <SwipeScreen
+        card={currentCard}
+        cardNumber={history.length + 1}
+        likeButtonSide={likeButtonSide}
+        loading={loading}
+        onReact={handleReact}
       />
     )
   }
 
-  if (screen === "result" && result) {
+  if (screen === "midResult" && resultData) {
+    return (
+      <MidResultScreen
+        explanation={resultData.explanation}
+        onContinue={handleContinueFromMid}
+        onSeeResult={handleSeeResultFromMid}
+      />
+    )
+  }
+
+  if (screen === "result" && resultData) {
     return (
       <ResultScreen
-        explanation={result.explanation}
-        jobs={result.jobs}
+        explanation={resultData.explanation}
+        jobs={resultData.jobs}
         knownJobIds={knownJobIds}
         onMarkKnown={handleMarkKnown}
         onSelectJob={handleSelectJob}

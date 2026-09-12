@@ -1,4 +1,4 @@
-import type { Job, QuestionsResponse, RecommendResponse } from "./types"
+import type { Job, NextCardResponse, RecommendResponse, SwipeEntry } from "./types"
 
 // 本番はVercelの環境変数 VITE_API_BASE_URL（Renderのapi URL）から読む。
 // 未設定時はローカル開発用に127.0.0.1へフォールバックする。
@@ -6,22 +6,23 @@ import type { Job, QuestionsResponse, RecommendResponse } from "./types"
 // ポートを掴んでいると誤接続するため、127.0.0.1を明示する。
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"
 
-export async function fetchQuestions(): Promise<QuestionsResponse> {
-  const res = await fetch(`${API_BASE}/questions`)
-  if (!res.ok) throw new Error("質問の取得に失敗しました")
+export async function fetchNextCard(history: SwipeEntry[]): Promise<NextCardResponse> {
+  const res = await fetch(`${API_BASE}/cards/next`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ history }),
+  })
+  if (!res.ok) throw new Error("次のカードを取得できませんでした")
   return res.json()
 }
 
-export async function submitAnswers(
-  seed: string,
-  answers: Record<string, string>,
-): Promise<RecommendResponse> {
-  const res = await fetch(`${API_BASE}/answers`, {
+export async function fetchResult(history: SwipeEntry[]): Promise<RecommendResponse> {
+  const res = await fetch(`${API_BASE}/result`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ seed, answers }),
+    body: JSON.stringify({ history }),
   })
-  if (!res.ok) throw new Error("推薦結果の取得に失敗しました")
+  if (!res.ok) throw new Error("結果を取得できませんでした")
   return res.json()
 }
 
@@ -37,7 +38,7 @@ export async function fetchJob(jobId: number): Promise<Job> {
  * 影響させない（catchで握りつぶす）。
  */
 export function warmupApi(): void {
-  fetch(`${API_BASE}/questions`).catch(() => {
-    // ウォームアップ失敗は無視する。実際の質問取得は別途行われる。
+  fetch(`${API_BASE}/health`).catch(() => {
+    // ウォームアップ失敗は無視する。
   })
 }

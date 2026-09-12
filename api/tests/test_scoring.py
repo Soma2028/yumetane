@@ -1,84 +1,108 @@
+import numpy as np
 import pytest
 
-from app.explain import explain
+from app.data import load_jobs
 from app.scoring import (
-    display_order,
-    recommend,
-    render_questions,
-    riasec_z_from_answers,
-    score_responses,
+    LEFT_SWIPE_WEIGHT,
+    MAX_CARDS,
+    Z_COLS,
+    estimate_position,
+    next_card,
+    result_from_history,
 )
 
-SESSION1_ANSWERS = {
-    "Q1": "テストのように答えが一つに決まっている問題の方が面白い",
-    "Q2": "教わったとおりにやる方が好き",
-    "Q3": "レシピどおりに正確に作る方が好き",
-    "Q4": "こわれたものを自分で直してみたい",
-    "Q5": "新しい道具や機械のしくみを調べる方が得意な気がする",
-    "Q6": "作り方の動画を見て何かを作る方が楽しそう",
-    "Q7": "最初に完成までの手順を決めてから進める方が自分に近い",
-    "Q8": "ゲームはルールどおりに進める方が好き",
-    "Q9": "しくみや理由を突き止める授業の方が好き",
-    "Q10": "作品を作って見せる方にする",
-}
+JOBS = load_jobs()
+JOB_A = int(JOBS.iloc[0].job_id)  # 洋菓子製造、パティシエ
+JOB_B = int(JOBS.iloc[1].job_id)  # ハム・ソーセージ・ベーコン製造
+JOB_C = int(JOBS.iloc[2].job_id)  # ワイン製造
 
 
-def test_score_responses_matches_notebook_result():
-    raw = score_responses(SESSION1_ANSWERS)
-    assert raw == {"PC1": -3, "PC2": 3, "PC3": 2, "PC4": 0}
+def _vector(job_id: int) -> np.ndarray:
+    row = JOBS[JOBS["job_id"] == job_id].iloc[0]
+    return row[Z_COLS].to_numpy(dtype=float)
 
 
-def test_riasec_z_matches_notebook_result():
-    z = riasec_z_from_answers(SESSION1_ANSWERS)
-    expected = {
-        "現実的": 1.89, "研究的": -0.27, "芸術的": -0.77,
-        "社会的": -1.43, "企業的": -1.56, "慣習的": 1.26,
-    }
+def test_estimate_position_empty_history_is_origin():
+    pos = estimate_position([])
+    assert np.allclose(pos, np.zeros(len(Z_COLS)))
+
+
+def test_estimate_position_single_right_swipe_equals_job_vector():
+    pos = estimate_position([{"job_id": JOB_A, "direction": "right"}])
+    assert np.allclose(pos, _vector(JOB_A))
+
+
+def test_estimate_position_right_swipe_centroid():
+    pos = estimate_position([
+        {"job_id": JOB_A, "direction": "right"},
+        {"job_id": JOB_B, "direction": "right"},
+    ])
+    expected = (_vector(JOB_A) + _vector(JOB_B)) / 2
+    assert np.allclose(pos, expected)
+
+
+def test_estimate_position_left_swipe_pulls_away_with_reduced_weight():
+    pos = estimate_position([
+        {"job_id": JOB_A, "direction": "right"},
+        {"job_id": JOB_B, "direction": "left"},
+    ])
+    expected = (_vector(JOB_A) - LEFT_SWIPE_WEIGHT * _vector(JOB_B)) / (1 + LEFT_SWIPE_WEIGHT)
+    assert np.allclose(pos, expected)
+
+
+def test_estimate_position_ignores_duplicate_job_id():
+    once = estimate_position([{"job_id": JOB_A, "direction": "right"}])
+    twice = estimate_position([
+        {"job_id": JOB_A, "direction": "right"},
+        {"job_id": JOB_A, "direction": "right"},
+    ])
+    assert np.allclose(once, twice)
+
+
+def test_next_card_excludes_already_shown():
+    history = [{"job_id": JOB_A, "direction": "right"}]
+    card = next_card(history)
+    assert card is not None
+    assert card["job_id"] != JOB_A
+
+
+def test_next_card_never_repeats_across_a_long_session():
+    history: list[dict] = []
+    seen = set()
+    for _ in range(50):
+        card = next_card(history)
+        if card is None:
+            break
+        assert card["job_id"] not in seen
+        seen.add(card["job_id"])
+        history.append({"job_id": card["job_id"], "direction": "right"})
+
+
+def test_next_card_stops_at_max_cards():
+    history = [{"job_id": int(row.job_id), "direction": "right"} for row in JOBS.iloc[:MAX_CARDS].itertuples()]
+    assert len(history) == MAX_CARDS
+    assert next_card(history) is None
+
+
+def test_next_card_returns_none_when_pool_exhausted():
+    history = [{"job_id": int(jid), "direction": "right"} for jid in JOBS["job_id"]]
+    assert next_card(history) is None
+
+
+def test_result_from_history_riasec_matches_position():
+    history = [{"job_id": JOB_A, "direction": "right"}]
+    riasec_z, jobs = result_from_history(history)
+    expected = dict(zip(
+        ["現実的", "研究的", "芸術的", "社会的", "企業的", "慣習的"],
+        _vector(JOB_A).tolist(),
+    ))
     for factor, value in expected.items():
-        assert z[factor] == pytest.approx(value, abs=0.02)
-
-
-def test_recommend_returns_n_jobs_sorted_by_similarity():
-    _, jobs = recommend(SESSION1_ANSWERS, n=5)
-    assert len(jobs) == 5
+        assert riasec_z[factor] == pytest.approx(value)
+    assert len(jobs) <= 20
     assert list(jobs["similarity"]) == sorted(jobs["similarity"], reverse=True)
-    # 06での結果と一致するはず（計器組立が最も類似度が高い）
-    assert jobs.iloc[0]["job_name"] == "計器組立"
 
 
-def test_recommend_missing_answer_raises():
-    incomplete = dict(SESSION1_ANSWERS)
-    del incomplete["Q1"]
-    with pytest.raises(ValueError):
-        recommend(incomplete)
-
-
-def test_render_questions_is_reproducible_for_same_seed():
-    a = render_questions(seed="test-seed")
-    b = render_questions(seed="test-seed")
-    assert a == b
-
-
-def test_render_questions_differs_across_seeds():
-    a = render_questions(seed="seed-1")
-    b = render_questions(seed="seed-2")
-    assert a != b
-
-
-def test_display_order_returns_valid_pair():
-    order = display_order("Q1", seed="x")
-    assert set(order) == {"a", "b"}
-
-
-def test_explain_has_fallback_for_neutral_profile():
-    text = explain({f: 0.0 for f in [
-        "現実的", "研究的", "芸術的", "社会的", "企業的", "慣習的",
-    ]})
-    assert "はっきりした" in text
-
-
-def test_explain_mentions_dominant_factor():
-    z = {"現実的": 1.89, "研究的": -0.27, "芸術的": -0.77,
-         "社会的": -1.43, "企業的": -1.56, "慣習的": 1.26}
-    text = explain(z)
-    assert "道具や機械" in text or "手順やルール" in text
+def test_result_from_history_empty_history_is_neutral():
+    riasec_z, jobs = result_from_history([])
+    assert all(v == 0.0 for v in riasec_z.values())
+    assert len(jobs) <= 20

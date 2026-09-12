@@ -12,8 +12,8 @@ export function TopScreen({ loading, error, onStart }: Props) {
       <SproutIcon className="h-12 w-12 text-sage-600" />
       <h1 className="text-4xl font-bold tracking-tight">夢のタネ</h1>
       <p className="max-w-xs text-base leading-loose text-charcoal-muted">
-        10個の質問に答えると、あなたの興味に近い仕事を紹介します。
-        まだ知らない仕事に出会えるかもしれません。
+        職業カードを気になる/ちがうでスワイプしていくと、あなたの興味に近い
+        仕事を紹介します。まだ知らない仕事に出会えるかもしれません。
       </p>
       {error && <p className="text-coral-600">{error}</p>}
       <button
