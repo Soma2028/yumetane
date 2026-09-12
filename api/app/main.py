@@ -4,6 +4,7 @@
 推薦ロジックの実体は scoring.py / explain.py（notebooks/07・08で検証済み）。
 """
 
+import os
 import uuid
 
 from fastapi import FastAPI, HTTPException
@@ -16,10 +17,15 @@ from .scoring import recommend, render_questions
 
 app = FastAPI(title="夢のタネ API")
 
-# ローカル開発用。本番でフロントのオリジンが決まったら絞る。
+# ローカル開発用のオリジンは常に許可し、本番のフロントのオリジン（Vercel等）は
+# ALLOWED_ORIGINS環境変数（カンマ区切り）で追加する。例:
+# ALLOWED_ORIGINS=https://yumetane.vercel.app,https://yumetane-git-main.vercel.app
+_default_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+_extra_origins = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_default_origins + _extra_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

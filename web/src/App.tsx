@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { fetchQuestions, submitAnswers } from "./api"
+import { useEffect, useState } from "react"
+import { fetchQuestions, submitAnswers, warmupApi } from "./api"
 import { JobDetailScreen } from "./components/JobDetailScreen"
 import { QuestionScreen } from "./components/QuestionScreen"
 import { ResultScreen } from "./components/ResultScreen"
@@ -21,6 +21,11 @@ function App() {
   const [result, setResult] = useState<RecommendResponse | null>(null)
   const [knownJobIds, setKnownJobIds] = useState<number[]>([])
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+
+  useEffect(() => {
+    // Renderの無料枠がスリープしていても、トップ画面表示時点で起こしておく。
+    warmupApi()
+  }, [])
 
   async function handleStart() {
     setLoading(true)
