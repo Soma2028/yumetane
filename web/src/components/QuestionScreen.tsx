@@ -11,33 +11,35 @@ export function QuestionScreen({ question, currentIndex, total, onAnswer }: Prop
   const progress = ((currentIndex + 1) / total) * 100
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-6">
-      <div className="w-full max-w-md">
-        <div className="mb-2 flex justify-between text-sm text-gray-500">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-10 px-6">
+      <div className="w-full max-w-sm">
+        <div className="mb-2 flex justify-between text-sm font-medium text-charcoal-muted">
           <span>
             {currentIndex + 1} / {total}問
           </span>
         </div>
-        <div className="h-2 w-full rounded-full bg-gray-200">
+        <div className="h-2 w-full rounded-full bg-sage-100">
           <div
-            className="h-2 rounded-full bg-indigo-600 transition-all"
+            className="h-2 rounded-full bg-sage-600 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
-      <div className="flex w-full max-w-md flex-col gap-4">
+      <p className="text-sm font-medium text-charcoal-muted">どちらが自分に近い？</p>
+
+      <div className="flex w-full max-w-sm flex-col gap-4">
         <button
           type="button"
           onClick={() => onAnswer(question.choice_1)}
-          className="rounded-2xl border border-gray-300 bg-white p-5 text-left text-lg hover:border-indigo-500 hover:bg-indigo-50"
+          className="rounded-2xl border border-border-soft bg-white p-5 text-left text-lg leading-snug transition hover:border-sage-600 hover:bg-sage-50 active:scale-[0.98] active:border-sage-600 active:bg-sage-50"
         >
           {question.choice_1}
         </button>
         <button
           type="button"
           onClick={() => onAnswer(question.choice_2)}
-          className="rounded-2xl border border-gray-300 bg-white p-5 text-left text-lg hover:border-indigo-500 hover:bg-indigo-50"
+          className="rounded-2xl border border-border-soft bg-white p-5 text-left text-lg leading-snug transition hover:border-sage-600 hover:bg-sage-50 active:scale-[0.98] active:border-sage-600 active:bg-sage-50"
         >
           {question.choice_2}
         </button>
