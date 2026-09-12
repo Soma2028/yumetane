@@ -20,6 +20,7 @@ class JobOut(BaseModel):
     description: str
     riasec_source: str
     awareness_label: str
+    tags: list[str] = []
     similarity: float | None = None
 
 

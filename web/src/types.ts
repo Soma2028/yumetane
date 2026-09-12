@@ -4,6 +4,7 @@ export interface Job {
   description: string
   riasec_source: "observed" | "predicted"
   awareness_label: string
+  tags: string[]
   similarity?: number
 }
 

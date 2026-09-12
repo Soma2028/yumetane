@@ -16,6 +16,7 @@ import numpy as np
 import pandas as pd
 
 from .data import load_jobs
+from .tags import select_tags
 
 RIASEC_FACTORS = ["現実的", "研究的", "芸術的", "社会的", "企業的", "慣習的"]
 Z_COLS = [f"riasec_{f}_z" for f in RIASEC_FACTORS]
@@ -141,6 +142,7 @@ def next_card(history: list[dict]) -> dict | None:
         "description": row.description,
         "riasec_source": row.riasec_source,
         "awareness_label": row.awareness_label,
+        "tags": select_tags(row),
     }
 
 

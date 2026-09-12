@@ -47,7 +47,17 @@ export function ResultScreen({ explanation, jobs, knownJobIds, onMarkKnown, onSe
                   </span>
                 )}
               </div>
-              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-charcoal-muted">
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {job.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-charcoal-muted">
                 {job.description}
               </p>
             </button>

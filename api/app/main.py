@@ -17,6 +17,7 @@ from .data import load_jobs
 from .explain import explain
 from .schemas import HistoryRequest, JobOut, NextCardResponse, RecommendResponse
 from .scoring import next_card, result_from_history
+from .tags import select_tags
 
 app = FastAPI(title="夢のタネ API")
 
@@ -70,9 +71,10 @@ def post_result(body: HistoryRequest) -> RecommendResponse:
                 description=row.description,
                 riasec_source=row.riasec_source,
                 awareness_label=row.awareness_label,
+                tags=select_tags(row),
                 similarity=float(row.similarity),
             )
-            for row in jobs.itertuples()
+            for _, row in jobs.iterrows()
         ],
     )
 
@@ -95,4 +97,5 @@ def get_job(job_id: int) -> JobOut:
         description=row.description,
         riasec_source=row.riasec_source,
         awareness_label=row.awareness_label,
+        tags=select_tags(row),
     )
