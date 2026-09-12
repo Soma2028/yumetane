@@ -5,3 +5,4 @@ dist/
 .DS_Store
 data/raw/
 .ipynb_checkpoints/
+.pytest_cache/
