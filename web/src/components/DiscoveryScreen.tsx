@@ -1,17 +1,34 @@
+import { motion } from "framer-motion"
 import { Star } from "lucide-react"
+import { useState } from "react"
 import { iconForTags } from "../tagIcons"
+import { TaneCharacter } from "./TaneCharacter"
+import { TaneSpeech } from "./TaneSpeech"
 import type { Job } from "../types"
 
 interface Props {
   job: Job | null
   exhausted: boolean
   subject: string
+  zukanCount: number
+  speechLines: string[]
+  allDiscovered: boolean
   isTane: boolean
   onToggleTane: () => void
   onDone: () => void
 }
 
-export function DiscoveryScreen({ job, exhausted, subject, isTane, onToggleTane, onDone }: Props) {
+export function DiscoveryScreen({
+  job,
+  exhausted,
+  subject,
+  zukanCount,
+  speechLines,
+  allDiscovered,
+  isTane,
+  onToggleTane,
+  onDone,
+}: Props) {
   if (exhausted || !job) {
     return (
       <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
@@ -36,9 +53,12 @@ export function DiscoveryScreen({ job, exhausted, subject, isTane, onToggleTane,
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
-      <p className="text-center text-sm font-medium text-charcoal-muted">
-        {subject}を勉強して、新しい仕事が見つかったよ
-      </p>
+      {allDiscovered && <PetalConfetti />}
+
+      <div className="flex items-start gap-3">
+        <TaneCharacter count={zukanCount} size={80} />
+        <TaneSpeech lines={speechLines} className="mt-1 flex-1" />
+      </div>
 
       <div className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-sm">
         <div className="flex h-40 items-center justify-center bg-sage-100">
@@ -88,6 +108,48 @@ export function DiscoveryScreen({ job, exhausted, subject, isTane, onToggleTane,
       >
         ホームにもどる
       </button>
+    </div>
+  )
+}
+
+const PETAL_COLORS = ["#2F6B4F", "#E8734A"]
+
+interface Petal {
+  id: number
+  left: number
+  delay: number
+  duration: number
+  rotate: number
+  color: string
+}
+
+function generatePetals(): Petal[] {
+  return Array.from({ length: 28 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 0.6,
+    duration: 2.2 + Math.random() * 1.6,
+    rotate: 180 + Math.random() * 360,
+    color: PETAL_COLORS[i % 2],
+  }))
+}
+
+/** 167件達成のときだけ降らせる花吹雪。マウント時に一度だけ生成する。 */
+function PetalConfetti() {
+  const [petals] = useState<Petal[]>(generatePetals)
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden" aria-hidden="true">
+      {petals.map((p) => (
+        <motion.span
+          key={p.id}
+          className="absolute h-2.5 w-2.5"
+          style={{ left: `${p.left}%`, backgroundColor: p.color, borderRadius: "60% 40% 60% 40%" }}
+          initial={{ top: "-6%", opacity: 0.9, rotate: 0 }}
+          animate={{ top: "110%", rotate: p.rotate }}
+          transition={{ duration: p.duration, delay: p.delay, ease: "easeIn" }}
+        />
+      ))}
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
 import type { StudyLogEntry } from "../storage"
+import { TaneCharacter } from "./TaneCharacter"
+import { TaneSpeech } from "./TaneSpeech"
 
 interface Props {
   subjects: string[]
@@ -51,7 +53,10 @@ export function HomeScreen({
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
+        <div className="flex items-center gap-2">
+          <TaneCharacter count={zukanCount} size={40} />
+          <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
+        </div>
         <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
           <Flame className="h-4 w-4 text-coral-500" />
           {streak}日連続
@@ -91,9 +96,10 @@ export function HomeScreen({
         )}
 
         {toast && (
-          <p className="rounded-lg bg-notice-bg px-3 py-2 text-center text-xs font-medium text-notice-text">
-            {toast}
-          </p>
+          <div className="flex items-start gap-2">
+            <TaneCharacter count={zukanCount} size={40} />
+            <TaneSpeech lines={[toast]} className="flex-1" />
+          </div>
         )}
 
         {error && <p className="text-sm text-coral-600">{error}</p>}

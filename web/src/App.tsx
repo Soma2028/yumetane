@@ -35,6 +35,9 @@ function App() {
 
   const [discoverResult, setDiscoverResult] = useState<DiscoverResponse | null>(null)
   const [discoverSubject, setDiscoverSubject] = useState("")
+  const [discoverZukanCount, setDiscoverZukanCount] = useState(0)
+  const [discoverSpeechLines, setDiscoverSpeechLines] = useState<string[]>([])
+  const [discoverAllDiscovered, setDiscoverAllDiscovered] = useState(false)
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
   const [detailReturnScreen, setDetailReturnScreen] = useState<DetailReturnScreen>("home")
@@ -66,8 +69,8 @@ function App() {
       // 2回目以降の記録：職業探索はせず、ログに積むだけ
       updateAppState(recordStudy(appState, subject, minutes, null))
       if (toastTimer.current) clearTimeout(toastTimer.current)
-      setHomeToast("今日の発見はすみ。また明日！")
-      toastTimer.current = setTimeout(() => setHomeToast(null), 2500)
+      setHomeToast("今日の発見はすみ。また明日一緒に探そう！")
+      toastTimer.current = setTimeout(() => setHomeToast(null), 3000)
       return
     }
 
@@ -80,8 +83,21 @@ function App() {
         next = addToZukan(next, result.job.job_id, result.job.job_name, subject, result.job.area)
       }
       updateAppState(next)
+
+      const allDiscovered = next.zukan.length === 167 && result.job !== null
+      const lines: string[] = []
+      if (allDiscovered) {
+        lines.push("全部の仕事を見つけたよ！")
+      } else if (result.job) {
+        if (next.streak >= 3) lines.push(`${next.streak}日連続！すごいね`)
+        lines.push(`${result.job.job_name}という仕事を見つけたよ！`)
+      }
+
       setDiscoverResult(result)
       setDiscoverSubject(subject)
+      setDiscoverZukanCount(next.zukan.length)
+      setDiscoverSpeechLines(lines)
+      setDiscoverAllDiscovered(allDiscovered)
       setScreen("discovery")
     } catch {
       setError("うまく見つけられませんでした。しばらくしてからもう一度お試しください。")
@@ -146,6 +162,9 @@ function App() {
         job={discoverResult.job}
         exhausted={discoverResult.exhausted}
         subject={discoverSubject}
+        zukanCount={discoverZukanCount}
+        speechLines={discoverSpeechLines}
+        allDiscovered={discoverAllDiscovered}
         isTane={jobId ? appState.taneIds.includes(jobId) : false}
         onToggleTane={() => jobId && handleToggleTaneFor(jobId)}
         onDone={() => setScreen("home")}
