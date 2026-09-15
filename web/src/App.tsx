@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { discover, fetchAreas, fetchJob, fetchSubjects, warmupApi } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
@@ -8,17 +8,21 @@ import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
-  hasRecordedToday,
+  isFirstRecordToday,
   knownJobIds,
   loadState,
-  recordStudyAndUpdateStreak,
+  recordStudy,
   saveState,
+  todaysDiscoveredJobId,
+  todaysLogs,
+  todaysTotalMinutes,
   toggleTane,
   type AppState,
 } from "./storage"
 import type { DiscoverResponse, Job } from "./types"
 
 type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail"
+type DetailReturnScreen = "home" | "zukan" | "tane"
 
 function App() {
   const [screen, setScreen] = useState<Screen>("top")
@@ -33,7 +37,10 @@ function App() {
   const [discoverSubject, setDiscoverSubject] = useState("")
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
-  const [detailReturnScreen, setDetailReturnScreen] = useState<"zukan" | "tane">("zukan")
+  const [detailReturnScreen, setDetailReturnScreen] = useState<DetailReturnScreen>("home")
+
+  const [homeToast, setHomeToast] = useState<string | null>(null)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     warmupApi()
@@ -53,11 +60,22 @@ function App() {
   }
 
   async function handleRecord(subject: string, minutes: number) {
-    setLoading(true)
     setError(null)
+
+    if (!isFirstRecordToday(appState)) {
+      // 2回目以降の記録：職業探索はせず、ログに積むだけ
+      updateAppState(recordStudy(appState, subject, minutes, null))
+      if (toastTimer.current) clearTimeout(toastTimer.current)
+      setHomeToast("今日の発見はすみ。また明日！")
+      toastTimer.current = setTimeout(() => setHomeToast(null), 2500)
+      return
+    }
+
+    setLoading(true)
     try {
       const result = await discover(subject, knownJobIds(appState))
-      let next = recordStudyAndUpdateStreak(appState, minutes)
+      const discoveredJobId = result.job ? result.job.job_id : null
+      let next = recordStudy(appState, subject, minutes, discoveredJobId)
       if (result.job) {
         next = addToZukan(next, result.job.job_id, result.job.job_name, subject, result.job.area)
       }
@@ -76,7 +94,7 @@ function App() {
     updateAppState(toggleTane(appState, jobId))
   }
 
-  async function handleSelectJob(jobId: number, from: "zukan" | "tane") {
+  async function handleSelectJob(jobId: number, from: DetailReturnScreen) {
     setLoading(true)
     setError(null)
     try {
@@ -96,18 +114,27 @@ function App() {
   }
 
   if (screen === "home") {
+    const discoveredId = todaysDiscoveredJobId(appState)
+    const discoveredEntry = discoveredId != null ? appState.zukan.find((e) => e.jobId === discoveredId) : undefined
+    const todaysDiscoveredJob = discoveredEntry
+      ? { jobId: discoveredEntry.jobId, jobName: discoveredEntry.jobName }
+      : null
+
     return (
       <HomeScreen
         subjects={subjects}
-        recordedToday={hasRecordedToday(appState)}
+        todaysLogs={todaysLogs(appState)}
+        todaysTotalMinutes={todaysTotalMinutes(appState)}
         streak={appState.streak}
-        totalMinutes={appState.totalMinutes}
         zukanCount={appState.zukan.length}
+        todaysDiscoveredJob={todaysDiscoveredJob}
+        toast={homeToast}
         loading={loading}
         error={error}
         onRecord={handleRecord}
         onOpenZukan={() => setScreen("zukan")}
         onOpenTane={() => setScreen("tane")}
+        onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
       />
     )
   }

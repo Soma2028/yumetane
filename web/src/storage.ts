@@ -2,6 +2,9 @@
  * 学習記録・職業図鑑・タネの永続化。サーバーには何も送らず、この端末の
  * localStorageだけに保存する（ログイン無し・個人情報を取らない、という制約のため）。
  * 端末を変えると消えるのは許容する前提（docs/design.md参照）。
+ *
+ * 1日に何回でも記録できるスタディプラス型。職業が見つかるのはその日の
+ * 最初の記録のときだけで、2回目以降はログに積むだけ（discoveredJobIdはnull）。
  */
 
 export interface ZukanEntry {
@@ -12,9 +15,17 @@ export interface ZukanEntry {
   discoveredAt: string // ISO日時
 }
 
+export interface StudyLogEntry {
+  date: string // YYYY-MM-DD
+  subject: string
+  minutes: number
+  discoveredJobId: number | null // その日最初の記録のときだけ値が入る
+}
+
 export interface AppState {
   zukan: ZukanEntry[]
   taneIds: number[]
+  logs: StudyLogEntry[]
   lastRecordedDate: string | null // YYYY-MM-DD
   streak: number
   totalMinutes: number
@@ -23,7 +34,7 @@ export interface AppState {
 const STORAGE_KEY = "yumetane_state_v1"
 
 function defaultState(): AppState {
-  return { zukan: [], taneIds: [], lastRecordedDate: null, streak: 0, totalMinutes: 0 }
+  return { zukan: [], taneIds: [], logs: [], lastRecordedDate: null, streak: 0, totalMinutes: 0 }
 }
 
 export function loadState(): AppState {
@@ -49,17 +60,38 @@ function todayStr(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
-export function hasRecordedToday(state: AppState): boolean {
-  return state.lastRecordedDate === todayStr()
+export function todaysLogs(state: AppState): StudyLogEntry[] {
+  const today = todayStr()
+  return state.logs.filter((l) => l.date === today)
 }
 
-export function recordStudyAndUpdateStreak(state: AppState, minutes: number): AppState {
+export function todaysTotalMinutes(state: AppState): number {
+  return todaysLogs(state).reduce((sum, l) => sum + l.minutes, 0)
+}
+
+export function isFirstRecordToday(state: AppState): boolean {
+  return todaysLogs(state).length === 0
+}
+
+export function todaysDiscoveredJobId(state: AppState): number | null {
+  const found = todaysLogs(state).find((l) => l.discoveredJobId !== null)
+  return found ? found.discoveredJobId : null
+}
+
+export function recordStudy(
+  state: AppState,
+  subject: string,
+  minutes: number,
+  discoveredJobId: number | null,
+): AppState {
   const today = todayStr()
-  if (state.lastRecordedDate === today) return state
+  const isNewDay = state.lastRecordedDate !== today
   const yesterday = new Date(Date.now() - 86400_000).toISOString().slice(0, 10)
-  const streak = state.lastRecordedDate === yesterday ? state.streak + 1 : 1
+  const streak = isNewDay ? (state.lastRecordedDate === yesterday ? state.streak + 1 : 1) : state.streak
+  const log: StudyLogEntry = { date: today, subject, minutes, discoveredJobId }
   return {
     ...state,
+    logs: [...state.logs, log],
     lastRecordedDate: today,
     streak,
     totalMinutes: state.totalMinutes + Math.max(0, minutes),

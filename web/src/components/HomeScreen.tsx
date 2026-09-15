@@ -1,36 +1,55 @@
-import { Flame } from "lucide-react"
+import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
+import type { StudyLogEntry } from "../storage"
 
 interface Props {
   subjects: string[]
-  recordedToday: boolean
+  todaysLogs: StudyLogEntry[]
+  todaysTotalMinutes: number
   streak: number
-  totalMinutes: number
   zukanCount: number
+  todaysDiscoveredJob: { jobId: number; jobName: string } | null
+  toast: string | null
   loading: boolean
   error: string | null
   onRecord: (subject: string, minutes: number) => void
   onOpenZukan: () => void
   onOpenTane: () => void
+  onSelectJob: (jobId: number) => void
 }
 
 export function HomeScreen({
   subjects,
-  recordedToday,
+  todaysLogs,
+  todaysTotalMinutes,
   streak,
-  totalMinutes,
   zukanCount,
+  todaysDiscoveredJob,
+  toast,
   loading,
   error,
   onRecord,
   onOpenZukan,
   onOpenTane,
+  onSelectJob,
 }: Props) {
+  const [showForm, setShowForm] = useState(false)
   const [subject, setSubject] = useState<string | null>(null)
-  const [minutes, setMinutes] = useState("30")
+  const [minutesInput, setMinutesInput] = useState("30")
+
+  const minutes = Number(minutesInput) || 0
+  const canSubmit = subject !== null && minutes >= 10
+
+  function handleSubmit() {
+    if (!canSubmit || !subject) return
+    onRecord(subject, minutes)
+    setSubject(null)
+    setMinutesInput("30")
+    setShowForm(false)
+  }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
         <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
@@ -39,57 +58,110 @@ export function HomeScreen({
         </span>
       </div>
 
-      {recordedToday ? (
-        <div className="rounded-2xl bg-sage-50 p-5 text-center">
-          <p className="font-bold text-sage-700">今日はもう記録したよ</p>
-          <p className="mt-1 text-sm text-charcoal-muted">また明日、勉強したら記録しよう</p>
-          <p className="mt-2 text-xs text-charcoal-muted">これまでの合計 {totalMinutes}分</p>
+      {todaysDiscoveredJob && (
+        <button
+          type="button"
+          onClick={() => onSelectJob(todaysDiscoveredJob.jobId)}
+          className="flex items-center justify-between rounded-xl bg-sage-50 px-4 py-2.5 text-left text-sm font-medium text-sage-700 transition hover:bg-sage-100"
+        >
+          <span>今日見つけた仕事：{todaysDiscoveredJob.jobName}</span>
+          <ChevronRight className="h-4 w-4 shrink-0" />
+        </button>
+      )}
+
+      <div className="flex flex-col gap-4 rounded-2xl border border-border-soft bg-white p-5">
+        <div className="flex items-center justify-between">
+          <p className="font-bold">今日の記録</p>
+          {todaysLogs.length > 0 && (
+            <p className="text-sm text-charcoal-muted">合計 {todaysTotalMinutes}分</p>
+          )}
         </div>
-      ) : (
-        <div className="flex flex-col gap-4 rounded-2xl border border-border-soft bg-white p-5">
-          <p className="font-bold">今日、何を勉強した？</p>
-          <div className="grid grid-cols-2 gap-2">
-            {subjects.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setSubject(s)}
-                className={
-                  "rounded-xl border px-3 py-3 text-sm font-medium transition " +
-                  (subject === s
-                    ? "border-sage-600 bg-sage-50 text-sage-700"
-                    : "border-border-soft bg-white text-charcoal hover:border-sage-600")
-                }
-              >
-                {s}
-              </button>
+
+        {todaysLogs.length === 0 ? (
+          <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {todaysLogs.map((log, i) => (
+              <li key={i} className="flex items-center justify-between text-sm">
+                <span>{log.subject}</span>
+                <span className="text-charcoal-muted">{log.minutes}分</span>
+              </li>
             ))}
+          </ul>
+        )}
+
+        {toast && (
+          <p className="rounded-lg bg-notice-bg px-3 py-2 text-center text-xs font-medium text-notice-text">
+            {toast}
+          </p>
+        )}
+
+        {error && <p className="text-sm text-coral-600">{error}</p>}
+
+        {showForm ? (
+          <div className="flex flex-col gap-4 border-t border-border-soft pt-4">
+            <div className="grid grid-cols-2 gap-2">
+              {subjects.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSubject(s)}
+                  className={
+                    "rounded-xl border px-3 py-3 text-sm font-medium transition " +
+                    (subject === s
+                      ? "border-sage-600 bg-sage-50 text-sage-700"
+                      : "border-border-soft bg-white text-charcoal hover:border-sage-600")
+                  }
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+
+            <label className="flex items-center gap-3 text-sm">
+              <span className="text-charcoal-muted">勉強した時間</span>
+              <input
+                type="number"
+                min={1}
+                value={minutesInput}
+                onChange={(e) => setMinutesInput(e.target.value)}
+                className="w-20 rounded-lg border border-border-soft px-3 py-2 text-right"
+              />
+              <span className="text-charcoal-muted">分</span>
+            </label>
+
+            {minutes > 0 && minutes < 10 && (
+              <p className="text-xs text-coral-600">10分未満は記録できません</p>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="flex-1 rounded-full border border-border-soft py-3 text-center font-bold text-charcoal-muted transition active:bg-gray-100"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                disabled={!canSubmit || loading}
+                onClick={handleSubmit}
+                className="flex-1 rounded-full bg-coral-500 py-3 text-center font-bold text-white transition active:bg-coral-600 disabled:opacity-40"
+              >
+                {loading ? "さがしています…" : "記録する"}
+              </button>
+            </div>
           </div>
-
-          <label className="flex items-center gap-3 text-sm">
-            <span className="text-charcoal-muted">勉強した時間</span>
-            <input
-              type="number"
-              min={1}
-              value={minutes}
-              onChange={(e) => setMinutes(e.target.value)}
-              className="w-20 rounded-lg border border-border-soft px-3 py-2 text-right"
-            />
-            <span className="text-charcoal-muted">分</span>
-          </label>
-
-          {error && <p className="text-sm text-coral-600">{error}</p>}
-
+        ) : (
           <button
             type="button"
-            disabled={!subject || loading}
-            onClick={() => subject && onRecord(subject, Number(minutes) || 0)}
-            className="rounded-full bg-coral-500 py-3 text-center font-bold text-white transition active:bg-coral-600 disabled:opacity-40"
+            onClick={() => setShowForm(true)}
+            className="rounded-full bg-coral-500 py-3 text-center font-bold text-white transition active:bg-coral-600"
           >
-            {loading ? "さがしています…" : "記録する"}
+            ＋ 記録を追加する
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="mt-auto grid grid-cols-2 gap-3">
         <button
