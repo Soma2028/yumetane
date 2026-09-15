@@ -1,167 +1,164 @@
 import { useEffect, useState } from "react"
-import { fetchNextCard, fetchResult, warmupApi } from "./api"
+import { discover, fetchAreas, fetchJob, fetchSubjects, warmupApi } from "./api"
+import { DiscoveryScreen } from "./components/DiscoveryScreen"
+import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
-import { MidResultScreen } from "./components/MidResultScreen"
-import { ResultScreen } from "./components/ResultScreen"
-import { SwipeScreen } from "./components/SwipeScreen"
+import { TaneScreen } from "./components/TaneScreen"
 import { TopScreen } from "./components/TopScreen"
-import type { Job, RecommendResponse, SwipeDirection, SwipeEntry } from "./types"
+import { ZukanScreen } from "./components/ZukanScreen"
+import {
+  addToZukan,
+  hasRecordedToday,
+  knownJobIds,
+  loadState,
+  recordStudyAndUpdateStreak,
+  saveState,
+  toggleTane,
+  type AppState,
+} from "./storage"
+import type { DiscoverResponse, Job } from "./types"
 
-type Screen = "top" | "swipe" | "midResult" | "result" | "detail"
-
-const MID_RESULT_AT = 10
+type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail"
 
 function App() {
   const [screen, setScreen] = useState<Screen>("top")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const [history, setHistory] = useState<SwipeEntry[]>([])
-  const [currentCard, setCurrentCard] = useState<Job | null>(null)
-  const [likeButtonSide, setLikeButtonSide] = useState<"left" | "right">("right")
-  const [midShown, setMidShown] = useState(false)
+  const [appState, setAppState] = useState<AppState>(() => loadState())
+  const [subjects, setSubjects] = useState<string[]>([])
+  const [areaTotals, setAreaTotals] = useState<Record<string, number>>({})
 
-  const [resultData, setResultData] = useState<RecommendResponse | null>(null)
-  const [knownJobIds, setKnownJobIds] = useState<number[]>([])
+  const [discoverResult, setDiscoverResult] = useState<DiscoverResponse | null>(null)
+  const [discoverSubject, setDiscoverSubject] = useState("")
+
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+  const [detailReturnScreen, setDetailReturnScreen] = useState<"zukan" | "tane">("zukan")
 
   useEffect(() => {
-    // Renderの無料枠がスリープしていても、トップ画面表示時点で起こしておく。
     warmupApi()
+    fetchSubjects()
+      .then(setSubjects)
+      .catch(() => setError("教科の一覧を取得できませんでした"))
+    fetchAreas()
+      .then(setAreaTotals)
+      .catch(() => {
+        // 図鑑画面に入るまで使わないので、ここでの失敗は致命的ではない
+      })
   }, [])
 
-  async function goToResult(finalHistory: SwipeEntry[]) {
-    const data = await fetchResult(finalHistory)
-    setResultData(data)
-    setKnownJobIds([])
-    setScreen("result")
+  function updateAppState(next: AppState) {
+    setAppState(next)
+    saveState(next)
   }
 
-  async function handleStart() {
+  async function handleRecord(subject: string, minutes: number) {
     setLoading(true)
     setError(null)
     try {
-      setHistory([])
-      setMidShown(false)
-      setLikeButtonSide(Math.random() < 0.5 ? "left" : "right")
-      const { card, done } = await fetchNextCard([])
-      if (done || !card) {
-        setError("紹介できる職業がありませんでした。")
-        return
+      const result = await discover(subject, knownJobIds(appState))
+      let next = recordStudyAndUpdateStreak(appState, minutes)
+      if (result.job) {
+        next = addToZukan(next, result.job.job_id, result.job.job_name, subject, result.job.area)
       }
-      setCurrentCard(card)
-      setScreen("swipe")
+      updateAppState(next)
+      setDiscoverResult(result)
+      setDiscoverSubject(subject)
+      setScreen("discovery")
     } catch {
-      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
+      setError("うまく見つけられませんでした。しばらくしてからもう一度お試しください。")
     } finally {
       setLoading(false)
     }
   }
 
-  async function handleReact(direction: SwipeDirection) {
-    if (!currentCard) return
-    const newHistory = [...history, { job_id: currentCard.job_id, direction }]
-    setHistory(newHistory)
-    setCurrentCard(null)
+  function handleToggleTaneFor(jobId: number) {
+    updateAppState(toggleTane(appState, jobId))
+  }
 
+  async function handleSelectJob(jobId: number, from: "zukan" | "tane") {
     setLoading(true)
     setError(null)
     try {
-      if (newHistory.length === MID_RESULT_AT && !midShown) {
-        setMidShown(true)
-        const data = await fetchResult(newHistory)
-        setResultData(data)
-        setScreen("midResult")
-        return
-      }
-
-      const { card, done } = await fetchNextCard(newHistory)
-      if (done || !card) {
-        await goToResult(newHistory)
-        return
-      }
-      setCurrentCard(card)
+      const job = await fetchJob(jobId)
+      setSelectedJob(job)
+      setDetailReturnScreen(from)
+      setScreen("detail")
     } catch {
-      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
-      setScreen("top")
+      setError("職業情報を取得できませんでした。")
     } finally {
       setLoading(false)
     }
-  }
-
-  async function handleContinueFromMid() {
-    setLoading(true)
-    setError(null)
-    try {
-      const { card, done } = await fetchNextCard(history)
-      if (done || !card) {
-        await goToResult(history)
-        return
-      }
-      setCurrentCard(card)
-      setScreen("swipe")
-    } catch {
-      setError("うまく読み込めませんでした。しばらくしてからもう一度お試しください。")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  function handleSeeResultFromMid() {
-    if (!resultData) return
-    setKnownJobIds([])
-    setScreen("result")
-  }
-
-  function handleMarkKnown(jobId: number) {
-    setKnownJobIds((prev) => [...prev, jobId])
-  }
-
-  function handleSelectJob(job: Job) {
-    setSelectedJob(job)
-    setScreen("detail")
   }
 
   if (screen === "top") {
-    return <TopScreen loading={loading} error={error} onStart={handleStart} />
+    return <TopScreen onStart={() => setScreen("home")} />
   }
 
-  if (screen === "swipe") {
+  if (screen === "home") {
     return (
-      <SwipeScreen
-        card={currentCard}
-        cardNumber={history.length + 1}
-        likeButtonSide={likeButtonSide}
+      <HomeScreen
+        subjects={subjects}
+        recordedToday={hasRecordedToday(appState)}
+        streak={appState.streak}
+        totalMinutes={appState.totalMinutes}
+        zukanCount={appState.zukan.length}
         loading={loading}
-        onReact={handleReact}
+        error={error}
+        onRecord={handleRecord}
+        onOpenZukan={() => setScreen("zukan")}
+        onOpenTane={() => setScreen("tane")}
       />
     )
   }
 
-  if (screen === "midResult" && resultData) {
+  if (screen === "discovery" && discoverResult) {
+    const jobId = discoverResult.job?.job_id
     return (
-      <MidResultScreen
-        explanation={resultData.explanation}
-        onContinue={handleContinueFromMid}
-        onSeeResult={handleSeeResultFromMid}
+      <DiscoveryScreen
+        job={discoverResult.job}
+        exhausted={discoverResult.exhausted}
+        subject={discoverSubject}
+        isTane={jobId ? appState.taneIds.includes(jobId) : false}
+        onToggleTane={() => jobId && handleToggleTaneFor(jobId)}
+        onDone={() => setScreen("home")}
       />
     )
   }
 
-  if (screen === "result" && resultData) {
+  if (screen === "zukan") {
     return (
-      <ResultScreen
-        explanation={resultData.explanation}
-        jobs={resultData.jobs}
-        knownJobIds={knownJobIds}
-        onMarkKnown={handleMarkKnown}
-        onSelectJob={handleSelectJob}
+      <ZukanScreen
+        zukan={appState.zukan}
+        areaTotals={areaTotals}
+        onBack={() => setScreen("home")}
+        onSelectJob={(jobId) => handleSelectJob(jobId, "zukan")}
+      />
+    )
+  }
+
+  if (screen === "tane") {
+    return (
+      <TaneScreen
+        zukan={appState.zukan}
+        taneIds={appState.taneIds}
+        onBack={() => setScreen("home")}
+        onSelectJob={(jobId) => handleSelectJob(jobId, "tane")}
       />
     )
   }
 
   if (screen === "detail" && selectedJob) {
-    return <JobDetailScreen job={selectedJob} onBack={() => setScreen("result")} />
+    const entry = appState.zukan.find((e) => e.jobId === selectedJob.job_id)
+    return (
+      <JobDetailScreen
+        job={selectedJob}
+        subject={entry?.subject}
+        isTane={appState.taneIds.includes(selectedJob.job_id)}
+        onToggleTane={() => handleToggleTaneFor(selectedJob.job_id)}
+        onBack={() => setScreen(detailReturnScreen)}
+      />
+    )
   }
 
   return null

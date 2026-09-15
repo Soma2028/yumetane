@@ -1,4 +1,4 @@
-import type { Job, NextCardResponse, RecommendResponse, SwipeEntry } from "./types"
+import type { DiscoverResponse, Job } from "./types"
 
 // 本番はVercelの環境変数 VITE_API_BASE_URL（Renderのapi URL）から読む。
 // 未設定時はローカル開発用に127.0.0.1へフォールバックする。
@@ -6,23 +6,25 @@ import type { Job, NextCardResponse, RecommendResponse, SwipeEntry } from "./typ
 // ポートを掴んでいると誤接続するため、127.0.0.1を明示する。
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"
 
-export async function fetchNextCard(history: SwipeEntry[]): Promise<NextCardResponse> {
-  const res = await fetch(`${API_BASE}/cards/next`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ history }),
-  })
-  if (!res.ok) throw new Error("次のカードを取得できませんでした")
+export async function fetchSubjects(): Promise<string[]> {
+  const res = await fetch(`${API_BASE}/subjects`)
+  if (!res.ok) throw new Error("教科の取得に失敗しました")
   return res.json()
 }
 
-export async function fetchResult(history: SwipeEntry[]): Promise<RecommendResponse> {
-  const res = await fetch(`${API_BASE}/result`, {
+export async function fetchAreas(): Promise<Record<string, number>> {
+  const res = await fetch(`${API_BASE}/areas`)
+  if (!res.ok) throw new Error("エリア情報の取得に失敗しました")
+  return res.json()
+}
+
+export async function discover(subject: string, knownJobIds: number[]): Promise<DiscoverResponse> {
+  const res = await fetch(`${API_BASE}/discover`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ history }),
+    body: JSON.stringify({ subject, known_job_ids: knownJobIds }),
   })
-  if (!res.ok) throw new Error("結果を取得できませんでした")
+  if (!res.ok) throw new Error("職業を見つけられませんでした")
   return res.json()
 }
 

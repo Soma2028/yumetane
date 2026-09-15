@@ -1,11 +1,12 @@
 """夢のタネ API。
 
-職業カードを1枚ずつ提示し、スワイプ（気になる/ちがう）の反応から
-ユーザーの興味の位置を推定して、次のカードと推薦結果を返す。
+今日勉強した教科を受け取り、その教科の知識をよく使う職業を1件見つけて返す。
+すべての状態（学習記録・職業図鑑・タネ）はクライアント側（localStorage）に持ち、
+このAPIはステートレス。既出職業の除外リストも毎回クライアントから送る。
 
-10問クイズ形式（旧 GET /questions, POST /answers）は設計・検証の上で、
-体験として目的に合わないと判断し廃止した。経緯はdocs/design.md参照。
-推薦ロジックの実体は scoring.py / explain.py。
+10問クイズ形式・スワイプ形式（旧 GET /questions, POST /answers,
+POST /cards/next, POST /result）は設計・検証の上で廃止した。経緯はdocs/design.md参照。
+選定ロジックの実体は discovery.py / tags.py。
 """
 
 import os
@@ -13,10 +14,10 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from .areas import area_counts, dominant_area
 from .data import load_jobs
-from .explain import explain
-from .schemas import HistoryRequest, JobOut, NextCardResponse, RecommendResponse
-from .scoring import next_card, result_from_history
+from .discovery import STUDIABLE_SUBJECTS, discover_job
+from .schemas import DiscoverRequest, DiscoverResponse, JobOut
 from .tags import select_tags
 
 app = FastAPI(title="夢のタネ API")
@@ -42,46 +43,40 @@ def get_health() -> dict:
     return {"status": "ok"}
 
 
-@app.post("/cards/next", response_model=NextCardResponse)
-def post_next_card(body: HistoryRequest) -> NextCardResponse:
-    """次に見せるカードを1枚返す。
+@app.get("/subjects")
+def get_subjects() -> list[str]:
+    """学習記録で選べる教科の一覧。保健体育は対応する知識項目が無いため含まない
+    （docs/design.md「知識33項目 → 教科への対応」参照）。"""
+    return STUDIABLE_SUBJECTS
 
-    候補が尽きた場合、またはMAX_CARDS枚（scoring.MAX_CARDS）に達した場合は
-    done=Trueとcard=Noneを返す。クライアントは結果画面に誘導する。
+
+@app.get("/areas")
+def get_areas() -> dict[str, int]:
+    """職業図鑑の6エリア（RIASEC因子）ごとの、全167職業中の件数。
+    図鑑画面の踏破率の分母として使う（分子はクライアントが自分の図鑑から数える）。"""
+    return area_counts(load_jobs())
+
+
+@app.post("/discover", response_model=DiscoverResponse)
+def post_discover(body: DiscoverRequest) -> DiscoverResponse:
+    """今日勉強した教科から、職業を1件見つける。
+
+    その教科の候補プールを図鑑登録済みの職業ですべて使い切っている場合は、
+    job=None・exhausted=Trueを返す。
     """
-    history = [h.model_dump() for h in body.history]
-    card = next_card(history)
-    if card is None:
-        return NextCardResponse(card=None, done=True)
-    return NextCardResponse(card=JobOut(**card), done=False)
+    try:
+        job = discover_job(body.subject, body.known_job_ids)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e)) from e
 
-
-@app.post("/result", response_model=RecommendResponse)
-def post_result(body: HistoryRequest) -> RecommendResponse:
-    """スワイプ履歴から推薦職業と理由を返す。中間結果・最終結果で共用する。"""
-    history = [h.model_dump() for h in body.history]
-    riasec_z, jobs = result_from_history(history)
-    return RecommendResponse(
-        riasec=riasec_z,
-        explanation=explain(riasec_z),
-        jobs=[
-            JobOut(
-                job_id=int(row.job_id),
-                job_name=row.job_name,
-                description=row.description,
-                riasec_source=row.riasec_source,
-                awareness_label=row.awareness_label,
-                tags=select_tags(row),
-                similarity=float(row.similarity),
-            )
-            for _, row in jobs.iterrows()
-        ],
-    )
+    if job is None:
+        return DiscoverResponse(job=None, exhausted=True)
+    return DiscoverResponse(job=JobOut(**job), exhausted=False)
 
 
 @app.get("/jobs/{job_id}", response_model=JobOut)
 def get_job(job_id: int) -> JobOut:
-    """職業1件の詳細。職業図鑑・推薦結果からのリンク先で使う想定。
+    """職業1件の詳細。職業図鑑・タネの詳細画面で使う。
 
     現時点ではjobs.csv（推薦対象167件）のみが対象。RIASECのunavailable7件など、
     推薦対象外の職業カタログはまだ処理していない（docs/design.md参照）。
@@ -98,4 +93,5 @@ def get_job(job_id: int) -> JobOut:
         riasec_source=row.riasec_source,
         awareness_label=row.awareness_label,
         tags=select_tags(row),
+        area=dominant_area(row),
     )
