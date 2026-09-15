@@ -3,8 +3,8 @@ import { discover, fetchAreas, fetchJob, fetchSubjects, warmupApi } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
+import { LandingPage } from "./components/LandingPage"
 import { TaneScreen } from "./components/TaneScreen"
-import { TopScreen } from "./components/TopScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
@@ -92,7 +92,7 @@ function App() {
   }
 
   if (screen === "top") {
-    return <TopScreen onStart={() => setScreen("home")} />
+    return <LandingPage onStart={() => setScreen("home")} />
   }
 
   if (screen === "home") {
