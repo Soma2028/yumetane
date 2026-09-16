@@ -1,3 +1,4 @@
+import { motion } from "framer-motion"
 import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
 import type { RecordDetails, StudyLogEntry } from "../storage"
@@ -66,7 +67,14 @@ export function HomeScreen({
           <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
         </div>
         <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
-          <Flame className="h-4 w-4 text-coral-500" />
+          <motion.span
+            className="inline-block"
+            style={{ transformOrigin: "50% 90%" }}
+            animate={{ rotate: [-8, 8, -8] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Flame className="h-4 w-4 text-coral-500" />
+          </motion.span>
           {streak}日連続
         </span>
       </div>
@@ -82,7 +90,7 @@ export function HomeScreen({
         </button>
       )}
 
-      <div className="flex flex-col gap-4 rounded-2xl border border-border-soft bg-white p-5">
+      <div className="flex flex-col gap-4 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
         <div className="flex items-center justify-between">
           <p className="font-bold">今日の記録</p>
           {todaysLogs.length > 0 && (
@@ -97,7 +105,7 @@ export function HomeScreen({
             {todaysLogs.map((log, i) => (
               <li
                 key={i}
-                className="rounded-2xl border border-border-soft bg-cream px-4 py-3 text-sm"
+                className="rounded-3xl border border-border-soft bg-cream px-4 py-3 text-sm"
               >
                 <div className="flex items-center justify-between font-medium">
                   <span>{log.subject}</span>
@@ -126,19 +134,21 @@ export function HomeScreen({
           <div className="flex flex-col gap-4 border-t border-border-soft pt-4">
             <div className="grid grid-cols-2 gap-2">
               {subjects.map((s) => (
-                <button
+                <motion.button
                   key={s}
                   type="button"
                   onClick={() => setSubject(s)}
+                  animate={subject === s ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
                   className={
-                    "rounded-xl border px-3 py-3 text-sm font-medium transition " +
+                    "rounded-xl border px-3 py-3 text-sm font-medium transition-colors " +
                     (subject === s
-                      ? "border-sage-600 bg-sage-50 text-sage-700"
+                      ? "border-coral-500 bg-coral-500 text-white"
                       : "border-border-soft bg-white text-charcoal hover:border-sage-600")
                   }
                 >
                   {s}
-                </button>
+                </motion.button>
               ))}
             </div>
 

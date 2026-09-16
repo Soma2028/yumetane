@@ -34,7 +34,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-2xl border border-border-soft bg-white p-4">
+      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
         {Object.entries(areaTotals).map(([area, areaTotal]) => {
           const known = knownByArea[area] ?? 0
           const pct = areaTotal > 0 ? Math.round((known / areaTotal) * 100) : 0
@@ -48,7 +48,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               </div>
               <div className="mt-1 h-2 w-full rounded-full bg-sage-50">
                 <div
-                  className="h-2 rounded-full bg-sage-600 transition-all"
+                  className="h-2 rounded-full bg-gradient-to-r from-sage-600 to-coral-500 transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -68,7 +68,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               key={entry.jobId}
               type="button"
               onClick={() => onSelectJob(entry.jobId)}
-              className="rounded-2xl border border-border-soft bg-white p-4 text-left transition hover:border-sage-600"
+              className="rounded-3xl border border-border-soft bg-white p-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:border-sage-600"
             >
               <p className="font-bold">{entry.jobName}</p>
               <p className="mt-1 text-xs text-charcoal-muted">

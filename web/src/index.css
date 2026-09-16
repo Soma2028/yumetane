@@ -26,5 +26,13 @@
 
 body {
   background-color: var(--color-cream);
+  background-image: repeating-radial-gradient(
+    circle at center,
+    rgba(47, 107, 79, 0.03) 0px,
+    rgba(47, 107, 79, 0.03) 2px,
+    transparent 2px,
+    transparent 100%
+  );
+  background-size: 24px 24px;
   color: var(--color-charcoal);
 }
