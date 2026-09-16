@@ -1,11 +1,13 @@
 import { motion } from "framer-motion"
 import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
-import type { RecordDetails, StudyLogEntry } from "../storage"
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import type { RecordDetails, StudyLogEntry, SubjectTotal } from "../storage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
 const MEMO_MAX_LENGTH = 100
+const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 interface Props {
   subjects: string[]
@@ -17,9 +19,13 @@ interface Props {
   toast: string | null
   loading: boolean
   error: string | null
+  weekDates: string[]
+  studiedDates: Set<string>
+  subjectTotals: SubjectTotal[]
   onRecord: (subject: string, minutes: number, details: RecordDetails) => void
   onOpenZukan: () => void
   onOpenTane: () => void
+  onOpenKiroku: () => void
   onSelectJob: (jobId: number) => void
 }
 
@@ -33,9 +39,13 @@ export function HomeScreen({
   toast,
   loading,
   error,
+  weekDates,
+  studiedDates,
+  subjectTotals,
   onRecord,
   onOpenZukan,
   onOpenTane,
+  onOpenKiroku,
   onSelectJob,
 }: Props) {
   const [showForm, setShowForm] = useState(false)
@@ -236,13 +246,68 @@ export function HomeScreen({
         )}
       </div>
 
-      <div className="mt-auto grid grid-cols-2 gap-3">
+      <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
+        <p className="font-bold">この1週間</p>
+        <div className="flex justify-between">
+          {weekDates.map((date) => {
+            const studied = studiedDates.has(date)
+            const isToday = date === weekDates[weekDates.length - 1]
+            const d = new Date(`${date}T00:00:00`)
+            return (
+              <div key={date} className="flex flex-col items-center gap-1">
+                <span className="text-xs text-charcoal-muted">{WEEKDAY_LABELS[d.getDay()]}</span>
+                <div
+                  className={
+                    "flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors " +
+                    (studied ? "bg-sage-600 text-white" : "bg-sage-50 text-charcoal-muted") +
+                    (isToday ? " ring-2 ring-coral-500 ring-offset-1" : "")
+                  }
+                >
+                  {d.getDate()}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {subjectTotals.length > 0 && (
+        <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
+          <p className="font-bold">教科別の勉強時間</p>
+          <div style={{ height: subjectTotals.length * 36 + 16 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={subjectTotals}
+                layout="vertical"
+                margin={{ left: 8, right: 16, top: 4, bottom: 4 }}
+              >
+                <XAxis type="number" hide />
+                <YAxis
+                  type="category"
+                  dataKey="subject"
+                  width={72}
+                  tick={{ fontSize: 12, fill: "#6b6358" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  formatter={(value) => [`${value}分`, "勉強時間"]}
+                  contentStyle={{ borderRadius: 12, borderColor: "#e4dfd5", fontSize: 12 }}
+                />
+                <Bar dataKey="minutes" fill="#2F6B4F" radius={[0, 8, 8, 0]} maxBarSize={18} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-auto grid grid-cols-3 gap-3">
         <button
           type="button"
           onClick={onOpenZukan}
           className="rounded-2xl border border-border-soft bg-white py-4 text-center transition hover:border-sage-600"
         >
-          <p className="text-lg font-bold">{zukanCount} / 167</p>
+          <p className="text-lg font-bold">{zukanCount}</p>
           <p className="text-xs text-charcoal-muted">職業図鑑</p>
         </button>
         <button
@@ -252,6 +317,14 @@ export function HomeScreen({
         >
           <p className="text-lg font-bold">タネ</p>
           <p className="text-xs text-charcoal-muted">気になる仕事</p>
+        </button>
+        <button
+          type="button"
+          onClick={onOpenKiroku}
+          className="rounded-2xl border border-border-soft bg-white py-4 text-center transition hover:border-sage-600"
+        >
+          <p className="text-lg font-bold">きろく</p>
+          <p className="text-xs text-charcoal-muted">記録の分析</p>
         </button>
       </div>
     </div>

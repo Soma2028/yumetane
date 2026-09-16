@@ -3,6 +3,7 @@ import { discover, fetchAreas, fetchJob, fetchSubjects, warmupApi } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
+import { KirokuScreen } from "./components/KirokuScreen"
 import { LandingPage } from "./components/LandingPage"
 import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
@@ -10,21 +11,28 @@ import {
   addToZukan,
   isFirstRecordToday,
   knownJobIds,
+  last7Dates,
   loadState,
+  mostStudiedSubject,
   recordStudy,
   saveState,
+  studiedDatesSet,
+  subjectJobHistory,
+  subjectTotals,
   todaysDiscoveredJobId,
   todaysLogs,
   todaysTotalMinutes,
   toggleTane,
+  weeklySubjectTotals,
+  weeklyTotalMinutes,
   type AppState,
   type RecordDetails,
 } from "./storage"
 import { stageFromCount } from "./taneStage"
 import type { DiscoverResponse, Job } from "./types"
 
-type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail"
-type DetailReturnScreen = "home" | "zukan" | "tane"
+type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku"
+type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
 
 function App() {
   const [screen, setScreen] = useState<Screen>("top")
@@ -160,9 +168,13 @@ function App() {
         toast={homeToast}
         loading={loading}
         error={error}
+        weekDates={last7Dates()}
+        studiedDates={studiedDatesSet(appState)}
+        subjectTotals={subjectTotals(appState)}
         onRecord={handleRecord}
         onOpenZukan={() => setScreen("zukan")}
         onOpenTane={() => setScreen("tane")}
+        onOpenKiroku={() => setScreen("kiroku")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
       />
     )
@@ -204,6 +216,19 @@ function App() {
         taneIds={appState.taneIds}
         onBack={() => setScreen("home")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "tane")}
+      />
+    )
+  }
+
+  if (screen === "kiroku") {
+    return (
+      <KirokuScreen
+        weeklyTotalMinutes={weeklyTotalMinutes(appState)}
+        weeklySubjectTotals={weeklySubjectTotals(appState)}
+        subjectJobHistory={subjectJobHistory(appState)}
+        mostStudied={mostStudiedSubject(appState)}
+        onBack={() => setScreen("home")}
+        onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
       />
     )
   }
