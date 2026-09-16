@@ -14,6 +14,11 @@ const fadeUp: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 }
 
+const popIn: Variants = {
+  hidden: { opacity: 0, scale: 0 },
+  show: { opacity: 1, scale: [0, 1.1, 1], transition: { duration: 0.3, ease: "easeOut" } },
+}
+
 function stagger(staggerChildren = 0.12): Variants {
   return {
     hidden: {},
@@ -55,14 +60,23 @@ export function LandingPage({ onStart }: Props) {
           >
             今日の勉強が、まだ知らない仕事との出会いになる。
           </motion.p>
-          <motion.button
+          <motion.div
             variants={fadeUp}
-            type="button"
-            onClick={onStart}
-            className="mt-1 rounded-full bg-coral-500 px-10 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
+            className="mt-1 flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
           >
-            はじめる
-          </motion.button>
+            <FloatingTane
+              src="/images/tane/stage1.jpg"
+              alt="双葉が出たタネのキャラクター"
+              size={80}
+            />
+            <button
+              type="button"
+              onClick={onStart}
+              className="rounded-full bg-coral-500 px-10 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
+            >
+              はじめる
+            </button>
+          </motion.div>
           <motion.img
             variants={fadeUp}
             src={screenshotHome}
@@ -139,17 +153,17 @@ export function LandingPage({ onStart }: Props) {
           仕組み
         </motion.h2>
 
-        <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
-          <motion.div
-            variants={fadeUp}
-            className="relative flex w-full max-w-[220px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center"
-          >
-            <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
-              01
-            </span>
-            <BookOpen className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-            <p className="font-bold">勉強を記録する</p>
-            <p className="text-xs text-charcoal-muted">今日勉強した教科を選ぶだけ</p>
+        <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
+          <motion.div variants={fadeUp} className="flex items-center gap-2">
+            <StepTane src="/images/tane/stage0.jpg" alt="タネ（丸い状態）" />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+              <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
+                01
+              </span>
+              <BookOpen className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
+              <p className="font-bold">勉強を記録する</p>
+              <p className="text-xs text-charcoal-muted">今日勉強した教科を選ぶだけ</p>
+            </div>
           </motion.div>
 
           <motion.div variants={fadeUp} className="sm:hidden">
@@ -159,16 +173,16 @@ export function LandingPage({ onStart }: Props) {
             <FlowArrow direction="right" />
           </motion.div>
 
-          <motion.div
-            variants={fadeUp}
-            className="relative flex w-full max-w-[220px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center"
-          >
-            <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
-              02
-            </span>
-            <Search className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-            <p className="font-bold">関連する職業が見つかる</p>
-            <p className="text-xs text-charcoal-muted">その教科をよく使う仕事を紹介</p>
+          <motion.div variants={fadeUp} className="flex items-center gap-2">
+            <StepTane src="/images/tane/stage1.jpg" alt="タネ（双葉が出た状態）" />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+              <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
+                02
+              </span>
+              <Search className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
+              <p className="font-bold">関連する職業が見つかる</p>
+              <p className="text-xs text-charcoal-muted">その教科をよく使う仕事を紹介</p>
+            </div>
           </motion.div>
 
           <motion.div variants={fadeUp} className="sm:hidden">
@@ -178,16 +192,16 @@ export function LandingPage({ onStart }: Props) {
             <FlowArrow direction="right" />
           </motion.div>
 
-          <motion.div
-            variants={fadeUp}
-            className="relative flex w-full max-w-[220px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center"
-          >
-            <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
-              03
-            </span>
-            <BookMarked className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-            <p className="font-bold">図鑑が埋まっていく</p>
-            <p className="text-xs text-charcoal-muted">気になった仕事は「タネ」に保存</p>
+          <motion.div variants={fadeUp} className="flex items-center gap-2">
+            <StepTane src="/images/tane/stage2.jpg" alt="タネ（葉が増えた状態）" />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+              <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
+                03
+              </span>
+              <BookMarked className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
+              <p className="font-bold">図鑑が埋まっていく</p>
+              <p className="text-xs text-charcoal-muted">気になった仕事は「タネ」に保存</p>
+            </div>
           </motion.div>
         </div>
 
@@ -299,9 +313,15 @@ export function LandingPage({ onStart }: Props) {
         viewport={viewport}
         className="flex flex-col items-center gap-6 px-6 py-36 text-center"
       >
-        <motion.p variants={fadeUp} className="text-lg font-medium leading-loose sm:text-xl">
-          今日の勉強を、記録してみませんか。
-        </motion.p>
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
+        >
+          <FloatingTane src="/images/tane/stage4.jpg" alt="花が咲いたタネのキャラクター" size={96} />
+          <p className="text-lg font-medium leading-loose sm:text-xl">
+            今日の勉強を、記録してみませんか。
+          </p>
+        </motion.div>
         <motion.button
           variants={fadeUp}
           type="button"
@@ -312,6 +332,33 @@ export function LandingPage({ onStart }: Props) {
         </motion.button>
       </motion.section>
     </div>
+  )
+}
+
+function FloatingTane({ src, alt, size }: { src: string; alt: string; size: number }) {
+  return (
+    <motion.img
+      src={src}
+      alt={alt}
+      width={size}
+      height={size}
+      className="shrink-0 rounded-2xl"
+      animate={{ y: [0, -8, 0] }}
+      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+    />
+  )
+}
+
+function StepTane({ src, alt }: { src: string; alt: string }) {
+  return (
+    <motion.img
+      variants={popIn}
+      src={src}
+      alt={alt}
+      width={48}
+      height={48}
+      className="h-12 w-12 shrink-0 rounded-xl"
+    />
   )
 }
 
