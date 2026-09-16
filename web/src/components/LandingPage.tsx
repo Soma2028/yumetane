@@ -31,9 +31,9 @@ const viewport = { once: true, amount: 0.25 } as const
 export function LandingPage({ onStart }: Props) {
   return (
     <div className="text-charcoal">
-      {/* 1. ファーストビュー */}
+      {/* 1. ファーストビュー — PC(lg, 1024px+)は左右2カラム、モバイルは縦積み */}
       <section
-        className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 py-14 text-center"
+        className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 py-14 text-center lg:h-screen lg:min-h-0 lg:px-12 lg:py-0 lg:text-left"
         style={{
           backgroundImage:
             "radial-gradient(ellipse 90% 55% at 50% 0%, rgba(47,107,79,0.06), transparent 70%)",
@@ -43,46 +43,47 @@ export function LandingPage({ onStart }: Props) {
           variants={stagger(0.12)}
           initial="hidden"
           animate="show"
-          className="flex flex-col items-center gap-5"
+          className="flex w-full max-w-6xl flex-col items-center gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
         >
-          <motion.div variants={fadeUp}>
-            <SproutIcon className="h-12 w-12 text-sage-600" />
-          </motion.div>
-          <motion.h1
-            variants={fadeUp}
-            className="text-4xl font-bold tracking-[-0.02em]"
-          >
-            夢のタネ
-          </motion.h1>
-          <motion.p
-            variants={fadeUp}
-            className="whitespace-nowrap text-[13px] leading-loose text-charcoal-muted sm:text-xl"
-          >
-            今日の勉強が、まだ知らない仕事との出会いになる。
-          </motion.p>
-          <motion.div
-            variants={fadeUp}
-            className="mt-1 flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
-          >
-            <FloatingTane
-              src="/images/tane/stage1.png"
-              alt="双葉が出たタネのキャラクター"
-              size={80}
-              sizeClassName="h-20 w-20 sm:h-24 sm:w-24"
-            />
-            <button
-              type="button"
-              onClick={onStart}
-              className="rounded-full bg-coral-500 px-10 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
+          <div className="flex flex-col items-center gap-5 lg:w-2/5 lg:items-start">
+            <motion.div variants={fadeUp}>
+              <SproutIcon className="h-12 w-12 text-sage-600" />
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-4xl font-bold tracking-[-0.02em] lg:text-5xl">
+              夢のタネ
+            </motion.h1>
+            <motion.p
+              variants={fadeUp}
+              className="whitespace-nowrap text-[13px] leading-loose text-charcoal-muted lg:text-xl"
             >
-              はじめる
-            </button>
-          </motion.div>
+              今日の勉強が、まだ知らない仕事との出会いになる。
+            </motion.p>
+            <motion.div
+              variants={fadeUp}
+              className="mt-1 flex flex-col items-center gap-3 lg:flex-row lg:gap-4"
+            >
+              <FloatingTane
+                src="/images/tane/stage1.png"
+                alt="双葉が出たタネのキャラクター"
+                size={80}
+                sizeClassName="h-20 w-20 lg:h-24 lg:w-24"
+              />
+              <button
+                type="button"
+                onClick={onStart}
+                className="rounded-full bg-coral-500 px-10 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
+              >
+                はじめる
+              </button>
+            </motion.div>
+          </div>
+
+          {/* PC: 右カラムに大きく、モバイル: ボタンの下に小さめに */}
           <motion.img
             variants={fadeUp}
             src={screenshotHome}
             alt="アプリのホーム画面。今日勉強した教科を選ぶ画面"
-            className="mt-4 max-h-[36vh] w-auto rounded-2xl border border-border-soft object-contain shadow-sm"
+            className="mt-4 max-h-[36vh] w-auto rounded-2xl border border-border-soft object-contain shadow-sm lg:mt-0 lg:max-h-[78vh] lg:w-3/5"
           />
         </motion.div>
       </section>
@@ -93,19 +94,19 @@ export function LandingPage({ onStart }: Props) {
         initial="hidden"
         whileInView="show"
         viewport={viewport}
-        className="mx-auto max-w-2xl px-6 py-[120px]"
+        className="mx-auto max-w-2xl px-6 py-20 lg:max-w-3xl lg:py-[120px]"
       >
         <motion.h2
           variants={fadeUp}
-          className="text-center text-2xl font-bold tracking-[-0.02em] sm:text-3xl"
+          className="text-center text-2xl font-bold tracking-[-0.02em] lg:text-3xl"
         >
           知っている職業が、少ないだけ
         </motion.h2>
 
-        <div className="relative mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6">
+        <div className="relative mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-6">
           <motion.p
             variants={fadeUp}
-            className="rounded-2xl border border-border-soft bg-white p-5 text-sm leading-loose text-charcoal-muted shadow-sm sm:mr-[-8px] sm:-translate-y-3 sm:text-base"
+            className="rounded-2xl border border-border-soft bg-white p-5 text-sm leading-loose text-charcoal-muted shadow-sm lg:mr-[-8px] lg:-translate-y-3 lg:text-base"
           >
             小中高校生の子どもを持つ保護者への調査では、「将来の夢を持っていない」と
             回答した割合は中学生が最も高く、22.0%だった
@@ -116,7 +117,7 @@ export function LandingPage({ onStart }: Props) {
           </motion.p>
           <motion.p
             variants={fadeUp}
-            className="rounded-2xl border border-border-soft bg-white p-5 text-sm leading-loose text-charcoal-muted shadow-sm sm:ml-[-8px] sm:translate-y-3 sm:text-base"
+            className="rounded-2xl border border-border-soft bg-white p-5 text-sm leading-loose text-charcoal-muted shadow-sm lg:ml-[-8px] lg:translate-y-3 lg:text-base"
           >
             別の調査でも、将来の夢を「持っている」と回答した中学生の割合は、中学1年の
             60.7%から中学3年では46.3%まで下がる
@@ -128,110 +129,125 @@ export function LandingPage({ onStart }: Props) {
         </div>
 
         <motion.div variants={fadeUp} className="mt-12 text-center">
-          <p className="text-base font-medium leading-loose sm:text-lg">
+          <p className="text-base font-medium leading-loose lg:text-xl">
             夢が無いのは、意欲が無いからではありません。
             <br />
             多くの場合、知っている職業の数がそもそも少ないだけです。
           </p>
-          <p className="mt-3 text-xl font-bold leading-snug tracking-[-0.02em] sm:text-2xl">
+          <p className="mt-3 text-xl font-bold leading-snug tracking-[-0.02em] lg:text-3xl">
             知らない選択肢は、選びようがない。
           </p>
         </motion.div>
       </motion.section>
 
-      {/* 3. 仕組み */}
+      {/* 3. 仕組み — PCはタネを上・大きく、テキストを下に */}
       <motion.section
         variants={stagger()}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
-        className="bg-white px-6 py-[120px]"
+        className="bg-white px-6 py-20 lg:py-[120px]"
       >
         <motion.h2
           variants={fadeUp}
-          className="text-center text-2xl font-bold tracking-[-0.02em] sm:text-3xl"
+          className="text-center text-2xl font-bold tracking-[-0.02em] lg:text-3xl"
         >
           仕組み
         </motion.h2>
 
-        <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
-          <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage0.png" alt="タネ（丸い状態）" />
-            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+        <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-3 lg:mt-14 lg:max-w-5xl lg:flex-row lg:justify-center lg:gap-8">
+          <motion.div variants={fadeUp} className="flex items-center gap-2 lg:flex-col lg:gap-4">
+            <StepTane
+              src="/images/tane/stage0.png"
+              alt="タネ（丸い状態）"
+              sizeClassName="lg:h-16 lg:w-16"
+            />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center lg:max-w-[240px] lg:p-6">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 01
               </span>
-              <BookOpen className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-              <p className="font-bold">勉強を記録する</p>
-              <p className="text-xs text-charcoal-muted">今日勉強した教科を選ぶだけ</p>
+              <BookOpen className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
+              <p className="font-bold lg:text-lg">勉強を記録する</p>
+              <p className="text-xs text-charcoal-muted lg:text-sm">今日勉強した教科を選ぶだけ</p>
             </div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="sm:hidden">
+          <motion.div variants={fadeUp} className="lg:hidden">
             <FlowArrow direction="down" />
           </motion.div>
-          <motion.div variants={fadeUp} className="hidden sm:block">
+          <motion.div variants={fadeUp} className="hidden lg:block">
             <FlowArrow direction="right" />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage1.png" alt="タネ（双葉が出た状態）" />
-            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+          <motion.div variants={fadeUp} className="flex items-center gap-2 lg:flex-col lg:gap-4">
+            <StepTane
+              src="/images/tane/stage1.png"
+              alt="タネ（双葉が出た状態）"
+              sizeClassName="lg:h-16 lg:w-16"
+            />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center lg:max-w-[240px] lg:p-6">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 02
               </span>
-              <Search className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-              <p className="font-bold">関連する職業が見つかる</p>
-              <p className="text-xs text-charcoal-muted">その教科をよく使う仕事を紹介</p>
+              <Search className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
+              <p className="font-bold lg:text-lg">関連する職業が見つかる</p>
+              <p className="text-xs text-charcoal-muted lg:text-sm">その教科をよく使う仕事を紹介</p>
             </div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="sm:hidden">
+          <motion.div variants={fadeUp} className="lg:hidden">
             <FlowArrow direction="down" />
           </motion.div>
-          <motion.div variants={fadeUp} className="hidden sm:block">
+          <motion.div variants={fadeUp} className="hidden lg:block">
             <FlowArrow direction="right" />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage2.png" alt="タネ（葉が増えた状態）" />
-            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
+          <motion.div variants={fadeUp} className="flex items-center gap-2 lg:flex-col lg:gap-4">
+            <StepTane
+              src="/images/tane/stage2.png"
+              alt="タネ（葉が増えた状態）"
+              sizeClassName="lg:h-16 lg:w-16"
+            />
+            <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center lg:max-w-[240px] lg:p-6">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 03
               </span>
-              <BookMarked className="h-8 w-8 text-sage-600" strokeWidth={1.5} />
-              <p className="font-bold">図鑑が埋まっていく</p>
-              <p className="text-xs text-charcoal-muted">気になった仕事は「タネ」に保存</p>
+              <BookMarked className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
+              <p className="font-bold lg:text-lg">図鑑が埋まっていく</p>
+              <p className="text-xs text-charcoal-muted lg:text-sm">気になった仕事は「タネ」に保存</p>
             </div>
           </motion.div>
         </div>
 
-        <motion.div variants={fadeUp} className="mx-auto mt-12 max-w-xl rounded-2xl bg-sage-50 px-6 py-5 text-center">
-          <p className="text-base font-medium leading-loose sm:text-lg">
+        <motion.div
+          variants={fadeUp}
+          className="mx-auto mt-12 max-w-xl rounded-2xl bg-sage-50 px-6 py-5 text-center lg:max-w-2xl lg:py-6"
+        >
+          <p className="text-base font-medium leading-loose lg:text-lg">
             勉強するたびに、新しい仕事に出会える。
           </p>
         </motion.div>
       </motion.section>
 
-      {/* 4. 画面紹介 */}
+      {/* 4. 画面紹介 — 既存の実装（横並び・中央を大きく）を維持 */}
       <motion.section
         variants={stagger()}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
-        className="mx-auto max-w-4xl px-6 py-[120px]"
+        className="mx-auto max-w-4xl px-6 py-20 lg:py-[120px]"
       >
         <motion.h2
           variants={fadeUp}
-          className="text-center text-2xl font-bold tracking-[-0.02em] sm:text-3xl"
+          className="text-center text-2xl font-bold tracking-[-0.02em] lg:text-3xl"
         >
           画面紹介
         </motion.h2>
 
-        <div className="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3 sm:items-center sm:gap-6">
+        <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-3 lg:items-center lg:gap-6">
           <motion.figure
             variants={fadeUp}
-            className="flex flex-col items-center gap-3 text-center sm:origin-bottom sm:-rotate-2 sm:scale-95"
+            className="flex flex-col items-center gap-3 text-center lg:origin-bottom lg:-rotate-2 lg:scale-95"
           >
             <img
               src={screenshotHome}
@@ -244,7 +260,7 @@ export function LandingPage({ onStart }: Props) {
           </motion.figure>
           <motion.figure
             variants={fadeUp}
-            className="relative z-10 flex flex-col items-center gap-3 text-center sm:origin-bottom sm:scale-105"
+            className="relative z-10 flex flex-col items-center gap-3 text-center lg:origin-bottom lg:scale-105"
           >
             <img
               src={screenshotDiscovery}
@@ -257,7 +273,7 @@ export function LandingPage({ onStart }: Props) {
           </motion.figure>
           <motion.figure
             variants={fadeUp}
-            className="flex flex-col items-center gap-3 text-center sm:origin-bottom sm:rotate-2 sm:scale-95"
+            className="flex flex-col items-center gap-3 text-center lg:origin-bottom lg:rotate-2 lg:scale-95"
           >
             <img
               src={screenshotZukan}
@@ -277,18 +293,18 @@ export function LandingPage({ onStart }: Props) {
         initial="hidden"
         whileInView="show"
         viewport={viewport}
-        className="bg-white px-6 py-[120px]"
+        className="bg-white px-6 py-20 lg:py-[120px]"
       >
         <div className="mx-auto max-w-2xl">
           <motion.h2
             variants={fadeUp}
-            className="text-center text-2xl font-bold tracking-[-0.02em] sm:text-3xl"
+            className="text-center text-2xl font-bold tracking-[-0.02em] lg:text-3xl"
           >
             データについて
           </motion.h2>
           <motion.div
             variants={fadeUp}
-            className="mt-8 flex flex-col gap-4 text-sm leading-loose text-charcoal-muted sm:text-base"
+            className="mt-8 flex flex-col gap-4 text-sm leading-loose text-charcoal-muted lg:text-base"
           >
             <p>
               職業の情報は、独立行政法人労働政策研究・研修機構（JILPT）が公開する職業情報提供サイト「job
@@ -306,20 +322,20 @@ export function LandingPage({ onStart }: Props) {
         </div>
       </motion.section>
 
-      {/* 6. CTA */}
+      {/* 6. CTA — PCは文言・タネ・ボタンを横並びに */}
       <motion.section
         variants={stagger()}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
-        className="flex flex-col items-center gap-6 px-6 py-36 text-center"
+        className="flex flex-col items-center gap-6 px-6 py-24 text-center lg:flex-row lg:justify-center lg:gap-10 lg:py-36"
       >
         <motion.div
           variants={fadeUp}
-          className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
+          className="flex flex-col items-center gap-3 lg:flex-row lg:gap-4"
         >
           <FloatingTane src="/images/tane/stage4.png" alt="花が咲いたタネのキャラクター" size={96} />
-          <p className="text-lg font-medium leading-loose sm:text-xl">
+          <p className="text-lg font-medium leading-loose lg:text-xl">
             今日の勉強を、記録してみませんか。
           </p>
         </motion.div>
@@ -345,7 +361,7 @@ function FloatingTane({
   src: string
   alt: string
   size: number
-  /** レスポンシブにサイズを上書きしたいときのTailwindクラス（例: "h-20 w-20 sm:h-24 sm:w-24"）。 */
+  /** レスポンシブにサイズを上書きしたいときのTailwindクラス（例: "h-20 w-20 lg:h-24 lg:w-24"）。 */
   sizeClassName?: string
 }) {
   return (
@@ -362,7 +378,15 @@ function FloatingTane({
   )
 }
 
-function StepTane({ src, alt }: { src: string; alt: string }) {
+function StepTane({
+  src,
+  alt,
+  sizeClassName,
+}: {
+  src: string
+  alt: string
+  sizeClassName?: string
+}) {
   return (
     <motion.img
       variants={popIn}
@@ -370,7 +394,7 @@ function StepTane({ src, alt }: { src: string; alt: string }) {
       alt={alt}
       width={48}
       height={48}
-      className="h-12 w-12 shrink-0 rounded-xl object-contain"
+      className={`h-12 w-12 shrink-0 rounded-xl object-contain ${sizeClassName ?? ""}`}
       style={{ mixBlendMode: "multiply" }}
     />
   )
