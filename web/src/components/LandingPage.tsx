@@ -68,6 +68,7 @@ export function LandingPage({ onStart }: Props) {
               src="/images/tane/stage1.png"
               alt="双葉が出たタネのキャラクター"
               size={80}
+              sizeClassName="h-20 w-20 sm:h-24 sm:w-24"
             />
             <button
               type="button"
@@ -335,14 +336,25 @@ export function LandingPage({ onStart }: Props) {
   )
 }
 
-function FloatingTane({ src, alt, size }: { src: string; alt: string; size: number }) {
+function FloatingTane({
+  src,
+  alt,
+  size,
+  sizeClassName,
+}: {
+  src: string
+  alt: string
+  size: number
+  /** レスポンシブにサイズを上書きしたいときのTailwindクラス（例: "h-20 w-20 sm:h-24 sm:w-24"）。 */
+  sizeClassName?: string
+}) {
   return (
     <motion.img
       src={src}
       alt={alt}
       width={size}
       height={size}
-      className="shrink-0 rounded-2xl object-contain"
+      className={`shrink-0 rounded-2xl object-contain ${sizeClassName ?? ""}`}
       style={{ mixBlendMode: "multiply" }}
       animate={{ y: [0, -8, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
