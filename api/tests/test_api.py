@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from app.data import load_jobs
-from app.discovery import STUDIABLE_SUBJECTS, TOP_N_PER_SUBJECT
+from app.discovery import TOP_N_PER_SUBJECT
 from app.main import app
 
 client = TestClient(app)
@@ -16,12 +16,19 @@ def test_health():
     assert r.json() == {"status": "ok"}
 
 
-def test_subjects_matches_studiable_subjects():
+def test_subjects_returns_9_subjects_with_health_pe_flagged_special():
     r = client.get("/subjects")
     assert r.status_code == 200
-    assert r.json() == STUDIABLE_SUBJECTS
-    # 保健体育は対応する知識項目が無いため含まれないはず
-    assert "保健体育" not in r.json()
+    body = r.json()
+    assert len(body) == 9
+    names = [s["name"] for s in body]
+    assert set(names) == {
+        "数学", "国語", "理科", "社会", "英語", "美術", "音楽", "技術・家庭", "保健体育",
+    }
+    health = next(s for s in body if s["name"] == "保健体育")
+    assert health["is_special"] is True
+    others = [s for s in body if s["name"] != "保健体育"]
+    assert all(s["is_special"] is False for s in others)
 
 
 def test_discover_returns_a_job():
@@ -49,9 +56,18 @@ def test_discover_excludes_known_jobs_until_pool_exhausted():
     assert len(seen) <= TOP_N_PER_SUBJECT
 
 
-def test_discover_unknown_subject_returns_422():
+def test_discover_health_pe_subject_returns_422():
+    # 保健体育はis_special=Trueで discover の対象外（クライアントが呼ばない前提だが、
+    # サーバー側でも呼ばれたら422で拒否する）
     r = client.post("/discover", json={"subject": "保健体育", "known_job_ids": []})
     assert r.status_code == 422
+
+
+def test_discover_art_and_music_both_work():
+    for subject in ["美術", "音楽"]:
+        r = client.post("/discover", json={"subject": subject, "known_job_ids": []})
+        assert r.status_code == 200
+        assert r.json()["exhausted"] is False
 
 
 def test_areas_endpoint():

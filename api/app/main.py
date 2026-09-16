@@ -16,8 +16,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .areas import area_counts, dominant_area
 from .data import load_jobs
-from .discovery import STUDIABLE_SUBJECTS, discover_job
-from .schemas import DiscoverRequest, DiscoverResponse, JobOut
+from .discovery import ALL_SUBJECTS, SPECIAL_SUBJECTS, discover_job
+from .schemas import DiscoverRequest, DiscoverResponse, JobOut, SubjectOut
 from .tags import select_tags
 
 app = FastAPI(title="夢のタネ API")
@@ -43,11 +43,12 @@ def get_health() -> dict:
     return {"status": "ok"}
 
 
-@app.get("/subjects")
-def get_subjects() -> list[str]:
-    """学習記録で選べる教科の一覧。保健体育は対応する知識項目が無いため含まない
-    （docs/design.md「知識33項目 → 教科への対応」参照）。"""
-    return STUDIABLE_SUBJECTS
+@app.get("/subjects", response_model=list[SubjectOut])
+def get_subjects() -> list[SubjectOut]:
+    """学習記録で選べる教科の一覧（9教科）。保健体育は記録・累計時間には
+    含めてよいが、対応する知識項目が無いためPOST /discoverの対象外で、
+    is_special=Trueで示す（docs/design.md「知識33項目 → 教科への対応」参照）。"""
+    return [SubjectOut(name=s, is_special=s in SPECIAL_SUBJECTS) for s in ALL_SUBJECTS]
 
 
 @app.get("/areas")

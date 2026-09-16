@@ -9,7 +9,9 @@ const SUBJECT_FLAVOR: Record<string, string> = {
   社会: "社会科学",
   国語: "ことば",
   英語: "語学",
-  "美術・音楽": "表現",
+  美術: "表現",
+  音楽: "表現",
+  "美術・音楽": "表現", // 旧データ（分離前に記録されたログ）のため変換せず残す
   "技術・家庭": "ものづくり",
 }
 
@@ -31,6 +33,7 @@ interface Props {
   weeklySubjectTotals: SubjectTotal[]
   subjectJobHistory: SubjectJobRow[]
   mostStudied: SubjectTotal | null
+  specialSubjects: string[]
   onBack: () => void
   onSelectJob: (jobId: number) => void
 }
@@ -40,6 +43,7 @@ export function KirokuScreen({
   weeklySubjectTotals,
   subjectJobHistory,
   mostStudied,
+  specialSubjects,
   onBack,
   onSelectJob,
 }: Props) {
@@ -133,7 +137,9 @@ export function KirokuScreen({
                 </div>
                 <div className="mt-2 border-t border-border-soft pt-2">
                   <p className="mb-1.5 text-xs text-charcoal-muted">見つかった仕事</p>
-                  {row.jobs.length === 0 ? (
+                  {specialSubjects.includes(row.subject) ? (
+                    <p className="text-xs text-charcoal-muted">職業発見には未対応</p>
+                  ) : row.jobs.length === 0 ? (
                     <p className="text-sm text-charcoal-muted">まだ見つかった仕事はないよ</p>
                   ) : (
                     <div className="flex flex-wrap gap-1.5">

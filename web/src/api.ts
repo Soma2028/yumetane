@@ -1,4 +1,4 @@
-import type { DiscoverResponse, Job } from "./types"
+import type { DiscoverResponse, Job, Subject } from "./types"
 
 // 本番はVercelの環境変数 VITE_API_BASE_URL（Renderのapi URL）から読む。
 // 未設定時はローカル開発用に127.0.0.1へフォールバックする。
@@ -6,7 +6,7 @@ import type { DiscoverResponse, Job } from "./types"
 // ポートを掴んでいると誤接続するため、127.0.0.1を明示する。
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"
 
-export async function fetchSubjects(): Promise<string[]> {
+export async function fetchSubjects(): Promise<Subject[]> {
   const res = await fetch(`${API_BASE}/subjects`)
   if (!res.ok) throw new Error("教科の取得に失敗しました")
   return res.json()

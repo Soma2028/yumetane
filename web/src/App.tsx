@@ -9,11 +9,9 @@ import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
-  isFirstRecordToday,
   knownJobIds,
   last7Dates,
   loadState,
-  mostStudiedSubject,
   recordStudy,
   saveState,
   studiedDatesSet,
@@ -29,7 +27,7 @@ import {
   type RecordDetails,
 } from "./storage"
 import { stageFromCount } from "./taneStage"
-import type { DiscoverResponse, Job } from "./types"
+import type { DiscoverResponse, Job, Subject } from "./types"
 
 type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku"
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
@@ -40,8 +38,9 @@ function App() {
   const [error, setError] = useState<string | null>(null)
 
   const [appState, setAppState] = useState<AppState>(() => loadState())
-  const [subjects, setSubjects] = useState<string[]>([])
+  const [subjects, setSubjects] = useState<Subject[]>([])
   const [areaTotals, setAreaTotals] = useState<Record<string, number>>({})
+  const specialSubjectNames = subjects.filter((s) => s.is_special).map((s) => s.name)
 
   const [discoverResult, setDiscoverResult] = useState<DiscoverResponse | null>(null)
   const [discoverSubject, setDiscoverSubject] = useState("")
@@ -76,7 +75,19 @@ function App() {
   async function handleRecord(subject: string, minutes: number, details: RecordDetails) {
     setError(null)
 
-    if (!isFirstRecordToday(appState)) {
+    if (specialSubjectNames.includes(subject)) {
+      // 保健体育など: job tagに対応する知識項目が無いため、記録だけしてdiscoverは呼ばない
+      updateAppState(recordStudy(appState, subject, minutes, null, details))
+      if (toastTimer.current) clearTimeout(toastTimer.current)
+      setHomeToast(`記録したよ！${subject}は今対応する職業データを準備中だよ`)
+      toastTimer.current = setTimeout(() => setHomeToast(null), 3000)
+      return
+    }
+
+    const hasDiscoverableRecordToday = todaysLogs(appState).some(
+      (l) => !specialSubjectNames.includes(l.subject),
+    )
+    if (hasDiscoverableRecordToday) {
       // 2回目以降の記録：職業探索はせず、ログに積むだけ
       updateAppState(recordStudy(appState, subject, minutes, null, details))
       if (toastTimer.current) clearTimeout(toastTimer.current)
@@ -159,7 +170,7 @@ function App() {
 
     return (
       <HomeScreen
-        subjects={subjects}
+        subjects={subjects.map((s) => s.name)}
         todaysLogs={todaysLogs(appState)}
         todaysTotalMinutes={todaysTotalMinutes(appState)}
         streak={appState.streak}
@@ -226,7 +237,11 @@ function App() {
         weeklyTotalMinutes={weeklyTotalMinutes(appState)}
         weeklySubjectTotals={weeklySubjectTotals(appState)}
         subjectJobHistory={subjectJobHistory(appState)}
-        mostStudied={mostStudiedSubject(appState)}
+        mostStudied={
+          // 保健体育は職業に繋がらないため「ひとこと分析」の対象からは除く
+          subjectTotals(appState).find((s) => !specialSubjectNames.includes(s.subject)) ?? null
+        }
+        specialSubjects={specialSubjectNames}
         onBack={() => setScreen("home")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
       />
