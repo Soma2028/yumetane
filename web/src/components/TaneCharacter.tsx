@@ -46,11 +46,12 @@ export function TaneCharacter({ count, size = 80, justGrew = false, popIn = fals
       }}
     >
       <motion.img
-        src={`/images/tane/stage${stage}.jpg`}
+        src={`/images/tane/stage${stage}.png`}
         alt={STAGE_ALT[stage]}
         width={size}
         height={size}
-        className="rounded-xl"
+        className="rounded-xl object-contain"
+        style={{ mixBlendMode: "multiply" }}
         initial={popIn ? { scale: 0 } : false}
         animate={{
           scale: popIn ? [0, 1.1, 1] : 1,
