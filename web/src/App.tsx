@@ -20,6 +20,7 @@ import {
   type AppState,
   type RecordDetails,
 } from "./storage"
+import { stageFromCount } from "./taneStage"
 import type { DiscoverResponse, Job } from "./types"
 
 type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail"
@@ -39,6 +40,7 @@ function App() {
   const [discoverZukanCount, setDiscoverZukanCount] = useState(0)
   const [discoverSpeechLines, setDiscoverSpeechLines] = useState<string[]>([])
   const [discoverAllDiscovered, setDiscoverAllDiscovered] = useState(false)
+  const [discoverJustGrew, setDiscoverJustGrew] = useState(false)
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
   const [detailReturnScreen, setDetailReturnScreen] = useState<DetailReturnScreen>("home")
@@ -94,6 +96,7 @@ function App() {
       updateAppState(next)
 
       const allDiscovered = next.zukan.length === 167 && result.job !== null
+      const grew = stageFromCount(appState.zukan.length) !== stageFromCount(next.zukan.length)
       const lines: string[] = []
       if (allDiscovered) {
         lines.push("全部の仕事を見つけたよ！")
@@ -107,6 +110,7 @@ function App() {
       setDiscoverZukanCount(next.zukan.length)
       setDiscoverSpeechLines(lines)
       setDiscoverAllDiscovered(allDiscovered)
+      setDiscoverJustGrew(grew)
       setScreen("discovery")
     } catch {
       setError("うまく見つけられませんでした。しばらくしてからもう一度お試しください。")
@@ -174,6 +178,7 @@ function App() {
         zukanCount={discoverZukanCount}
         speechLines={discoverSpeechLines}
         allDiscovered={discoverAllDiscovered}
+        justGrew={discoverJustGrew}
         isTane={jobId ? appState.taneIds.includes(jobId) : false}
         onToggleTane={() => jobId && handleToggleTaneFor(jobId)}
         onDone={() => setScreen("home")}

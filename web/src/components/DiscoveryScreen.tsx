@@ -13,6 +13,7 @@ interface Props {
   zukanCount: number
   speechLines: string[]
   allDiscovered: boolean
+  justGrew: boolean
   isTane: boolean
   onToggleTane: () => void
   onDone: () => void
@@ -25,6 +26,7 @@ export function DiscoveryScreen({
   zukanCount,
   speechLines,
   allDiscovered,
+  justGrew,
   isTane,
   onToggleTane,
   onDone,
@@ -50,17 +52,42 @@ export function DiscoveryScreen({
   }
 
   const Icon = iconForTags(job.tags)
+  const showGrowthToast = justGrew && !allDiscovered
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
       {allDiscovered && <PetalConfetti />}
 
       <div className="flex items-start gap-3">
-        <TaneCharacter count={zukanCount} size={80} />
-        <TaneSpeech lines={speechLines} className="mt-1 flex-1" />
+        <TaneCharacter count={zukanCount} size={80} popIn justGrew={showGrowthToast} />
+        <motion.div
+          className="mt-1 flex-1"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <TaneSpeech lines={speechLines} />
+        </motion.div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-sm">
+      {showGrowthToast && (
+        <motion.div
+          className="flex items-start gap-2"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.6 }}
+        >
+          <TaneCharacter count={zukanCount} size={40} />
+          <TaneSpeech lines={["タネが育ったよ！"]} className="flex-1" />
+        </motion.div>
+      )}
+
+      <motion.div
+        className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
+      >
         <div className="flex h-40 items-center justify-center bg-sage-100">
           <Icon className="h-16 w-16 text-sage-600" strokeWidth={1.5} />
         </div>
@@ -83,7 +110,7 @@ export function DiscoveryScreen({
             </span>
           )}
         </div>
-      </div>
+      </motion.div>
 
       <p className="text-center text-xs text-charcoal-muted">図鑑に登録したよ</p>
 
@@ -112,7 +139,7 @@ export function DiscoveryScreen({
   )
 }
 
-const PETAL_COLORS = ["#2F6B4F", "#E8734A"]
+const PETAL_COLOR = "#E8734A"
 
 interface Petal {
   id: number
@@ -120,21 +147,20 @@ interface Petal {
   delay: number
   duration: number
   rotate: number
-  color: string
 }
 
 function generatePetals(): Petal[] {
-  return Array.from({ length: 28 }, (_, i) => ({
+  // 5秒間降り続けて見えるよう、delay(0〜2s)+duration(2.5〜3.5s)の合計を5s前後に揃える
+  return Array.from({ length: 40 }, (_, i) => ({
     id: i,
     left: Math.random() * 100,
-    delay: Math.random() * 0.6,
-    duration: 2.2 + Math.random() * 1.6,
+    delay: Math.random() * 2,
+    duration: 2.5 + Math.random() * 1,
     rotate: 180 + Math.random() * 360,
-    color: PETAL_COLORS[i % 2],
   }))
 }
 
-/** 167件達成のときだけ降らせる花吹雪。マウント時に一度だけ生成する。 */
+/** 167件達成のときだけ降らせる花吹雪（コーラル色、約5秒間）。マウント時に一度だけ生成する。 */
 function PetalConfetti() {
   const [petals] = useState<Petal[]>(generatePetals)
 
@@ -144,7 +170,7 @@ function PetalConfetti() {
         <motion.span
           key={p.id}
           className="absolute h-2.5 w-2.5"
-          style={{ left: `${p.left}%`, backgroundColor: p.color, borderRadius: "60% 40% 60% 40%" }}
+          style={{ left: `${p.left}%`, backgroundColor: PETAL_COLOR, borderRadius: "60% 40% 60% 40%" }}
           initial={{ top: "-6%", opacity: 0.9, rotate: 0 }}
           animate={{ top: "110%", rotate: p.rotate }}
           transition={{ duration: p.duration, delay: p.delay, ease: "easeIn" }}
