@@ -18,6 +18,7 @@ import {
   todaysTotalMinutes,
   toggleTane,
   type AppState,
+  type RecordDetails,
 } from "./storage"
 import type { DiscoverResponse, Job } from "./types"
 
@@ -62,12 +63,12 @@ function App() {
     saveState(next)
   }
 
-  async function handleRecord(subject: string, minutes: number) {
+  async function handleRecord(subject: string, minutes: number, details: RecordDetails) {
     setError(null)
 
     if (!isFirstRecordToday(appState)) {
       // 2回目以降の記録：職業探索はせず、ログに積むだけ
-      updateAppState(recordStudy(appState, subject, minutes, null))
+      updateAppState(recordStudy(appState, subject, minutes, null, details))
       if (toastTimer.current) clearTimeout(toastTimer.current)
       setHomeToast("今日の発見はすみ。また明日一緒に探そう！")
       toastTimer.current = setTimeout(() => setHomeToast(null), 3000)
@@ -78,9 +79,17 @@ function App() {
     try {
       const result = await discover(subject, knownJobIds(appState))
       const discoveredJobId = result.job ? result.job.job_id : null
-      let next = recordStudy(appState, subject, minutes, discoveredJobId)
+      let next = recordStudy(appState, subject, minutes, discoveredJobId, details)
       if (result.job) {
-        next = addToZukan(next, result.job.job_id, result.job.job_name, subject, result.job.area)
+        next = addToZukan(
+          next,
+          result.job.job_id,
+          result.job.job_name,
+          subject,
+          result.job.area,
+          result.job.tags,
+          result.job.description,
+        )
       }
       updateAppState(next)
 

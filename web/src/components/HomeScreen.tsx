@@ -1,8 +1,10 @@
 import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
-import type { StudyLogEntry } from "../storage"
+import type { RecordDetails, StudyLogEntry } from "../storage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
+
+const MEMO_MAX_LENGTH = 100
 
 interface Props {
   subjects: string[]
@@ -14,7 +16,7 @@ interface Props {
   toast: string | null
   loading: boolean
   error: string | null
-  onRecord: (subject: string, minutes: number) => void
+  onRecord: (subject: string, minutes: number, details: RecordDetails) => void
   onOpenZukan: () => void
   onOpenTane: () => void
   onSelectJob: (jobId: number) => void
@@ -38,15 +40,21 @@ export function HomeScreen({
   const [showForm, setShowForm] = useState(false)
   const [subject, setSubject] = useState<string | null>(null)
   const [minutesInput, setMinutesInput] = useState("30")
+  const [material, setMaterial] = useState("")
+  const [content, setContent] = useState("")
+  const [memo, setMemo] = useState("")
 
   const minutes = Number(minutesInput) || 0
   const canSubmit = subject !== null && minutes >= 10
 
   function handleSubmit() {
     if (!canSubmit || !subject) return
-    onRecord(subject, minutes)
+    onRecord(subject, minutes, { material, content, memo })
     setSubject(null)
     setMinutesInput("30")
+    setMaterial("")
+    setContent("")
+    setMemo("")
     setShowForm(false)
   }
 
@@ -87,9 +95,19 @@ export function HomeScreen({
         ) : (
           <ul className="flex flex-col gap-2">
             {todaysLogs.map((log, i) => (
-              <li key={i} className="flex items-center justify-between text-sm">
-                <span>{log.subject}</span>
-                <span className="text-charcoal-muted">{log.minutes}分</span>
+              <li
+                key={i}
+                className="rounded-2xl border border-border-soft bg-cream px-4 py-3 text-sm"
+              >
+                <div className="flex items-center justify-between font-medium">
+                  <span>{log.subject}</span>
+                  <span className="text-charcoal-muted">{log.minutes}分</span>
+                </div>
+                {(log.material || log.content) && (
+                  <p className="mt-1 text-xs text-charcoal-muted">
+                    {[log.material, log.content].filter(Boolean).join(" ・ ")}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -139,6 +157,45 @@ export function HomeScreen({
             {minutes > 0 && minutes < 10 && (
               <p className="text-xs text-coral-600">10分未満は記録できません</p>
             )}
+
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="text-charcoal-muted">教材名（任意）</span>
+              <input
+                type="text"
+                value={material}
+                onChange={(e) => setMaterial(e.target.value)}
+                placeholder="例：チャート式"
+                className="rounded-lg border border-border-soft px-3 py-2"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="text-charcoal-muted">単元・内容（任意）</span>
+              <input
+                type="text"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="例：二次方程式"
+                className="rounded-lg border border-border-soft px-3 py-2"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="flex items-center justify-between text-charcoal-muted">
+                <span>メモ（任意）</span>
+                <span className="text-xs">
+                  {memo.length} / {MEMO_MAX_LENGTH}
+                </span>
+              </span>
+              <input
+                type="text"
+                value={memo}
+                maxLength={MEMO_MAX_LENGTH}
+                onChange={(e) => setMemo(e.target.value.slice(0, MEMO_MAX_LENGTH))}
+                placeholder="例：やっと解けた"
+                className="rounded-lg border border-border-soft px-3 py-2"
+              />
+            </label>
 
             <div className="flex gap-2">
               <button
