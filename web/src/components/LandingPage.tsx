@@ -65,7 +65,7 @@ export function LandingPage({ onStart }: Props) {
             className="mt-1 flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
           >
             <FloatingTane
-              src="/images/tane/stage1.jpg"
+              src="/images/tane/stage1.png"
               alt="双葉が出たタネのキャラクター"
               size={80}
             />
@@ -155,7 +155,7 @@ export function LandingPage({ onStart }: Props) {
 
         <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
           <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage0.jpg" alt="タネ（丸い状態）" />
+            <StepTane src="/images/tane/stage0.png" alt="タネ（丸い状態）" />
             <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 01
@@ -174,7 +174,7 @@ export function LandingPage({ onStart }: Props) {
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage1.jpg" alt="タネ（双葉が出た状態）" />
+            <StepTane src="/images/tane/stage1.png" alt="タネ（双葉が出た状態）" />
             <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 02
@@ -193,7 +193,7 @@ export function LandingPage({ onStart }: Props) {
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex items-center gap-2">
-            <StepTane src="/images/tane/stage2.jpg" alt="タネ（葉が増えた状態）" />
+            <StepTane src="/images/tane/stage2.png" alt="タネ（葉が増えた状態）" />
             <div className="relative flex w-full max-w-[190px] flex-col items-center gap-3 rounded-2xl border border-border-soft p-5 text-center">
               <span className="absolute left-4 top-3 text-xs font-bold tracking-wide text-sage-600/50">
                 03
@@ -317,7 +317,7 @@ export function LandingPage({ onStart }: Props) {
           variants={fadeUp}
           className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
         >
-          <FloatingTane src="/images/tane/stage4.jpg" alt="花が咲いたタネのキャラクター" size={96} />
+          <FloatingTane src="/images/tane/stage4.png" alt="花が咲いたタネのキャラクター" size={96} />
           <p className="text-lg font-medium leading-loose sm:text-xl">
             今日の勉強を、記録してみませんか。
           </p>
@@ -342,7 +342,8 @@ function FloatingTane({ src, alt, size }: { src: string; alt: string; size: numb
       alt={alt}
       width={size}
       height={size}
-      className="shrink-0 rounded-2xl"
+      className="shrink-0 rounded-2xl object-contain"
+      style={{ mixBlendMode: "multiply" }}
       animate={{ y: [0, -8, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
     />
@@ -357,7 +358,8 @@ function StepTane({ src, alt }: { src: string; alt: string }) {
       alt={alt}
       width={48}
       height={48}
-      className="h-12 w-12 shrink-0 rounded-xl"
+      className="h-12 w-12 shrink-0 rounded-xl object-contain"
+      style={{ mixBlendMode: "multiply" }}
     />
   )
 }
