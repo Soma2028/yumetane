@@ -131,6 +131,7 @@ function App() {
       } else if (result.job) {
         if (next.streak >= 3) lines.push(`${next.streak}日連続！すごいね`)
         lines.push(`${result.job.job_name}という仕事を見つけたよ！`)
+        if (grew) lines.push("タネが育ったよ！")
       }
 
       setDiscoverResult(result)

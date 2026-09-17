@@ -52,18 +52,18 @@ export function DiscoveryScreen({
   }
 
   const Icon = iconForTags(job.tags)
-  const showGrowthToast = justGrew && !allDiscovered
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
       {allDiscovered && <PetalConfetti />}
 
+      {/* 補足: タネのリアクション。主役はこの下の職業カード */}
       <div className="flex items-start gap-3">
         <TaneCharacter
           count={zukanCount}
           size={120}
           popIn
-          justGrew={showGrowthToast}
+          justGrew={justGrew && !allDiscovered}
           speaking={speechLines.length > 0}
         />
         <motion.div
@@ -76,30 +76,19 @@ export function DiscoveryScreen({
         </motion.div>
       </div>
 
-      {showGrowthToast && (
-        <motion.div
-          className="flex items-start gap-2"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.6 }}
-        >
-          <TaneCharacter count={zukanCount} size={56} speaking />
-          <TaneSpeech lines={["タネが育ったよ！"]} className="flex-1" />
-        </motion.div>
-      )}
-
+      {/* 主役: 見つかった職業 */}
       <motion.div
-        className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+        className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
       >
-        <div className="flex h-40 items-center justify-center bg-sage-100">
-          <Icon className="h-16 w-16 text-sage-600" strokeWidth={1.5} />
+        <div className="flex h-24 items-center justify-center bg-sage-100">
+          <Icon className="h-12 w-12 text-sage-600" strokeWidth={1.5} />
         </div>
-        <div className="px-5 pt-4 pb-5">
-          <h3 className="text-xl font-bold tracking-tight">{job.job_name}</h3>
-          <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="px-5 pt-5 pb-6">
+          <h3 className="text-2xl font-bold leading-snug tracking-tight">{job.job_name}</h3>
+          <div className="mt-3 flex flex-wrap gap-1.5">
             {job.tags.map((tag) => (
               <span
                 key={tag}
@@ -115,10 +104,9 @@ export function DiscoveryScreen({
               まだデータが少ないから、仕事の内容から予想したよ
             </span>
           )}
+          <p className="mt-4 text-xs font-medium text-sage-600">図鑑に登録したよ</p>
         </div>
       </motion.div>
-
-      <p className="text-center text-xs text-charcoal-muted">図鑑に登録したよ</p>
 
       <button
         type="button"
