@@ -33,19 +33,25 @@ export function LandingPage({ onStart }: Props) {
     <div className="text-charcoal">
       {/* 1. ファーストビュー — PC(lg, 1024px+)は左右2カラム、モバイルは縦積み */}
       <section
-        className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 py-14 text-center lg:h-screen lg:min-h-0 lg:px-12 lg:py-0 lg:text-left"
+        className="relative flex min-h-screen flex-col items-center justify-center gap-5 overflow-hidden px-6 py-14 text-center lg:h-screen lg:min-h-0 lg:px-12 lg:py-0 lg:text-left"
         style={{
           backgroundImage:
             "radial-gradient(ellipse 90% 55% at 50% 0%, rgba(47,107,79,0.06), transparent 70%)",
         }}
       >
+        {/* PC版のみ: 右60%を薄いセージ背景にして、明るいモック画像を浮き上がらせる */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 hidden w-3/5 bg-sage-600/10 lg:block"
+        />
+
         <motion.div
           variants={stagger(0.12)}
           initial="hidden"
           animate="show"
-          className="flex w-full max-w-6xl flex-col items-center gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
+          className="relative z-10 flex w-full max-w-6xl flex-col items-center gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
         >
-          <div className="flex flex-col items-center gap-5 lg:w-2/5 lg:items-start">
+          <div className="flex flex-col items-center justify-center gap-5 lg:w-2/5 lg:items-start lg:self-stretch">
             <motion.div variants={fadeUp}>
               <SproutIcon className="h-12 w-12 text-sage-600" />
             </motion.div>
