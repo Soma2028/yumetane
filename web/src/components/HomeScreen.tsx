@@ -71,9 +71,9 @@ export function HomeScreen({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
-      <div className="relative flex flex-col items-center gap-1 pt-1">
+      <div className="relative flex flex-col items-center gap-1 pt-4">
         {streak > 0 && (
-          <span className="absolute right-0 top-1 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
+          <span className="absolute right-0 top-0 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
             <Flame className="h-4 w-4" />
             {streak}日連続
           </span>
@@ -84,7 +84,7 @@ export function HomeScreen({
           className="cursor-pointer transition-transform active:scale-95"
           aria-label="タネのせいちょうを見る"
         >
-          <TaneCharacter count={zukanCount} size={64} />
+          <TaneCharacter count={zukanCount} size={96} />
         </button>
         <h1 className="text-lg font-bold tracking-tight">夢のタネ</h1>
       </div>
