@@ -2,6 +2,7 @@ import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import type { RecordDetails, StudyLogEntry } from "../storage"
+import { stageFromCount } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
@@ -54,6 +55,7 @@ export function HomeScreen({
   const [material, setMaterial] = useState("")
   const [content, setContent] = useState("")
   const [memo, setMemo] = useState("")
+  const [isOpeningGrowth, setIsOpeningGrowth] = useState(false)
 
   const minutes = Number(minutesInput) || 0
   const canSubmit = subject !== null && minutes >= 10
@@ -80,7 +82,7 @@ export function HomeScreen({
         )}
         <button
           type="button"
-          onClick={onOpenGrowth}
+          onClick={() => setIsOpeningGrowth(true)}
           className="cursor-pointer transition-transform active:scale-95"
           aria-label="タネのせいちょうを見る"
         >
@@ -88,6 +90,30 @@ export function HomeScreen({
         </button>
         <h1 className="text-lg font-bold tracking-tight">夢のタネ</h1>
       </div>
+
+      {isOpeningGrowth && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeIn" }}
+          onAnimationComplete={() => {
+            setIsOpeningGrowth(false)
+            onOpenGrowth()
+          }}
+        >
+          <motion.img
+            src={`/images/tane/stage${stageFromCount(zukanCount)}.png`}
+            alt=""
+            width={96}
+            height={96}
+            style={{ mixBlendMode: "multiply" }}
+            initial={{ scale: 1 }}
+            animate={{ scale: 8 }}
+            transition={{ duration: 0.4, ease: "easeIn" }}
+          />
+        </motion.div>
+      )}
 
       {/* 主役: 今日の成果（見つかった仕事）。無ければ何も出さず、下のCTAが主役になる */}
       {todaysDiscoveredJob && (
