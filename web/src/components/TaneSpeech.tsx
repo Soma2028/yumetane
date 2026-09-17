@@ -17,8 +17,8 @@ export function TaneSpeech({ lines, className }: Props) {
       />
       <div className="flex flex-col gap-0.5">
         {lines.map((line, i) => (
-          <p key={i} className="text-sm font-medium leading-relaxed text-charcoal">
-            {line}
+          <p key={i} className="text-lg font-medium leading-relaxed text-charcoal">
+            {i === 0 ? `🌱 ${line}` : line}
           </p>
         ))}
       </div>

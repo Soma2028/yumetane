@@ -17,6 +17,8 @@ interface Props {
   justGrew?: boolean
   /** マウント時にポップインするか（発見画面など、新しく画面に現れる場面用）。 */
   popIn?: boolean
+  /** セリフ（TaneSpeech）と一緒に表示されているときtrue。マウント時に一度だけ小さく弾む。 */
+  speaking?: boolean
   className?: string
 }
 
@@ -31,7 +33,14 @@ const SPARKLE_OFFSETS = [
  * 図鑑の発見数に応じて育つキャラクター。常時ふわふわ浮遊し、わずかに揺れる。
  * justGrewのときだけ、跳ねながら周りに小さな星が4つ出て消える。
  */
-export function TaneCharacter({ count, size = 80, justGrew = false, popIn = false, className }: Props) {
+export function TaneCharacter({
+  count,
+  size = 80,
+  justGrew = false,
+  popIn = false,
+  speaking = false,
+  className,
+}: Props) {
   const stage = stageFromCount(count)
   const popDelay = popIn ? 0.5 : 0
 
@@ -56,10 +65,12 @@ export function TaneCharacter({ count, size = 80, justGrew = false, popIn = fals
         animate={{
           scale: popIn ? [0, 1.1, 1] : 1,
           scaleY: justGrew ? [1, 1, 0.8, 1.2, 1] : 1,
+          y: speaking ? [0, -4, 0] : 0,
         }}
         transition={{
           scale: { duration: 0.5, ease: "easeOut" },
           scaleY: { duration: 0.4, ease: "easeInOut", delay: justGrew ? popDelay : 0 },
+          y: { duration: 0.3, ease: "easeInOut", delay: popDelay },
         }}
       />
 

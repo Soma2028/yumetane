@@ -59,7 +59,13 @@ export function DiscoveryScreen({
       {allDiscovered && <PetalConfetti />}
 
       <div className="flex items-start gap-3">
-        <TaneCharacter count={zukanCount} size={120} popIn justGrew={showGrowthToast} />
+        <TaneCharacter
+          count={zukanCount}
+          size={120}
+          popIn
+          justGrew={showGrowthToast}
+          speaking={speechLines.length > 0}
+        />
         <motion.div
           className="mt-1 flex-1"
           initial={{ opacity: 0, y: 8 }}
@@ -77,7 +83,7 @@ export function DiscoveryScreen({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.6 }}
         >
-          <TaneCharacter count={zukanCount} size={56} />
+          <TaneCharacter count={zukanCount} size={56} speaking />
           <TaneSpeech lines={["タネが育ったよ！"]} className="flex-1" />
         </motion.div>
       )}

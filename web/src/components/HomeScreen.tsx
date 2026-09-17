@@ -133,7 +133,7 @@ export function HomeScreen({
 
         {toast && (
           <div className="flex items-start gap-2">
-            <TaneCharacter count={zukanCount} size={56} />
+            <TaneCharacter count={zukanCount} size={56} speaking />
             <TaneSpeech lines={[toast]} className="flex-1" />
           </div>
         )}
