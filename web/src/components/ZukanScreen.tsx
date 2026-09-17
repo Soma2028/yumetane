@@ -48,7 +48,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               </div>
               <div className="mt-1 h-2 w-full rounded-full bg-sage-50">
                 <div
-                  className="h-2 rounded-full bg-gradient-to-r from-sage-600 to-coral-500 transition-all"
+                  className="h-2 rounded-full bg-sage-600 transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -71,9 +71,27 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               className="rounded-3xl border border-border-soft bg-white p-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:border-sage-600"
             >
               <p className="font-bold">{entry.jobName}</p>
-              <p className="mt-1 text-xs text-charcoal-muted">
-                {entry.subject}の勉強から見つけた・{entry.area}
-              </p>
+              <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-charcoal-muted">
+                <span>{entry.subject}の勉強から見つけた</span>
+                <span className="rounded-full bg-sage-50 px-2 py-0.5 font-medium text-sage-700">
+                  {entry.area}
+                </span>
+              </div>
+              {entry.tags && entry.tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {entry.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-sage-50 px-2 py-0.5 text-xs font-medium text-sage-700"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {entry.description && (
+                <p className="mt-2 truncate text-xs text-charcoal-muted">{entry.description}</p>
+              )}
             </button>
           ))}
         </div>
