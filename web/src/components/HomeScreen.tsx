@@ -74,10 +74,18 @@ export function HomeScreen({
       <button
         type="button"
         onClick={onOpenGrowth}
-        className="flex items-center gap-2 self-start rounded-xl transition hover:opacity-80"
+        className="flex items-center gap-3 self-start rounded-xl transition-transform duration-150 hover:scale-95 active:scale-95"
         aria-label="タネのせいちょうを見る"
       >
-        <TaneCharacter count={zukanCount} size={48} />
+        <div className="flex flex-col items-center gap-0.5">
+          <div
+            className="flex items-center justify-center rounded-full p-1"
+            style={{ backgroundColor: "rgba(47,107,79,0.08)" }}
+          >
+            <TaneCharacter count={zukanCount} size={48} />
+          </div>
+          <span className="text-[10px] font-medium text-sage-600">タネを見る</span>
+        </div>
         <h1 className="text-xl font-bold tracking-tight">夢のタネ</h1>
       </button>
 
