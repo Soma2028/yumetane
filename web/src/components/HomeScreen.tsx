@@ -71,23 +71,23 @@ export function HomeScreen({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
-      <button
-        type="button"
-        onClick={onOpenGrowth}
-        className="flex items-center gap-3 self-start rounded-xl transition-transform duration-150 hover:scale-95 active:scale-95"
-        aria-label="タネのせいちょうを見る"
-      >
-        <div className="flex flex-col items-center gap-0.5">
-          <div
-            className="flex items-center justify-center rounded-full p-1"
-            style={{ backgroundColor: "rgba(47,107,79,0.08)" }}
-          >
-            <TaneCharacter count={zukanCount} size={48} />
-          </div>
-          <span className="text-[10px] font-medium text-sage-600">タネを見る</span>
-        </div>
-        <h1 className="text-xl font-bold tracking-tight">夢のタネ</h1>
-      </button>
+      <div className="relative flex flex-col items-center gap-1 pt-1">
+        {streak > 0 && (
+          <span className="absolute right-0 top-1 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
+            <Flame className="h-4 w-4" />
+            {streak}日連続
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={onOpenGrowth}
+          className="cursor-pointer transition-transform active:scale-95"
+          aria-label="タネのせいちょうを見る"
+        >
+          <TaneCharacter count={zukanCount} size={64} />
+        </button>
+        <h1 className="text-lg font-bold tracking-tight">夢のタネ</h1>
+      </div>
 
       {/* 主役: 今日の成果（見つかった仕事）。無ければ何も出さず、下のCTAが主役になる */}
       {todaysDiscoveredJob && (
@@ -261,15 +261,7 @@ export function HomeScreen({
 
       {/* 比較ゾーン: ストリークと週間の記録状況を1枚にまとめ、控えめなトーンで置く */}
       <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5">
-        <div className="flex items-center justify-between">
-          <p className="font-bold">この1週間</p>
-          {streak > 0 && (
-            <span className="flex items-center gap-1 text-sm font-medium text-sage-700">
-              <Flame className="h-4 w-4" />
-              {streak}日連続
-            </span>
-          )}
-        </div>
+        <p className="font-bold">この1週間</p>
         <div className="flex justify-between">
           {weekDates.map((date) => {
             const studied = studiedDates.has(date)
