@@ -37,7 +37,7 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
         <div className="w-full">
           <div className="h-2.5 w-full rounded-full bg-sage-50">
             <div
-              className="h-2.5 rounded-full bg-gradient-to-r from-sage-600 to-coral-500 transition-all"
+              className="h-2.5 rounded-full bg-sage-600 transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>
