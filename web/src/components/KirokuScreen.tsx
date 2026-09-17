@@ -98,12 +98,36 @@ export function KirokuScreen({
 
       <h2 className="text-2xl font-bold tracking-tight">きろく</h2>
 
+      {/* 主役: 今週の数字。振り返り画面でまず伝えたい内容なので最初に大きく出す */}
       <motion.div
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.3 }}
         variants={fadeUp}
-        className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+        className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+      >
+        <p className="mb-3 font-bold">週間サマリー</p>
+        <div className="flex flex-col gap-4">
+          <ComparisonRow
+            label="今週の合計勉強時間"
+            currentLabel={formatMinutes(thisWeek.totalMinutes)}
+            diff={thisWeek.totalMinutes - lastWeek.totalMinutes}
+          />
+          <ComparisonRow
+            label="今週見つけた職業数"
+            currentLabel={`${thisWeek.discoveredCount}件`}
+            diff={thisWeek.discoveredCount - lastWeek.discoveredCount}
+          />
+        </div>
+      </motion.div>
+
+      {/* 補足: 30日間の記録パターン */}
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeUp}
+        className="rounded-3xl border border-border-soft bg-white p-5"
       >
         <p className="font-bold">過去30日間</p>
         <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[10px] text-charcoal-muted">
@@ -152,35 +176,29 @@ export function KirokuScreen({
         </div>
       </motion.div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
-        className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
-      >
-        <p className="mb-3 font-bold">週間サマリー</p>
-        <div className="flex flex-col gap-3">
-          <ComparisonRow
-            label="今週の合計勉強時間"
-            currentLabel={formatMinutes(thisWeek.totalMinutes)}
-            diff={thisWeek.totalMinutes - lastWeek.totalMinutes}
-          />
-          <ComparisonRow
-            label="今週見つけた職業数"
-            currentLabel={`${thisWeek.discoveredCount}件`}
-            diff={thisWeek.discoveredCount - lastWeek.discoveredCount}
-          />
-        </div>
-      </motion.div>
-
-      {weeklySubjectTotals.length > 0 && (
+      {/* 補足: 今週の教科比率。1教科だけの週はグラフにせずテキストで済ませる */}
+      {weeklySubjectTotals.length === 1 && (
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+          className="rounded-3xl border border-border-soft bg-white p-5"
+        >
+          <p className="font-bold">教科別の時間比率（今週）</p>
+          <p className="mt-2 text-sm text-charcoal-muted">
+            今週は{weeklySubjectTotals[0].subject}だけ勉強したよ
+          </p>
+        </motion.div>
+      )}
+
+      {weeklySubjectTotals.length > 1 && (
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          className="rounded-3xl border border-border-soft bg-white p-5"
         >
           <p className="font-bold">教科別の時間比率（今週）</p>
           <div className="mt-2 flex items-center gap-4">
@@ -335,12 +353,12 @@ function ComparisonRow({
   diff: number
 }) {
   const Icon = diff > 0 ? ArrowUp : diff < 0 ? ArrowDown : Minus
-  const color = diff > 0 ? "text-sage-600" : diff < 0 ? "text-coral-500" : "text-charcoal-muted"
+  const color = diff > 0 ? "text-sage-600" : "text-charcoal-muted"
   return (
     <div className="flex items-center justify-between">
       <span className="text-sm text-charcoal-muted">{label}</span>
-      <span className="flex items-center gap-1">
-        <span className="text-lg font-bold tracking-tight">{currentLabel}</span>
+      <span className="flex items-center gap-1.5">
+        <span className="text-2xl font-bold tracking-tight">{currentLabel}</span>
         <Icon className={`h-4 w-4 ${color}`} />
       </span>
     </div>
