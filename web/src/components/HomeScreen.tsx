@@ -73,7 +73,7 @@ export function HomeScreen({
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TaneCharacter count={zukanCount} size={40} />
+          <TaneCharacter count={zukanCount} size={64} />
           <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
         </div>
         <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
@@ -133,7 +133,7 @@ export function HomeScreen({
 
         {toast && (
           <div className="flex items-start gap-2">
-            <TaneCharacter count={zukanCount} size={40} />
+            <TaneCharacter count={zukanCount} size={56} />
             <TaneSpeech lines={[toast]} className="flex-1" />
           </div>
         )}

@@ -66,7 +66,7 @@ export function LandingPage({ onStart }: Props) {
                 src="/images/tane/stage1.png"
                 alt="双葉が出たタネのキャラクター"
                 size={80}
-                sizeClassName="h-20 w-20 lg:h-24 lg:w-24"
+                sizeClassName="h-20 w-20 lg:h-32 lg:w-32"
               />
               <button
                 type="button"

@@ -12,7 +12,7 @@ const STAGE_ALT: Record<TaneStage, string> = {
 
 interface Props {
   count: number
-  size?: 80 | 40
+  size?: number
   /** 直前よりステージが上がった直後の描画かどうか。呼び出し側が判断して渡す。 */
   justGrew?: boolean
   /** マウント時にポップインするか（発見画面など、新しく画面に現れる場面用）。 */
