@@ -183,12 +183,12 @@ export function LandingPage({ onStart }: Props) {
             </div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="lg:hidden">
+          <div className="lg:hidden">
             <FlowArrow direction="down" />
-          </motion.div>
-          <motion.div variants={fadeUp} className="hidden lg:block">
+          </div>
+          <div className="hidden lg:block">
             <FlowArrow direction="right" />
-          </motion.div>
+          </div>
 
           <motion.div variants={fadeUp} className="flex items-center gap-2 lg:flex-col lg:gap-4">
             <StepTane
@@ -206,12 +206,12 @@ export function LandingPage({ onStart }: Props) {
             </div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="lg:hidden">
+          <div className="lg:hidden">
             <FlowArrow direction="down" />
-          </motion.div>
-          <motion.div variants={fadeUp} className="hidden lg:block">
+          </div>
+          <div className="hidden lg:block">
             <FlowArrow direction="right" />
-          </motion.div>
+          </div>
 
           <motion.div variants={fadeUp} className="flex items-center gap-2 lg:flex-col lg:gap-4">
             <StepTane
@@ -411,17 +411,19 @@ function StepTane({
   )
 }
 
+/** スクロールで画面に入ったときだけ一度流れるように動く矢印（常時ループはしない）。 */
 function FlowArrow({ direction }: { direction: "down" | "right" }) {
   const Icon = direction === "down" ? ArrowDown : ArrowRight
+  const arrowVariants: Variants = {
+    hidden: { opacity: 0.3 },
+    show: {
+      opacity: [0.3, 1, 0.3],
+      ...(direction === "down" ? { y: [0, 4, 0] } : { x: [0, 4, 0] }),
+      transition: { duration: 0.8, ease: "easeInOut" },
+    },
+  }
   return (
-    <motion.div
-      animate={
-        direction === "down"
-          ? { y: [0, 4, 0], opacity: [0.4, 1, 0.4] }
-          : { x: [0, 4, 0], opacity: [0.4, 1, 0.4] }
-      }
-      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-    >
+    <motion.div variants={arrowVariants}>
       <Icon className="h-6 w-6 shrink-0 text-charcoal-muted" />
     </motion.div>
   )
