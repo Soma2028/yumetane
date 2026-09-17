@@ -1,4 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
+import { formatMinutes } from "../format"
 import type { SubjectJobRow, SubjectTotal } from "../storage"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
@@ -13,14 +14,6 @@ const SUBJECT_FLAVOR: Record<string, string> = {
   音楽: "表現",
   "美術・音楽": "表現", // 旧データ（分離前に記録されたログ）のため変換せず残す
   "技術・家庭": "ものづくり",
-}
-
-function formatMinutes(total: number): string {
-  const h = Math.floor(total / 60)
-  const m = total % 60
-  if (h === 0) return `${m}分`
-  if (m === 0) return `${h}時間`
-  return `${h}時間${m}分`
 }
 
 function formatShortDate(iso: string): string {

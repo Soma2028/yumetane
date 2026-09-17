@@ -5,6 +5,7 @@ import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
 import { KirokuScreen } from "./components/KirokuScreen"
 import { LandingPage } from "./components/LandingPage"
+import { TaneGrowthScreen } from "./components/TaneGrowthScreen"
 import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
@@ -16,6 +17,7 @@ import {
   saveState,
   studiedDatesSet,
   subjectJobHistory,
+  subjectStats,
   subjectTotals,
   todaysDiscoveredJobId,
   todaysLogs,
@@ -29,7 +31,7 @@ import {
 import { stageFromCount } from "./taneStage"
 import type { DiscoverResponse, Job, Subject } from "./types"
 
-type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku"
+type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku" | "growth"
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
 
 function App() {
@@ -70,6 +72,11 @@ function App() {
   function updateAppState(next: AppState) {
     setAppState(next)
     saveState(next)
+  }
+
+  function mostStudiedDiscoverable(state: AppState) {
+    // 保健体育は職業に繋がらないため、ひとこと表示の対象からは除く
+    return subjectTotals(state).find((s) => !specialSubjectNames.includes(s.subject)) ?? null
   }
 
   async function handleRecord(subject: string, minutes: number, details: RecordDetails) {
@@ -186,6 +193,7 @@ function App() {
         onOpenZukan={() => setScreen("zukan")}
         onOpenTane={() => setScreen("tane")}
         onOpenKiroku={() => setScreen("kiroku")}
+        onOpenGrowth={() => setScreen("growth")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
       />
     )
@@ -237,13 +245,21 @@ function App() {
         weeklyTotalMinutes={weeklyTotalMinutes(appState)}
         weeklySubjectTotals={weeklySubjectTotals(appState)}
         subjectJobHistory={subjectJobHistory(appState)}
-        mostStudied={
-          // 保健体育は職業に繋がらないため「ひとこと分析」の対象からは除く
-          subjectTotals(appState).find((s) => !specialSubjectNames.includes(s.subject)) ?? null
-        }
+        mostStudied={mostStudiedDiscoverable(appState)}
         specialSubjects={specialSubjectNames}
         onBack={() => setScreen("home")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
+      />
+    )
+  }
+
+  if (screen === "growth") {
+    return (
+      <TaneGrowthScreen
+        zukanCount={appState.zukan.length}
+        subjectStats={subjectStats(appState)}
+        mostStudied={mostStudiedDiscoverable(appState)}
+        onBack={() => setScreen("home")}
       />
     )
   }

@@ -184,6 +184,25 @@ export function mostStudiedSubject(state: AppState): SubjectTotal | null {
   return totals.length > 0 ? totals[0] : null
 }
 
+export interface SubjectStat {
+  subject: string
+  minutes: number
+  jobCount: number
+}
+
+/** 教科ごとの累計勉強時間と、その教科の勉強から見つけた職業数。多い順（タネの育成画面用）。 */
+export function subjectStats(state: AppState): SubjectStat[] {
+  const jobCounts = new Map<string, number>()
+  for (const entry of state.zukan) {
+    jobCounts.set(entry.subject, (jobCounts.get(entry.subject) ?? 0) + 1)
+  }
+  return subjectTotals(state).map(({ subject, minutes }) => ({
+    subject,
+    minutes,
+    jobCount: jobCounts.get(subject) ?? 0,
+  }))
+}
+
 export interface SubjectJobRow {
   subject: string
   minutes: number

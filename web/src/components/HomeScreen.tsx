@@ -26,6 +26,7 @@ interface Props {
   onOpenZukan: () => void
   onOpenTane: () => void
   onOpenKiroku: () => void
+  onOpenGrowth: () => void
   onSelectJob: (jobId: number) => void
 }
 
@@ -46,6 +47,7 @@ export function HomeScreen({
   onOpenZukan,
   onOpenTane,
   onOpenKiroku,
+  onOpenGrowth,
   onSelectJob,
 }: Props) {
   const [showForm, setShowForm] = useState(false)
@@ -72,10 +74,15 @@ export function HomeScreen({
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onOpenGrowth}
+          className="flex items-center gap-2 rounded-xl transition hover:opacity-80"
+          aria-label="タネのせいちょうを見る"
+        >
           <TaneCharacter count={zukanCount} size={64} />
           <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
-        </div>
+        </button>
         <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
           <motion.span
             className="inline-block"
