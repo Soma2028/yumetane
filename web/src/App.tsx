@@ -10,7 +10,9 @@ import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
+  discoveredDatesSet,
   knownJobIds,
+  last30Dates,
   last7Dates,
   loadState,
   recordStudy,
@@ -24,7 +26,7 @@ import {
   todaysTotalMinutes,
   toggleTane,
   weeklySubjectTotals,
-  weeklyTotalMinutes,
+  weekSummary,
   type AppState,
   type RecordDetails,
 } from "./storage"
@@ -242,7 +244,11 @@ function App() {
   if (screen === "kiroku") {
     return (
       <KirokuScreen
-        weeklyTotalMinutes={weeklyTotalMinutes(appState)}
+        calendarDates={last30Dates()}
+        studiedDates={studiedDatesSet(appState)}
+        discoveredDates={discoveredDatesSet(appState)}
+        thisWeek={weekSummary(appState, 0)}
+        lastWeek={weekSummary(appState, 1)}
         weeklySubjectTotals={weeklySubjectTotals(appState)}
         subjectJobHistory={subjectJobHistory(appState)}
         mostStudied={mostStudiedDiscoverable(appState)}

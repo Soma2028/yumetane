@@ -207,9 +207,10 @@ export interface SubjectJobRow {
   subject: string
   minutes: number
   jobs: { jobId: number; jobName: string; discoveredAt: string }[]
+  logs: StudyLogEntry[]
 }
 
-/** 教科ごとの累計時間と、その教科の勉強から見つかった職業（発見日付つき）。多い順。 */
+/** 教科ごとの累計時間、見つかった職業（発見日付つき）、記録ログ本体（日付順）。多い順。 */
 export function subjectJobHistory(state: AppState): SubjectJobRow[] {
   return subjectTotals(state).map(({ subject, minutes }) => ({
     subject,
@@ -218,6 +219,9 @@ export function subjectJobHistory(state: AppState): SubjectJobRow[] {
       .filter((e) => e.subject === subject)
       .map((e) => ({ jobId: e.jobId, jobName: e.jobName, discoveredAt: e.discoveredAt }))
       .sort((a, b) => a.discoveredAt.localeCompare(b.discoveredAt)),
+    logs: state.logs
+      .filter((l) => l.subject === subject)
+      .sort((a, b) => b.date.localeCompare(a.date)),
   }))
 }
 
@@ -226,9 +230,19 @@ export function last7Dates(): string[] {
   return Array.from({ length: 7 }, (_, i) => dateNDaysAgo(6 - i))
 }
 
+/** 過去30日分の日付（YYYY-MM-DD）を古い→新しい順で返す。末尾が今日。 */
+export function last30Dates(): string[] {
+  return Array.from({ length: 30 }, (_, i) => dateNDaysAgo(29 - i))
+}
+
 /** 記録がある日付の集合（カレンダー表示の色付け判定用）。 */
 export function studiedDatesSet(state: AppState): Set<string> {
   return new Set(state.logs.map((l) => l.date))
+}
+
+/** 職業を発見した日付の集合（カレンダー表示の色付け判定用）。 */
+export function discoveredDatesSet(state: AppState): Set<string> {
+  return new Set(state.logs.filter((l) => l.discoveredJobId !== null).map((l) => l.date))
 }
 
 function logsInDates(state: AppState, dates: Set<string>): StudyLogEntry[] {
@@ -251,4 +265,23 @@ export function weeklySubjectTotals(state: AppState): SubjectTotal[] {
   return [...totals.entries()]
     .map(([subject, minutes]) => ({ subject, minutes }))
     .sort((a, b) => b.minutes - a.minutes)
+}
+
+export interface WeekSummary {
+  totalMinutes: number
+  discoveredCount: number
+}
+
+/**
+ * 週単位のサマリー。weeksAgo=0で今週（直近7日、今日を含む）、
+ * weeksAgo=1でその前の7日間（先週比較用）。
+ */
+export function weekSummary(state: AppState, weeksAgo: number): WeekSummary {
+  const offset = weeksAgo * 7
+  const dates = new Set(Array.from({ length: 7 }, (_, i) => dateNDaysAgo(offset + 6 - i)))
+  const logs = logsInDates(state, dates)
+  return {
+    totalMinutes: logs.reduce((sum, l) => sum + l.minutes, 0),
+    discoveredCount: logs.filter((l) => l.discoveredJobId !== null).length,
+  }
 }
