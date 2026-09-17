@@ -1,12 +1,12 @@
-import { motion } from "framer-motion"
 import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import type { RecordDetails, StudyLogEntry, SubjectTotal } from "../storage"
+import { motion } from "framer-motion"
+import type { RecordDetails, StudyLogEntry } from "../storage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
 const MEMO_MAX_LENGTH = 100
+const LABEL_MAX_LENGTH = 40
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 interface Props {
@@ -21,7 +21,6 @@ interface Props {
   error: string | null
   weekDates: string[]
   studiedDates: Set<string>
-  subjectTotals: SubjectTotal[]
   onRecord: (subject: string, minutes: number, details: RecordDetails) => void
   onOpenZukan: () => void
   onOpenTane: () => void
@@ -42,7 +41,6 @@ export function HomeScreen({
   error,
   weekDates,
   studiedDates,
-  subjectTotals,
   onRecord,
   onOpenZukan,
   onOpenTane,
@@ -73,71 +71,34 @@ export function HomeScreen({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={onOpenGrowth}
-          className="flex items-center gap-2 rounded-xl transition hover:opacity-80"
-          aria-label="タネのせいちょうを見る"
-        >
-          <TaneCharacter count={zukanCount} size={64} />
-          <h1 className="text-2xl font-bold tracking-tight">夢のタネ</h1>
-        </button>
-        <span className="flex items-center gap-1 text-sm font-medium text-charcoal-muted">
-          <motion.span
-            className="inline-block"
-            style={{ transformOrigin: "50% 90%" }}
-            animate={{ rotate: [-8, 8, -8] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Flame className="h-4 w-4 text-coral-500" />
-          </motion.span>
-          {streak}日連続
-        </span>
-      </div>
+      <button
+        type="button"
+        onClick={onOpenGrowth}
+        className="flex items-center gap-2 self-start rounded-xl transition hover:opacity-80"
+        aria-label="タネのせいちょうを見る"
+      >
+        <TaneCharacter count={zukanCount} size={48} />
+        <h1 className="text-xl font-bold tracking-tight">夢のタネ</h1>
+      </button>
 
+      {/* 主役: 今日の成果（見つかった仕事）。無ければ何も出さず、下のCTAが主役になる */}
       {todaysDiscoveredJob && (
         <button
           type="button"
           onClick={() => onSelectJob(todaysDiscoveredJob.jobId)}
-          className="flex items-center justify-between rounded-xl bg-sage-50 px-4 py-2.5 text-left text-sm font-medium text-sage-700 transition hover:bg-sage-100"
+          className="flex items-center justify-between rounded-3xl border border-sage-600/20 bg-sage-50 px-5 py-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:bg-sage-100"
         >
-          <span>今日見つけた仕事：{todaysDiscoveredJob.jobName}</span>
-          <ChevronRight className="h-4 w-4 shrink-0" />
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-wide text-sage-600">今日見つけた仕事</p>
+            <p className="mt-0.5 truncate text-lg font-bold text-charcoal">{todaysDiscoveredJob.jobName}</p>
+          </div>
+          <ChevronRight className="h-5 w-5 shrink-0 text-sage-600" />
         </button>
       )}
 
-      <div className="flex flex-col gap-4 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
-        <div className="flex items-center justify-between">
-          <p className="font-bold">今日の記録</p>
-          {todaysLogs.length > 0 && (
-            <p className="text-sm text-charcoal-muted">合計 {todaysTotalMinutes}分</p>
-          )}
-        </div>
-
-        {todaysLogs.length === 0 ? (
-          <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {todaysLogs.map((log, i) => (
-              <li
-                key={i}
-                className="rounded-3xl border border-border-soft bg-cream px-4 py-3 text-sm"
-              >
-                <div className="flex items-center justify-between font-medium">
-                  <span>{log.subject}</span>
-                  <span className="text-charcoal-muted">{log.minutes}分</span>
-                </div>
-                {(log.material || log.content) && (
-                  <p className="mt-1 text-xs text-charcoal-muted">
-                    {[log.material, log.content].filter(Boolean).join(" ・ ")}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-
+      {/* 主役: 記録アクション。フォームを開くまではコーラルのボタン単体で主張させ、
+          カードの箱をかぶせない（他の白カードと同列に見えないように） */}
+      <div className="flex flex-col gap-3">
         {toast && (
           <div className="flex items-start gap-2">
             <TaneCharacter count={zukanCount} size={56} speaking />
@@ -145,10 +106,12 @@ export function HomeScreen({
           </div>
         )}
 
-        {error && <p className="text-sm text-coral-600">{error}</p>}
+        {error && (
+          <p className="rounded-xl bg-notice-bg px-3 py-2 text-sm text-notice-text">{error}</p>
+        )}
 
         {showForm ? (
-          <div className="flex flex-col gap-4 border-t border-border-soft pt-4">
+          <div className="flex flex-col gap-4 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
             <div className="grid grid-cols-2 gap-2">
               {subjects.map((s) => (
                 <motion.button
@@ -182,7 +145,9 @@ export function HomeScreen({
             </label>
 
             {minutes > 0 && minutes < 10 && (
-              <p className="text-xs text-coral-600">10分未満は記録できません</p>
+              <p className="rounded-lg bg-notice-bg px-3 py-2 text-xs text-notice-text">
+                10分未満は記録できません
+              </p>
             )}
 
             <label className="flex flex-col gap-1 text-sm">
@@ -190,6 +155,7 @@ export function HomeScreen({
               <input
                 type="text"
                 value={material}
+                maxLength={LABEL_MAX_LENGTH}
                 onChange={(e) => setMaterial(e.target.value)}
                 placeholder="例：チャート式"
                 className="rounded-lg border border-border-soft px-3 py-2"
@@ -201,6 +167,7 @@ export function HomeScreen({
               <input
                 type="text"
                 value={content}
+                maxLength={LABEL_MAX_LENGTH}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="例：二次方程式"
                 className="rounded-lg border border-border-soft px-3 py-2"
@@ -246,15 +213,55 @@ export function HomeScreen({
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="rounded-full bg-coral-500 py-3 text-center font-bold text-white transition active:bg-coral-600"
+            className={
+              "rounded-full bg-coral-500 text-center font-bold text-white shadow-sm transition active:bg-coral-600 " +
+              (todaysLogs.length === 0 ? "py-5 text-lg" : "py-3 text-base")
+            }
           >
-            ＋ 記録を追加する
+            {todaysLogs.length === 0 ? "今日の勉強を記録する" : "＋ 記録を追加する"}
           </button>
         )}
       </div>
 
-      <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
-        <p className="font-bold">この1週間</p>
+      {/* 副次情報: 今日の記録一覧。箱で囲わず、行の集まりとして控えめに見せる */}
+      {todaysLogs.length > 0 && (
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-wide text-charcoal-muted">今日の記録</p>
+            <p className="text-xs text-charcoal-muted">合計 {todaysTotalMinutes}分</p>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {todaysLogs.map((log, i) => (
+              <li
+                key={i}
+                className="rounded-3xl border border-border-soft bg-cream px-4 py-3 text-sm"
+              >
+                <div className="flex items-center justify-between font-medium">
+                  <span>{log.subject}</span>
+                  <span className="text-charcoal-muted">{log.minutes}分</span>
+                </div>
+                {(log.material || log.content) && (
+                  <p className="mt-1 truncate text-xs text-charcoal-muted">
+                    {[log.material, log.content].filter(Boolean).join(" ・ ")}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* 比較ゾーン: ストリークと週間の記録状況を1枚にまとめ、控えめなトーンで置く */}
+      <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5">
+        <div className="flex items-center justify-between">
+          <p className="font-bold">この1週間</p>
+          {streak > 0 && (
+            <span className="flex items-center gap-1 text-sm font-medium text-sage-700">
+              <Flame className="h-4 w-4" />
+              {streak}日連続
+            </span>
+          )}
+        </div>
         <div className="flex justify-between">
           {weekDates.map((date) => {
             const studied = studiedDates.has(date)
@@ -267,7 +274,7 @@ export function HomeScreen({
                   className={
                     "flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors " +
                     (studied ? "bg-sage-600 text-white" : "bg-sage-50 text-charcoal-muted") +
-                    (isToday ? " ring-2 ring-coral-500 ring-offset-1" : "")
+                    (isToday ? " border-2 border-charcoal" : "")
                   }
                 >
                   {d.getDate()}
@@ -278,36 +285,7 @@ export function HomeScreen({
         </div>
       </div>
 
-      {subjectTotals.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
-          <p className="font-bold">教科別の勉強時間</p>
-          <div style={{ height: subjectTotals.length * 36 + 16 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={subjectTotals}
-                layout="vertical"
-                margin={{ left: 8, right: 16, top: 4, bottom: 4 }}
-              >
-                <XAxis type="number" hide />
-                <YAxis
-                  type="category"
-                  dataKey="subject"
-                  width={72}
-                  tick={{ fontSize: 12, fill: "#6b6358" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip
-                  formatter={(value) => [`${value}分`, "勉強時間"]}
-                  contentStyle={{ borderRadius: 12, borderColor: "#e4dfd5", fontSize: 12 }}
-                />
-                <Bar dataKey="minutes" fill="#2F6B4F" radius={[0, 8, 8, 0]} maxBarSize={18} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
+      {/* 行動する（次へ）: 深掘り先への導線 */}
       <div className="mt-auto grid grid-cols-3 gap-3">
         <button
           type="button"

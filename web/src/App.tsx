@@ -190,7 +190,6 @@ function App() {
         error={error}
         weekDates={last7Dates()}
         studiedDates={studiedDatesSet(appState)}
-        subjectTotals={subjectTotals(appState)}
         onRecord={handleRecord}
         onOpenZukan={() => setScreen("zukan")}
         onOpenTane={() => setScreen("tane")}
