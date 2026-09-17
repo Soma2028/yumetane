@@ -39,10 +39,15 @@ export function LandingPage({ onStart }: Props) {
             "radial-gradient(ellipse 90% 55% at 50% 0%, rgba(47,107,79,0.06), transparent 70%)",
         }}
       >
-        {/* PC版のみ: 右60%を薄いセージ背景にして、明るいモック画像を浮き上がらせる */}
+        {/* PC版のみ: 左から右へ薄いセージ色にグラデーションし、境界線を作らずに
+            明るいモック画像を浮き上がらせる */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-3/5 bg-sage-600/10 lg:block"
+          className="pointer-events-none absolute inset-0 hidden lg:block"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(47,107,79,0) 0%, rgba(47,107,79,0.08) 30%, rgba(47,107,79,0.08) 100%)",
+          }}
         />
 
         <motion.div
