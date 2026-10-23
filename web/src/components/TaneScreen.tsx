@@ -2,6 +2,8 @@ import { Star } from "lucide-react"
 import type { ZukanEntry } from "../storage"
 import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
+import { motion } from "framer-motion"
+import { cardInView } from "../motion"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -36,8 +38,9 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
         </div>
       ) : (
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
-          {tane.map((entry) => (
-            <button
+          {tane.map((entry, i) => (
+            <motion.button
+              {...cardInView(i)}
               key={entry.jobId}
               type="button"
               onClick={() => onSelectJob(entry.jobId)}
@@ -63,7 +66,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
                   <p className="mt-2 truncate text-xs text-charcoal-muted">{entry.description}</p>
                 )}
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       )}

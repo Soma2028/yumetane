@@ -6,7 +6,7 @@ import { formatMinutes } from "../format"
 import type { StudyLogEntry, SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
 import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
-import { STAGGER, fadeUp } from "../motion"
+import { cardInView, fadeUp } from "../motion"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
@@ -373,11 +373,7 @@ export function KirokuScreen({
                 return (
                   <motion.div
                     key={row.subject}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.3 }}
-                    variants={fadeUp}
-                    transition={{ delay: Math.min(i, 4) * STAGGER }}
+                    {...cardInView(i)}
                     className="rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
                   >
                     <button

@@ -1,6 +1,8 @@
 import type { ZukanEntry } from "../storage"
 import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
+import { motion } from "framer-motion"
+import { cardInView } from "../motion"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -33,7 +35,10 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
+      <motion.div
+        {...cardInView(0)}
+        className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+      >
         {Object.entries(areaTotals).map(([area, areaTotal]) => {
           const known = knownByArea[area] ?? 0
           const pct = areaTotal > 0 ? Math.round((known / areaTotal) * 100) : 0
@@ -54,7 +59,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
             </div>
           )
         })}
-      </div>
+      </motion.div>
 
       </div>
 
@@ -77,8 +82,9 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
         </div>
       ) : (
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
-          {sorted.map((entry) => (
-            <button
+          {sorted.map((entry, i) => (
+            <motion.button
+              {...cardInView(i + 1)}
               key={entry.jobId}
               type="button"
               onClick={() => onSelectJob(entry.jobId)}
@@ -106,7 +112,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               {entry.description && (
                 <p className="mt-2 truncate text-xs text-charcoal-muted">{entry.description}</p>
               )}
-            </button>
+            </motion.button>
           ))}
         </div>
       )}

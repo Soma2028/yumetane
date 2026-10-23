@@ -40,6 +40,20 @@ export function enter(delay = 0) {
   }
 }
 
+/**
+ * 一覧のカード用：画面に入ったら下から現れる。index番目ほど少し遅らせる（5枚目以降は同じ）。
+ * 要素側のtransitionにdelayを書いても、variantsの側にtransitionがあると無視されるため、
+ * variantsを使わずに値を直接渡す。きろく・タネ・職業図鑑で共通。
+ */
+export function cardInView(index: number) {
+  return {
+    initial: { opacity: 0, y: ENTER_DISTANCE },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.3 },
+    transition: { ...baseTransition, delay: Math.min(index, 4) * STAGGER },
+  }
+}
+
 /** タネのキャラクターがふわふわ浮く動き（アプリ内とLPで共通）。 */
 export const float: { animate: TargetAndTransition; transition: Transition } = {
   animate: { y: [0, -6, 0], rotate: [-1, 1, -1] },
