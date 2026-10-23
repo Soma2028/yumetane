@@ -3,6 +3,8 @@ import { ChevronDown, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { RecordDetails } from "../storage"
 import { DURATION, EASE_OUT, baseTransition } from "../motion"
+import { subjectColor } from "../subjectColors"
+import { SubjectDot } from "./SubjectDot"
 
 const MEMO_MAX_LENGTH = 100
 const LABEL_MAX_LENGTH = 40
@@ -103,14 +105,21 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
                     aria-pressed={subject === s}
                     animate={subject === s ? { scale: [1, 1.05, 1] } : { scale: 1 }}
                     transition={{ duration: DURATION.tap, ease: EASE_OUT }}
+                    // 選んだ教科は、その教科の色の背景と枠にする（白い文字は使わない）
                     className={
-                      "h-11 rounded-xl border px-1 text-sm font-medium transition-colors " +
-                      (subject === s
-                        ? "border-coral-500 bg-coral-500 text-white"
-                        : "border-border-soft bg-white text-charcoal hover:border-sage-600")
+                      "h-11 rounded-xl border-2 px-1 text-sm font-medium transition-colors " +
+                      (subject === s ? "font-bold" : "border-border-soft bg-white text-charcoal hover:border-sage-600")
+                    }
+                    style={
+                      subject === s
+                        ? { backgroundColor: subjectColor(s).bg, borderColor: subjectColor(s).solid, color: subjectColor(s).text }
+                        : undefined
                     }
                   >
-                    {s}
+                    <span className="flex items-center justify-center gap-1.5">
+                      <SubjectDot subject={s} />
+                      {s}
+                    </span>
                   </motion.button>
                 ))}
               </div>

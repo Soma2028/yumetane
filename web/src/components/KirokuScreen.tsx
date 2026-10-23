@@ -7,8 +7,9 @@ import type { StudyLogEntry, SubjectJobRow, SubjectTotal, WeekSummary } from "..
 import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
 import { cardInView, fadeUp } from "../motion"
+import { subjectColor } from "../subjectColors"
+import { SubjectDot } from "./SubjectDot"
 
-const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 const SUBJECT_FLAVOR: Record<string, string> = {
@@ -198,8 +199,8 @@ export function KirokuScreen({
                       outerRadius={70}
                       paddingAngle={2}
                     >
-                      {weeklySubjectTotals.map((entry, i) => (
-                        <Cell key={entry.subject} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
+                      {weeklySubjectTotals.map((entry) => (
+                        <Cell key={entry.subject} fill={subjectColor(entry.subject).solid} />
                       ))}
                     </Pie>
                     <Tooltip
@@ -210,11 +211,11 @@ export function KirokuScreen({
                 </ResponsiveContainer>
               </div>
               <ul className="flex flex-1 flex-col gap-1.5 text-xs">
-                {weeklySubjectTotals.map((entry, i) => (
+                {weeklySubjectTotals.map((entry) => (
                   <li key={entry.subject} className="flex items-center gap-1.5">
                     <span
                       className="h-2.5 w-2.5 shrink-0 rounded-full"
-                      style={{ backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length] }}
+                      style={{ backgroundColor: subjectColor(entry.subject).solid }}
                     />
                     <span className="flex-1">{entry.subject}</span>
                     <span className="text-charcoal-muted">{formatMinutes(entry.minutes)}</span>
@@ -324,7 +325,10 @@ export function KirokuScreen({
                   {selectedLogs.map((log, i) => (
                     <li key={i} className="rounded-xl border border-border-soft bg-white px-3 py-2 text-sm">
                       <div className="flex items-center justify-between font-medium">
-                        <span>{log.subject}</span>
+                        <span className="flex items-center gap-1.5">
+                          <SubjectDot subject={log.subject} />
+                          {log.subject}
+                        </span>
                         <span className="text-charcoal-muted">{formatMinutes(log.minutes)}</span>
                       </div>
                       {(log.material || log.content) && (
@@ -381,7 +385,10 @@ export function KirokuScreen({
                       onClick={() => toggleExpanded(row.subject)}
                       className="flex w-full items-center justify-between text-left"
                     >
-                      <p className="font-bold">{row.subject}</p>
+                      <p className="flex items-center gap-2 font-bold">
+                        <SubjectDot subject={row.subject} className="h-3 w-3" />
+                        {row.subject}
+                      </p>
                       <span className="flex items-center gap-2">
                         <span className="text-sm text-charcoal-muted">
                           合計{formatMinutes(row.minutes)}

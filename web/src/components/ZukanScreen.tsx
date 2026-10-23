@@ -3,6 +3,7 @@ import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
 import { motion } from "framer-motion"
 import { cardInView } from "../motion"
+import { SubjectDot } from "./SubjectDot"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -92,7 +93,10 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
             >
               <p className="font-bold">{entry.jobName}</p>
               <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-charcoal-muted">
-                <span>{entry.subject}の勉強から見つけた</span>
+                <span className="flex items-center gap-1">
+                  <SubjectDot subject={entry.subject} className="h-2 w-2" />
+                  {entry.subject}の勉強から見つけた
+                </span>
                 <span className="rounded-full bg-sage-50 px-2 py-0.5 font-medium text-sage-700">
                   {entry.area}
                 </span>

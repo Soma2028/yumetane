@@ -4,6 +4,7 @@ import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
 import { motion } from "framer-motion"
 import { cardInView } from "../motion"
+import { SubjectDot } from "./SubjectDot"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -49,7 +50,10 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
               <Star className="mt-0.5 h-5 w-5 shrink-0 text-sage-600" fill="currentColor" strokeWidth={1} />
               <div className="min-w-0 flex-1">
                 <p className="font-bold">{entry.jobName}</p>
-                <p className="mt-0.5 text-xs text-charcoal-muted">{entry.subject}をよく使う仕事</p>
+                <p className="mt-0.5 flex items-center gap-1 text-xs text-charcoal-muted">
+                  <SubjectDot subject={entry.subject} className="h-2 w-2" />
+                  {entry.subject}をよく使う仕事
+                </p>
                 {entry.tags && entry.tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {entry.tags.slice(0, 3).map((tag) => (

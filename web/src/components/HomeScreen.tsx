@@ -8,6 +8,8 @@ import { stageProgress } from "../taneStage"
 import { shortSubject } from "../timetable"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
+import { subjectColor } from "../subjectColors"
+import { SubjectDot } from "./SubjectDot"
 
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
@@ -213,10 +215,8 @@ export function HomeScreen({
                 {todayTimetable.periods.map((subject, i) => (
                   <span
                     key={i}
-                    className={
-                      "flex items-baseline justify-center gap-0.5 rounded-lg py-1 " +
-                      (subject ? "bg-sage-50 text-sage-700" : "text-charcoal-muted")
-                    }
+                    className="flex items-baseline justify-center gap-0.5 rounded-lg py-1 text-charcoal-muted"
+                    style={subject ? { backgroundColor: subjectColor(subject).bg, color: subjectColor(subject).text } : undefined}
                   >
                     <span className="text-xs">{i + 1}</span>
                     <span className="text-sm font-bold">{subject ? shortSubject(subject) : "−"}</span>
@@ -264,7 +264,10 @@ export function HomeScreen({
                 >
                   <span className="min-w-0">
                     <span className="line-clamp-2 block text-sm leading-snug font-bold">{job.jobName}</span>
-                    <span className="text-xs text-charcoal-muted">{job.subject}の勉強から</span>
+                    <span className="flex items-center gap-1 text-xs text-charcoal-muted">
+                      <SubjectDot subject={job.subject} className="h-2 w-2" />
+                      {job.subject}の勉強から
+                    </span>
                   </span>
                   <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
                 </button>

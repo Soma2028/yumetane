@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { baseTransition } from "../motion"
 import { DAY_LABELS, PERIODS, TIMETABLE_SUBJECTS, activeDays, shortSubject, type Timetable } from "../timetable"
 import { BackButton } from "./BackButton"
+import { subjectColor } from "../subjectColors"
+import { SubjectDot } from "./SubjectDot"
 
 interface Props {
   timetable: Timetable
@@ -134,7 +136,10 @@ export function TimetableScreen({ timetable, showSaturday, onToggleSaturday, onC
                         : "border-border-soft bg-white text-charcoal hover:border-sage-600")
                     }
                   >
-                    {s}
+                    <span className="flex items-center justify-center gap-1.5">
+                      <SubjectDot subject={s} />
+                      {s}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -179,11 +184,10 @@ function Row({
             aria-label={`${DAY_LABELS[d]}曜 ${period + 1}限：${subject ?? "空き"}`}
             className={
               "flex h-12 items-center justify-center rounded-xl border text-[13px] font-bold transition lg:h-14 lg:text-sm [@media(max-height:740px)]:h-10 " +
-              (subject
-                ? "border-sage-600/20 bg-sage-50 text-sage-700"
-                : "border-dashed border-border-soft text-border-soft hover:border-sage-600") +
+              (subject ? "border-transparent" : "border-dashed border-border-soft text-border-soft hover:border-sage-600") +
               (d === today ? " ring-1 ring-sage-600/40" : "")
             }
+            style={subject ? { backgroundColor: subjectColor(subject).bg, color: subjectColor(subject).text } : undefined}
           >
             {subject ? (
               <>

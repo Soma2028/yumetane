@@ -1,6 +1,7 @@
 import { ExternalLink, Star } from "lucide-react"
 import type { Job } from "../types"
 import { BackButton } from "./BackButton"
+import { SubjectDot } from "./SubjectDot"
 
 interface Props {
   job: Job
@@ -17,7 +18,10 @@ export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: 
       <h2 className="text-2xl font-bold tracking-tight">{job.job_name}</h2>
 
       {subject && (
-        <p className="text-sm font-medium text-sage-700">この仕事は{subject}をよく使う</p>
+        <p className="flex items-center gap-1.5 text-sm font-medium text-sage-700">
+          <SubjectDot subject={subject} />
+          この仕事は{subject}をよく使う
+        </p>
       )}
 
       <div className="flex flex-wrap gap-1.5">

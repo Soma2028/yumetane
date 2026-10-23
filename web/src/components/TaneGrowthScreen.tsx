@@ -4,6 +4,7 @@ import { taneComment } from "../taneComments"
 import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { BackButton } from "./BackButton"
+import { SubjectDot } from "./SubjectDot"
 
 interface Props {
   zukanCount: number
@@ -112,7 +113,10 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
               <ul className="flex flex-col gap-2">
                 {subjectStats.map((s) => (
                   <li key={s.subject} className="flex items-center justify-between text-sm">
-                    <span className="font-medium">{s.subject}</span>
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <SubjectDot subject={s.subject} />
+                      {s.subject}
+                    </span>
                     <span className="text-charcoal-muted">
                       合計 {formatMinutes(s.minutes)}　{s.jobCount}件発見
                     </span>
