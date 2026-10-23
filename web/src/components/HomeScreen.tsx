@@ -31,6 +31,8 @@ interface Props {
   onOpenZukan: () => void
   onOpenTane: () => void
   onOpenKiroku: () => void
+  /** 「この1週間」の日付を押したとき。きろくのカレンダーでその日を開く。 */
+  onOpenDay: (date: string) => void
   onOpenGrowth: () => void
   onSelectJob: (jobId: number) => void
 }
@@ -54,6 +56,7 @@ export function HomeScreen({
   onOpenZukan,
   onOpenTane,
   onOpenKiroku,
+  onOpenDay,
   onOpenGrowth,
   onSelectJob,
 }: Props) {
@@ -168,7 +171,13 @@ export function HomeScreen({
             const isToday = date === weekDates[weekDates.length - 1]
             const d = new Date(`${date}T00:00:00`)
             return (
-              <div key={date} className="flex flex-col items-center gap-1">
+              <button
+                key={date}
+                type="button"
+                onClick={() => onOpenDay(date)}
+                aria-label={`${d.getMonth() + 1}月${d.getDate()}日の記録を見る`}
+                className="flex flex-col items-center gap-1 rounded-xl px-0.5 py-0.5 transition hover:bg-sage-50 active:scale-95"
+              >
                 <span className="text-xs text-charcoal-muted">{WEEKDAY_LABELS[d.getDay()]}</span>
                 <div
                   className={
@@ -179,7 +188,7 @@ export function HomeScreen({
                 >
                   {d.getDate()}
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>

@@ -266,6 +266,11 @@ function App() {
           setKirokuDate(null)
           setScreen("kiroku")
         }}
+        onOpenDay={(date) => {
+          setKirokuTab("calendar")
+          setKirokuDate(date)
+          setScreen("kiroku")
+        }}
         onOpenGrowth={() => setScreen("growth")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
       />

@@ -51,15 +51,19 @@ export function DiscoveryScreen({
     )
   }
 
+  // 画面の低い端末（iPhone SEなど）でも「ホームにもどる」までスクロールせずに見えるよう、
+  // タネ・余白・カード上部を小さくする（説明文の長い職業で最大118pxはみ出していた）
+  const compact = typeof window !== "undefined" && window.matchMedia("(max-height: 740px)").matches
+
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:py-4">
       {allDiscovered && <PetalConfetti />}
 
       {/* 補足: タネのリアクション。主役はこの下の職業カード */}
       <div className="flex items-start gap-3">
         <TaneCharacter
           count={zukanCount}
-          size={120}
+          size={compact ? 80 : 120}
           popIn
           justGrew={justGrew && !allDiscovered}
           speaking={speechLines.length > 0}
@@ -81,11 +85,11 @@ export function DiscoveryScreen({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
       >
-        <div className="flex h-24 items-center justify-center bg-sage-100">
-          <TagIcon tags={job.tags} className="h-12 w-12 text-sage-600" strokeWidth={1.5} />
+        <div className="flex h-24 items-center justify-center bg-sage-100 [@media(max-height:740px)]:h-16">
+          <TagIcon tags={job.tags} className="h-12 w-12 text-sage-600 [@media(max-height:740px)]:h-9 [@media(max-height:740px)]:w-9" strokeWidth={1.5} />
         </div>
-        <div className="px-5 pt-5 pb-6">
-          <h3 className="text-2xl font-bold leading-snug tracking-tight">{job.job_name}</h3>
+        <div className="px-5 pt-5 pb-6 [@media(max-height:740px)]:pt-4 [@media(max-height:740px)]:pb-4">
+          <h3 className="text-2xl font-bold leading-snug tracking-tight [@media(max-height:740px)]:text-xl">{job.job_name}</h3>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {job.tags.map((tag) => (
               <span
@@ -121,7 +125,7 @@ export function DiscoveryScreen({
         type="button"
         onClick={onToggleTane}
         className={
-          "flex items-center justify-center gap-2 rounded-full py-3 font-bold transition " +
+          "flex items-center justify-center gap-2 rounded-full py-3 font-bold transition [@media(max-height:740px)]:py-2.5 " +
           (isTane
             ? "bg-sage-600 text-white active:bg-sage-700"
             : "border border-border-soft text-charcoal-muted active:bg-gray-100")
@@ -134,7 +138,7 @@ export function DiscoveryScreen({
       <button
         type="button"
         onClick={onDone}
-        className="rounded-full border border-border-soft py-3 text-center font-bold text-charcoal-muted transition active:bg-gray-100"
+        className="rounded-full border border-border-soft py-3 text-center font-bold text-charcoal-muted transition active:bg-gray-100 [@media(max-height:740px)]:py-2.5"
       >
         ホームにもどる
       </button>
