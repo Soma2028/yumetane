@@ -60,7 +60,9 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
             type="button"
             aria-label="記録をやめる"
             onClick={onClose}
-            className="absolute inset-0 bg-charcoal/40"
+            // 暗い幕だと、iOS 26のSafariが画面端に固定された要素の背景色で上下のバーを塗るため、
+            // 開閉の瞬間に上が黒くなる。背景と同じクリーム色を半透明で重ね、少しぼかす
+            className="absolute inset-0 bg-cream/75 backdrop-blur-[3px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -69,7 +71,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
             role="dialog"
             aria-modal="true"
             aria-label="今日の勉強を記録する"
-            className="relative flex max-h-[92dvh] w-full max-w-md flex-col gap-4 overflow-y-auto overscroll-contain rounded-t-3xl bg-white px-5 pt-4 lg:max-w-lg lg:rounded-3xl lg:px-7 lg:pt-6 lg:pb-7 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(43,38,32,0.15)]"
+            className="relative flex max-h-[92dvh] w-full max-w-md flex-col gap-4 overflow-y-auto overscroll-contain rounded-t-3xl bg-white px-5 pt-4 lg:max-w-lg lg:rounded-3xl lg:px-7 lg:pt-6 lg:pb-7 pb-[max(1.25rem,env(safe-area-inset-bottom))] border border-border-soft shadow-[0_-8px_40px_rgba(43,38,32,0.18)] lg:shadow-[0_16px_48px_rgba(43,38,32,0.18)]"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
