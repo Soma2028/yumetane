@@ -1,10 +1,10 @@
-import { BarChart3, BookOpen, ChevronRight, Flame, Star, type LucideIcon } from "lucide-react"
+import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
 import type { RecordDetails, StudyLogEntry } from "../storage"
 import { formatMinutes } from "../format"
 import { InstallHint } from "./InstallHint"
 import { RecordSheet } from "./RecordSheet"
-import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
+import { stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
@@ -16,9 +16,6 @@ interface Props {
   todaysTotalMinutes: number
   streak: number
   zukanCount: number
-  taneCount: number
-  /** 直近7日間の合計勉強時間（分）。きろくボタンに出す。 */
-  weeklyMinutes: number
   todaysDiscoveredJob: { jobId: number; jobName: string } | null
   /** 最近見つけた仕事（今日の分を除き、新しい順に最大5件。スマホでは3件まで出す）。 */
   recentJobs: { jobId: number; jobName: string; subject: string }[]
@@ -43,8 +40,6 @@ export function HomeScreen({
   todaysTotalMinutes,
   streak,
   zukanCount,
-  taneCount,
-  weeklyMinutes,
   todaysDiscoveredJob,
   recentJobs,
   toast,
@@ -239,46 +234,28 @@ export function HomeScreen({
         )}
       </div>
 
-      {/* 行動する（次へ）: 深掘り先への導線 */}
-      {/* 3つとも「アイコン・名前・今の状態」の同じ形にそろえる（以前は図鑑だけ数字が主役で、
-          何のボタンか読み取りにくかった） */}
-      <nav aria-label="ほかの画面" className="mt-auto grid grid-cols-3 gap-3 lg:mt-2">
-        <NavButton icon={BookOpen} label="職業図鑑" detail={`${zukanCount}/${MAX_JOB_COUNT}件`} onClick={onOpenZukan} />
-        <NavButton icon={Star} label="タネ" detail={`保存${taneCount}件`} onClick={onOpenTane} />
-        <NavButton
-          icon={BarChart3}
-          label="きろく"
-          detail={weeklyMinutes > 0 ? `今週${formatMinutes(weeklyMinutes)}` : "今週まだなし"}
-          onClick={onOpenKiroku}
-        />
+      {/* 行動する（次へ）: ほかの画面への導線。きろくのタブ（今週・カレンダー・教科ごと）と
+          同じ見た目の、丸い枠に3つが並ぶ形にそろえる */}
+      <nav
+        aria-label="ほかの画面"
+        className="mt-auto grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 lg:mt-2"
+      >
+        {[
+          { label: "職業図鑑", onClick: onOpenZukan },
+          { label: "タネ", onClick: onOpenTane },
+          { label: "きろく", onClick: onOpenKiroku },
+        ].map((item) => (
+          <button
+            key={item.label}
+            type="button"
+            onClick={item.onClick}
+            className="h-10 rounded-full text-sm font-bold text-charcoal-muted transition hover:bg-sage-50 hover:text-sage-700"
+          >
+            {item.label}
+          </button>
+        ))}
       </nav>
       </div>
     </div>
-  )
-}
-
-function NavButton({
-  icon: Icon,
-  label,
-  detail,
-  onClick,
-}: {
-  icon: LucideIcon
-  label: string
-  detail: string
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3 pb-2.5 transition hover:border-sage-600 max-lg:[@media(max-height:740px)]:pt-2"
-    >
-      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sage-50">
-        <Icon className="h-5 w-5 text-sage-600" strokeWidth={1.75} />
-      </span>
-      <span className="text-sm font-bold">{label}</span>
-      <span className="text-xs leading-tight text-charcoal-muted">{detail}</span>
-    </button>
   )
 }

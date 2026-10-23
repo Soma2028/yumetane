@@ -25,7 +25,6 @@ import {
   todaysTotalMinutes,
   toggleTane,
   weeklySubjectTotals,
-  weeklyTotalMinutes,
   weekSummary,
   type AppState,
   type RecordDetails,
@@ -251,9 +250,7 @@ function App() {
           todaysTotalMinutes={todaysTotalMinutes(appState)}
           streak={appState.streak}
           zukanCount={appState.zukan.length}
-          taneCount={appState.taneIds.length}
-          weeklyMinutes={weeklyTotalMinutes(appState)}
-          todaysDiscoveredJob={todaysDiscoveredJob}
+              todaysDiscoveredJob={todaysDiscoveredJob}
           recentJobs={recentJobs}
           toast={homeToast}
           loading={loading}
