@@ -5,6 +5,7 @@ import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
 import { LandingPage } from "./components/LandingPage"
+import { RotateNotice } from "./components/RotateNotice"
 import { TaneGrowthScreen } from "./components/TaneGrowthScreen"
 import { TaneScreen } from "./components/TaneScreen"
 import { TimetableScreen } from "./components/TimetableScreen"
@@ -403,6 +404,7 @@ function App() {
       <motion.div key={screen} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={baseTransition}>
         {content}
       </motion.div>
+      <RotateNotice />
     </MotionConfig>
   )
 }
