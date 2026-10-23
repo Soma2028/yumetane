@@ -1,15 +1,13 @@
 import { BarChart3, BookOpen, ChevronRight, Flame, Star, type LucideIcon } from "lucide-react"
 import { useState } from "react"
-import { motion } from "framer-motion"
 import type { RecordDetails, StudyLogEntry } from "../storage"
 import { formatMinutes } from "../format"
 import { InstallHint } from "./InstallHint"
+import { RecordSheet } from "./RecordSheet"
 import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
-const MEMO_MAX_LENGTH = 100
-const LABEL_MAX_LENGTH = 40
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 interface Props {
@@ -60,26 +58,12 @@ export function HomeScreen({
   onSelectJob,
 }: Props) {
   const [showForm, setShowForm] = useState(false)
-  const [subject, setSubject] = useState<string | null>(null)
-  const [minutesInput, setMinutesInput] = useState("30")
-  const [material, setMaterial] = useState("")
-  const [content, setContent] = useState("")
-  const [memo, setMemo] = useState("")
 
   const { nextThreshold } = stageProgress(zukanCount)
   const growthLabel = nextThreshold !== null ? `あと${nextThreshold - zukanCount}件で育つ` : "タネの部屋"
 
-  const minutes = Number(minutesInput) || 0
-  const canSubmit = subject !== null && minutes >= 10
-
-  function handleSubmit() {
-    if (!canSubmit || !subject) return
-    onRecord(subject, minutes, { material, content, memo })
-    setSubject(null)
-    setMinutesInput("30")
-    setMaterial("")
-    setContent("")
-    setMemo("")
+  function handleRecord(subject: string, minutes: number, details: RecordDetails) {
+    onRecord(subject, minutes, details)
     setShowForm(false)
   }
 
@@ -138,118 +122,25 @@ export function HomeScreen({
           <p className="rounded-xl bg-notice-bg px-3 py-2 text-sm text-notice-text">{error}</p>
         )}
 
-        {showForm ? (
-          <div className="flex flex-col gap-4 rounded-3xl border border-border-soft bg-white p-5 shadow-[0_4px_16px_rgba(47,107,79,0.08)]">
-            <div className="grid grid-cols-2 gap-2">
-              {subjects.map((s) => (
-                <motion.button
-                  key={s}
-                  type="button"
-                  onClick={() => setSubject(s)}
-                  animate={subject === s ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
-                  className={
-                    "rounded-xl border px-3 py-3 text-sm font-medium transition-colors " +
-                    (subject === s
-                      ? "border-coral-500 bg-coral-500 text-white"
-                      : "border-border-soft bg-white text-charcoal hover:border-sage-600")
-                  }
-                >
-                  {s}
-                </motion.button>
-              ))}
-            </div>
-
-            <label className="flex items-center gap-3 text-sm">
-              <span className="text-charcoal-muted">勉強した時間</span>
-              <input
-                type="number"
-                min={1}
-                value={minutesInput}
-                onChange={(e) => setMinutesInput(e.target.value)}
-                className="w-20 rounded-lg border border-border-soft px-3 py-2 text-right"
-              />
-              <span className="text-charcoal-muted">分</span>
-            </label>
-
-            {minutes > 0 && minutes < 10 && (
-              <p className="rounded-lg bg-notice-bg px-3 py-2 text-xs text-notice-text">
-                10分未満は記録できません
-              </p>
-            )}
-
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="text-charcoal-muted">教材名（任意）</span>
-              <input
-                type="text"
-                value={material}
-                maxLength={LABEL_MAX_LENGTH}
-                onChange={(e) => setMaterial(e.target.value)}
-                placeholder="例：チャート式"
-                className="rounded-lg border border-border-soft px-3 py-2"
-              />
-            </label>
-
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="text-charcoal-muted">単元・内容（任意）</span>
-              <input
-                type="text"
-                value={content}
-                maxLength={LABEL_MAX_LENGTH}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="例：二次方程式"
-                className="rounded-lg border border-border-soft px-3 py-2"
-              />
-            </label>
-
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="flex items-center justify-between text-charcoal-muted">
-                <span>メモ（任意）</span>
-                <span className="text-xs">
-                  {memo.length} / {MEMO_MAX_LENGTH}
-                </span>
-              </span>
-              <input
-                type="text"
-                value={memo}
-                maxLength={MEMO_MAX_LENGTH}
-                onChange={(e) => setMemo(e.target.value.slice(0, MEMO_MAX_LENGTH))}
-                placeholder="例：やっと解けた"
-                className="rounded-lg border border-border-soft px-3 py-2"
-              />
-            </label>
-
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="flex-1 rounded-full border border-border-soft py-3 text-center font-bold text-charcoal-muted transition active:bg-gray-100"
-              >
-                キャンセル
-              </button>
-              <button
-                type="button"
-                disabled={!canSubmit || loading}
-                onClick={handleSubmit}
-                className="flex-1 rounded-full bg-coral-500 py-3 text-center font-bold text-white transition active:bg-coral-600 disabled:opacity-40"
-              >
-                {loading ? "さがしています…" : "記録する"}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setShowForm(true)}
-            className={
-              "rounded-full bg-coral-500 text-center font-bold text-white shadow-sm transition active:bg-coral-600 " +
-              (todaysLogs.length === 0 ? "py-5 text-lg" : "py-3 text-base")
-            }
-          >
-            {todaysLogs.length === 0 ? "今日の勉強を記録する" : "＋ 記録を追加する"}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => setShowForm(true)}
+          className={
+            "rounded-full bg-coral-500 text-center font-bold text-white shadow-sm transition active:bg-coral-600 " +
+            (todaysLogs.length === 0 ? "py-5 text-lg" : "py-3 text-base")
+          }
+        >
+          {todaysLogs.length === 0 ? "今日の勉強を記録する" : "＋ 記録を追加する"}
+        </button>
       </div>
+
+      <RecordSheet
+        open={showForm}
+        subjects={subjects}
+        loading={loading}
+        onSubmit={handleRecord}
+        onClose={() => setShowForm(false)}
+      />
 
       <InstallHint />
 
