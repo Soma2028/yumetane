@@ -117,7 +117,7 @@ export function HomeScreen({
         >
           <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-wide text-sage-600">今日見つけた仕事</p>
-            <p className="mt-0.5 truncate text-lg font-bold text-charcoal">{todaysDiscoveredJob.jobName}</p>
+            <p className="mt-0.5 line-clamp-2 text-lg leading-snug font-bold text-charcoal">{todaysDiscoveredJob.jobName}</p>
           </div>
           <ChevronRight className="h-5 w-5 shrink-0 text-sage-600" />
         </button>
@@ -318,7 +318,7 @@ export function HomeScreen({
                   className="flex w-full items-center justify-between gap-3 rounded-3xl border border-border-soft bg-cream px-4 py-3 text-left transition hover:border-sage-600"
                 >
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-bold">{job.jobName}</span>
+                    <span className="line-clamp-2 block text-sm leading-snug font-bold">{job.jobName}</span>
                     <span className="text-xs text-charcoal-muted">{job.subject}の勉強から</span>
                   </span>
                   <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />

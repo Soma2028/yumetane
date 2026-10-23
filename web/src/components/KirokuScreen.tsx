@@ -10,7 +10,7 @@ const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 const SUBJECT_FLAVOR: Record<string, string> = {
-  数学: "理系",
+  数学: "計算や数字",
   理科: "科学",
   社会: "社会科学",
   国語: "ことば",
@@ -411,7 +411,7 @@ export function KirokuScreen({
                         <div className="mt-2 border-t border-border-soft pt-2">
                           <p className="mb-1.5 text-xs text-charcoal-muted">見つかった仕事</p>
                           {specialSubjects.includes(row.subject) ? (
-                            <p className="text-xs text-charcoal-muted">職業発見には未対応</p>
+                            <p className="text-xs text-charcoal-muted">この教科につながる仕事のデータはないよ</p>
                           ) : row.jobs.length === 0 ? (
                             <p className="text-sm text-charcoal-muted">まだ見つかった仕事はないよ</p>
                           ) : (

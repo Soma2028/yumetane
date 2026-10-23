@@ -100,7 +100,7 @@ function App() {
       // 保健体育など: job tagに対応する知識項目が無いため、記録だけしてdiscoverは呼ばない
       updateAppState(recordStudy(appState, subject, minutes, null, details))
       if (toastTimer.current) clearTimeout(toastTimer.current)
-      setHomeToast(`記録したよ！${subject}は今対応する職業データを準備中だよ`)
+      setHomeToast(`記録したよ！${subject}につながる仕事のデータはないから、仕事は見つからないよ`)
       toastTimer.current = setTimeout(() => setHomeToast(null), 3000)
       return
     }
