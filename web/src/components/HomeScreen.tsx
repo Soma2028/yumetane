@@ -74,7 +74,7 @@ export function HomeScreen({
       <div className="flex flex-col gap-4 max-lg:[@media(max-height:740px)]:gap-3">
       <div className="relative flex flex-col items-center gap-1 pt-2">
         {streak > 0 && (
-          <span className="absolute right-0 top-0 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
+          <span className="absolute right-0 top-5 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
             <Flame className="h-4 w-4" />
             {streak}日連続
           </span>
