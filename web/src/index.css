@@ -32,6 +32,22 @@ body {
   overscroll-behavior: none;
 }
 
+/* 押したときの反応を全部のボタン・リンクでそろえる（以前は95%に縮むものと、何も起きない
+   ものが混ざっていた）。長さはsrc/motion.tsのDURATION.tapと同じ0.15秒。画面全体を覆う
+   幕のように縮んではいけないものには data-no-tap を付ける */
+/* @layer base に置くことで、色などのtransitionを指定したTailwindのクラスがあればそちらが勝つ
+   （Tailwindのtransitionはscaleも含むので、縮む動きはそのまま残る） */
+@layer base {
+  button,
+  a[href] {
+    transition: scale 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  button:not(:disabled):not([data-no-tap]):active,
+  a[href]:not([data-no-tap]):active {
+    scale: 0.97;
+  }
+}
+
 body {
   background-color: var(--color-cream);
   background-image: repeating-radial-gradient(

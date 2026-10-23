@@ -6,6 +6,7 @@ import { formatMinutes } from "../format"
 import type { StudyLogEntry, SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
 import { BackButton } from "./BackButton"
 import { Phrase } from "./Phrase"
+import { STAGGER, fadeUp } from "../motion"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
@@ -46,11 +47,6 @@ function buildCalendarWeeks(dates: string[]): (string | null)[][] {
   const weeks: (string | null)[][] = []
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
   return weeks
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 }
 
 export type KirokuTab = "week" | "calendar" | "subjects"
@@ -281,7 +277,7 @@ export function KirokuScreen({
                       aria-pressed={selectedDate === date}
                       aria-label={`${formatDayHeading(date)}の記録を見る`}
                       className={
-                        "flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl transition active:scale-95 " +
+                        "flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl transition " +
                         (selectedDate === date ? "bg-sage-50 ring-2 ring-sage-600" : "hover:bg-sage-50")
                       }
                     >
@@ -381,7 +377,7 @@ export function KirokuScreen({
                     whileInView="show"
                     viewport={{ once: true, amount: 0.3 }}
                     variants={fadeUp}
-                    transition={{ delay: Math.min(i, 4) * 0.05 }}
+                    transition={{ delay: Math.min(i, 4) * STAGGER }}
                     className="rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
                   >
                     <button

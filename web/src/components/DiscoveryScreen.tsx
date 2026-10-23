@@ -5,6 +5,7 @@ import { TagIcon } from "../tagIcons"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 import type { Job } from "../types"
+import { enter } from "../motion"
 
 interface Props {
   job: Job | null
@@ -70,9 +71,7 @@ export function DiscoveryScreen({
         />
         <motion.div
           className="mt-1 flex-1"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
+          {...enter(0.2)}
         >
           <TaneSpeech lines={speechLines} />
         </motion.div>
@@ -81,9 +80,7 @@ export function DiscoveryScreen({
       {/* 主役: 見つかった職業 */}
       <motion.div
         className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
+        {...enter(0.3)}
       >
         <div className="flex h-24 items-center justify-center bg-sage-100 [@media(max-height:740px)]:h-16">
           <TagIcon tags={job.tags} className="h-12 w-12 text-sage-600 [@media(max-height:740px)]:h-9 [@media(max-height:740px)]:w-9" strokeWidth={1.5} />

@@ -8,26 +8,10 @@ import { STAGE_MIN } from "../taneStage"
 import { SproutIcon } from "./SproutIcon"
 import { TaneCharacter } from "./TaneCharacter"
 import { Phrase } from "./Phrase"
+import { enter, fadeUp, float, stagger } from "../motion"
 
 interface Props {
   onStart: () => void
-}
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-}
-
-const popIn: Variants = {
-  hidden: { opacity: 0, scale: 0 },
-  show: { opacity: 1, scale: [0, 1.1, 1], transition: { duration: 0.3, ease: "easeOut" } },
-}
-
-function stagger(staggerChildren = 0.12): Variants {
-  return {
-    hidden: {},
-    show: { transition: { staggerChildren, delayChildren: 0.05 } },
-  }
 }
 
 const viewport = { once: true, amount: 0.25 } as const
@@ -40,7 +24,7 @@ export function LandingPage({ onStart }: Props) {
           見つかる」瞬間そのものを、本物の発見画面と同じ部品で見せる */}
       <section className="flex min-h-screen items-center px-6 py-14 lg:h-screen lg:min-h-0 lg:px-12 lg:py-0">
         <motion.div
-          variants={stagger(0.12)}
+          variants={stagger}
           initial="hidden"
           animate="show"
           className="mx-auto flex w-full max-w-5xl flex-col items-center gap-12 lg:flex-row lg:justify-between lg:gap-16"
@@ -89,7 +73,7 @@ export function LandingPage({ onStart }: Props) {
 
       {/* 2. 課題 */}
       <motion.section
-        variants={stagger()}
+        variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -145,7 +129,7 @@ export function LandingPage({ onStart }: Props) {
 
       {/* 3. 仕組み — PCはタネを上・大きく、テキストを下に */}
       <motion.section
-        variants={stagger()}
+        variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -235,7 +219,7 @@ export function LandingPage({ onStart }: Props) {
 
       {/* 4. 画面紹介 — 既存の実装（横並び・中央を大きく）を維持 */}
       <motion.section
-        variants={stagger()}
+        variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -293,7 +277,7 @@ export function LandingPage({ onStart }: Props) {
 
       {/* 5. データについて */}
       <motion.section
-        variants={stagger()}
+        variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -328,7 +312,7 @@ export function LandingPage({ onStart }: Props) {
 
       {/* 6. CTA — PCは文言・タネ・ボタンを横並びに */}
       <motion.section
-        variants={stagger()}
+        variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -367,23 +351,17 @@ const DEMO_JOB = {
 
 /** 「数学を記録 → 仕事が見つかる」の一連を、発見画面と同じ見た目で縮小して見せる。 */
 function DiscoveryDemo() {
-  const step = (delay: number) => ({
-    initial: { opacity: 0, y: 12 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.4, delay, ease: "easeOut" as const },
-  })
-
   return (
     <div
       aria-label="使い方の例：数学を30分記録すると、精密機器技術者という仕事が見つかる"
       className="w-[300px] rounded-[2.25rem] border border-border-soft bg-cream p-5 shadow-[0_16px_48px_rgba(43,38,32,0.10)] lg:w-[340px]"
     >
-      <motion.div {...step(0.5)} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm">
+      <motion.div {...enter(0.5)} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm">
         <span className="font-bold">数学</span>
         <span className="text-charcoal-muted">30分 記録した</span>
       </motion.div>
 
-      <motion.div {...step(1.0)} className="mt-4 flex items-center gap-2">
+      <motion.div {...enter(1.0)} className="mt-4 flex items-center gap-2">
         {/* 図鑑1件目はまだ種（stage0）で絵が小さいため、双葉の出たstage1（10件〜）で見せる */}
         <TaneCharacter count={STAGE_MIN[1]} size={88} className="-my-2 -ml-1" />
         <p className="relative flex-1 rounded-2xl border border-border-soft bg-white px-3 py-2 text-[13px] font-medium leading-relaxed">
@@ -392,7 +370,7 @@ function DiscoveryDemo() {
       </motion.div>
 
       <motion.div
-        {...step(1.4)}
+        {...enter(1.4)}
         className="mt-4 overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
       >
         <div className="flex h-16 items-center justify-center bg-sage-100">
@@ -435,8 +413,8 @@ function FloatingTane({
       height={size}
       className={`shrink-0 rounded-2xl object-contain ${sizeClassName ?? ""}`}
       style={{ mixBlendMode: "multiply" }}
-      animate={{ y: [0, -8, 0] }}
-      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      animate={float.animate}
+      transition={float.transition}
     />
   )
 }
@@ -452,7 +430,7 @@ function StepTane({
 }) {
   return (
     <motion.img
-      variants={popIn}
+      variants={fadeUp}
       src={src}
       alt={alt}
       width={48}

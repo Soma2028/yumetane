@@ -1,5 +1,3 @@
-import { motion } from "framer-motion"
-import { useState } from "react"
 import { formatMinutes } from "../format"
 import type { SubjectStat, SubjectTotal } from "../storage"
 import { taneComment } from "../taneComments"
@@ -37,7 +35,6 @@ function RoomWindow() {
 }
 
 export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack }: Props) {
-  const [isClosing, setIsClosing] = useState(false)
   const { stage, currentMin, nextThreshold } = stageProgress(zukanCount)
   const goal = nextThreshold ?? MAX_JOB_COUNT
   const pct = Math.min(100, Math.round(((zukanCount - currentMin) / (goal - currentMin)) * 100))
@@ -50,15 +47,8 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
   const wallHeight = Math.round(roomHeight / 3)
 
   return (
-    <motion.div
-      className="mx-auto flex min-h-screen max-w-md flex-col"
-      initial={{ y: 40, opacity: 0 }}
-      animate={isClosing ? { y: 40, opacity: 0 } : { y: 0, opacity: 1 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      onAnimationComplete={() => {
-        if (isClosing) onBack()
-      }}
-    >
+    // 開閉の動きは、ほかの画面と同じ切り替え（App側のフェード）にそろえる
+    <div className="mx-auto flex min-h-screen max-w-md flex-col">
       {/* タネの部屋 */}
       <div className="relative shrink-0 overflow-hidden" style={{ height: roomHeight }}>
         <h2 className="sr-only">タネの部屋</h2>
@@ -75,7 +65,7 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
         />
         <div className="absolute inset-x-0" style={{ top: wallHeight, height: 2, backgroundColor: "#D4C4A8" }} />
 
-        <BackButton onClick={() => setIsClosing(true)} className="absolute left-4 top-4 z-10" />
+        <BackButton onClick={onBack} className="absolute left-4 top-4 z-10" />
 
         <div className="absolute right-4 top-4">
           <RoomWindow />
@@ -133,6 +123,6 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
           </section>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

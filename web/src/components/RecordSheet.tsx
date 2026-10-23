@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ChevronDown, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { RecordDetails } from "../storage"
+import { DURATION, EASE_OUT, baseTransition } from "../motion"
 
 const MEMO_MAX_LENGTH = 100
 const LABEL_MAX_LENGTH = 40
@@ -59,6 +60,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
           <motion.button
             type="button"
             aria-label="記録をやめる"
+            data-no-tap
             onClick={onClose}
             // 暗い幕だと、iOS 26のSafariが画面端に固定された要素の背景色で上下のバーを塗るため、
             // 開閉の瞬間に上が黒くなる。背景と同じクリーム色を半透明で重ね、少しぼかす
@@ -66,6 +68,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={baseTransition}
           />
           <motion.div
             role="dialog"
@@ -75,7 +78,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
+            transition={baseTransition}
           >
             <div className="flex items-center justify-between">
               <p className="text-lg font-bold">今日の勉強を記録</p>
@@ -99,7 +102,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
                     onClick={() => setSubject(s)}
                     aria-pressed={subject === s}
                     animate={subject === s ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    transition={{ duration: DURATION.tap, ease: EASE_OUT }}
                     className={
                       "h-11 rounded-xl border px-1 text-sm font-medium transition-colors " +
                       (subject === s

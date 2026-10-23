@@ -88,7 +88,7 @@ export function HomeScreen({
         <button
           type="button"
           onClick={onOpenGrowth}
-          className="group flex cursor-pointer flex-col items-center gap-1 transition-transform active:scale-95"
+          className="group flex cursor-pointer flex-col items-center gap-1 transition-transform"
           aria-label={`タネの部屋を見る（${growthLabel}）`}
         >
           <TaneCharacter count={zukanCount} size={80} />
@@ -176,7 +176,7 @@ export function HomeScreen({
                 type="button"
                 onClick={() => onOpenDay(date)}
                 aria-label={`${d.getMonth() + 1}月${d.getDate()}日の記録を見る`}
-                className="flex flex-col items-center gap-1 rounded-xl px-0.5 py-0.5 transition hover:bg-sage-50 active:scale-95"
+                className="flex flex-col items-center gap-1 rounded-xl px-0.5 py-0.5 transition hover:bg-sage-50"
               >
                 <span className="text-xs text-charcoal-muted">{WEEKDAY_LABELS[d.getDay()]}</span>
                 <div
@@ -272,7 +272,7 @@ function NavButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3 pb-2.5 transition hover:border-sage-600 active:scale-95 max-lg:[@media(max-height:740px)]:pt-2"
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3 pb-2.5 transition hover:border-sage-600 max-lg:[@media(max-height:740px)]:pt-2"
     >
       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sage-50">
         <Icon className="h-5 w-5 text-sage-600" strokeWidth={1.75} />

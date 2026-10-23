@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Sparkle } from "lucide-react"
 import { stageFromCount, type TaneStage } from "../taneStage"
+import { float } from "../motion"
 
 const STAGE_ALT: Record<TaneStage, string> = {
   0: "タネ（丸いタネの状態）",
@@ -48,11 +49,8 @@ export function TaneCharacter({
     <motion.div
       className={`relative inline-block shrink-0 ${className ?? ""}`}
       style={{ width: size, height: size }}
-      animate={{ y: [0, -6, 0], rotate: [-1, 1, -1] }}
-      transition={{
-        y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-        rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-      }}
+      animate={float.animate}
+      transition={float.transition}
     >
       <motion.img
         src={`/images/tane/stage${stage}.png`}

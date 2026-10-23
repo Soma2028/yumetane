@@ -1,3 +1,4 @@
+import { MotionConfig, motion } from "framer-motion"
 import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from "react"
 import { discover, fetchAreas, fetchJob, fetchSubjects } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
@@ -30,6 +31,7 @@ import {
   type RecordDetails,
 } from "./storage"
 import { reloadForStaleChunk, takeResumeScreen } from "./staleChunk"
+import { baseTransition } from "./motion"
 import { stageFromCount } from "./taneStage"
 import type { KirokuTab } from "./components/KirokuScreen"
 import type { DiscoverResponse, Job, Subject } from "./types"
@@ -224,150 +226,163 @@ function App() {
     }
   }
 
-  if (screen === "top") {
-    return <LandingPage onStart={() => setScreen("home")} />
-  }
+  const content = (() => {
+    if (screen === "top") {
+      return <LandingPage onStart={() => setScreen("home")} />
+    }
 
-  if (screen === "home") {
-    const discoveredId = todaysDiscoveredJobId(appState)
-    const discoveredEntry = discoveredId != null ? appState.zukan.find((e) => e.jobId === discoveredId) : undefined
-    const todaysDiscoveredJob = discoveredEntry
-      ? { jobId: discoveredEntry.jobId, jobName: discoveredEntry.jobName }
-      : null
-    // 今日見つけた仕事は上のカードに出ているので除き、新しい順に5件（スマホでは3件まで表示）
-    const recentJobs = appState.zukan
-      .filter((e) => e.jobId !== discoveredId)
-      .slice(-5)
-      .reverse()
-      .map((e) => ({ jobId: e.jobId, jobName: e.jobName, subject: e.subject }))
+    if (screen === "home") {
+      const discoveredId = todaysDiscoveredJobId(appState)
+      const discoveredEntry = discoveredId != null ? appState.zukan.find((e) => e.jobId === discoveredId) : undefined
+      const todaysDiscoveredJob = discoveredEntry
+        ? { jobId: discoveredEntry.jobId, jobName: discoveredEntry.jobName }
+        : null
+      // 今日見つけた仕事は上のカードに出ているので除き、新しい順に5件（スマホでは3件まで表示）
+      const recentJobs = appState.zukan
+        .filter((e) => e.jobId !== discoveredId)
+        .slice(-5)
+        .reverse()
+        .map((e) => ({ jobId: e.jobId, jobName: e.jobName, subject: e.subject }))
 
-    return (
-      <HomeScreen
-        subjects={subjects.map((s) => s.name)}
-        todaysLogs={todaysLogs(appState)}
-        todaysTotalMinutes={todaysTotalMinutes(appState)}
-        streak={appState.streak}
-        zukanCount={appState.zukan.length}
-        taneCount={appState.taneIds.length}
-        weeklyMinutes={weeklyTotalMinutes(appState)}
-        todaysDiscoveredJob={todaysDiscoveredJob}
-        recentJobs={recentJobs}
-        toast={homeToast}
-        loading={loading}
-        error={error}
-        weekDates={last7Dates()}
-        studiedDates={studiedDatesSet(appState)}
-        onRecord={handleRecord}
-        onOpenZukan={() => setScreen("zukan")}
-        onOpenTane={() => setScreen("tane")}
-        onOpenKiroku={() => {
-          setKirokuTab("week")
-          setKirokuDate(null)
-          setScreen("kiroku")
-        }}
-        onOpenDay={(date) => {
-          setKirokuTab("calendar")
-          setKirokuDate(date)
-          setScreen("kiroku")
-        }}
-        onOpenGrowth={() => setScreen("growth")}
-        onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
-      />
-    )
-  }
+      return (
+        <HomeScreen
+          subjects={subjects.map((s) => s.name)}
+          todaysLogs={todaysLogs(appState)}
+          todaysTotalMinutes={todaysTotalMinutes(appState)}
+          streak={appState.streak}
+          zukanCount={appState.zukan.length}
+          taneCount={appState.taneIds.length}
+          weeklyMinutes={weeklyTotalMinutes(appState)}
+          todaysDiscoveredJob={todaysDiscoveredJob}
+          recentJobs={recentJobs}
+          toast={homeToast}
+          loading={loading}
+          error={error}
+          weekDates={last7Dates()}
+          studiedDates={studiedDatesSet(appState)}
+          onRecord={handleRecord}
+          onOpenZukan={() => setScreen("zukan")}
+          onOpenTane={() => setScreen("tane")}
+          onOpenKiroku={() => {
+            setKirokuTab("week")
+            setKirokuDate(null)
+            setScreen("kiroku")
+          }}
+          onOpenDay={(date) => {
+            setKirokuTab("calendar")
+            setKirokuDate(date)
+            setScreen("kiroku")
+          }}
+          onOpenGrowth={() => setScreen("growth")}
+          onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
+        />
+      )
+    }
 
-  if (screen === "discovery" && discoverResult) {
-    const jobId = discoverResult.job?.job_id
-    return (
-      <DiscoveryScreen
-        job={discoverResult.job}
-        exhausted={discoverResult.exhausted}
-        subject={discoverSubject}
-        zukanCount={discoverZukanCount}
-        speechLines={discoverSpeechLines}
-        allDiscovered={discoverAllDiscovered}
-        justGrew={discoverJustGrew}
-        isTane={jobId ? appState.taneIds.includes(jobId) : false}
-        onToggleTane={() => jobId && handleToggleTaneFor(jobId)}
-        onDone={() => setScreen("home")}
-      />
-    )
-  }
+    if (screen === "discovery" && discoverResult) {
+      const jobId = discoverResult.job?.job_id
+      return (
+        <DiscoveryScreen
+          job={discoverResult.job}
+          exhausted={discoverResult.exhausted}
+          subject={discoverSubject}
+          zukanCount={discoverZukanCount}
+          speechLines={discoverSpeechLines}
+          allDiscovered={discoverAllDiscovered}
+          justGrew={discoverJustGrew}
+          isTane={jobId ? appState.taneIds.includes(jobId) : false}
+          onToggleTane={() => jobId && handleToggleTaneFor(jobId)}
+          onDone={() => setScreen("home")}
+        />
+      )
+    }
 
-  if (screen === "zukan") {
-    return (
-      <ZukanScreen
-        zukan={appState.zukan}
-        areaTotals={areaTotals}
-        onBack={() => setScreen("home")}
-        onSelectJob={(jobId) => handleSelectJob(jobId, "zukan")}
-      />
-    )
-  }
+    if (screen === "zukan") {
+      return (
+        <ZukanScreen
+          zukan={appState.zukan}
+          areaTotals={areaTotals}
+          onBack={() => setScreen("home")}
+          onSelectJob={(jobId) => handleSelectJob(jobId, "zukan")}
+        />
+      )
+    }
 
-  if (screen === "tane") {
-    return (
-      <TaneScreen
-        zukan={appState.zukan}
-        taneIds={appState.taneIds}
-        onBack={() => setScreen("home")}
-        onSelectJob={(jobId) => handleSelectJob(jobId, "tane")}
-      />
-    )
-  }
+    if (screen === "tane") {
+      return (
+        <TaneScreen
+          zukan={appState.zukan}
+          taneIds={appState.taneIds}
+          onBack={() => setScreen("home")}
+          onSelectJob={(jobId) => handleSelectJob(jobId, "tane")}
+        />
+      )
+    }
 
-  if (screen === "kiroku") {
-    return (
-      <LoadErrorBoundary onBack={() => setScreen("home")}>
-        <Suspense fallback={null}>
-          <KirokuScreen
-            tab={kirokuTab}
-            onChangeTab={setKirokuTab}
-            selectedDate={kirokuDate}
-            onSelectDate={setKirokuDate}
-            calendarDates={last30Dates()}
-            studiedDates={studiedDatesSet(appState)}
-            thisWeek={weekSummary(appState, 0)}
-            lastWeek={weekSummary(appState, 1)}
-            weeklySubjectTotals={weeklySubjectTotals(appState)}
-            subjectJobHistory={subjectJobHistory(appState)}
-            mostStudied={mostStudiedDiscoverable(appState)}
-            specialSubjects={specialSubjectNames}
-            logs={appState.logs}
-            jobNames={new Map(appState.zukan.map((e) => [e.jobId, e.jobName]))}
-            onBack={() => setScreen("home")}
-            onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
-          />
-        </Suspense>
-      </LoadErrorBoundary>
-    )
-  }
+    if (screen === "kiroku") {
+      return (
+        <LoadErrorBoundary onBack={() => setScreen("home")}>
+          <Suspense fallback={null}>
+            <KirokuScreen
+              tab={kirokuTab}
+              onChangeTab={setKirokuTab}
+              selectedDate={kirokuDate}
+              onSelectDate={setKirokuDate}
+              calendarDates={last30Dates()}
+              studiedDates={studiedDatesSet(appState)}
+              thisWeek={weekSummary(appState, 0)}
+              lastWeek={weekSummary(appState, 1)}
+              weeklySubjectTotals={weeklySubjectTotals(appState)}
+              subjectJobHistory={subjectJobHistory(appState)}
+              mostStudied={mostStudiedDiscoverable(appState)}
+              specialSubjects={specialSubjectNames}
+              logs={appState.logs}
+              jobNames={new Map(appState.zukan.map((e) => [e.jobId, e.jobName]))}
+              onBack={() => setScreen("home")}
+              onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
+            />
+          </Suspense>
+        </LoadErrorBoundary>
+      )
+    }
 
-  if (screen === "growth") {
-    return (
-      <TaneGrowthScreen
-        zukanCount={appState.zukan.length}
-        subjectStats={subjectStats(appState)}
-        mostStudied={mostStudiedDiscoverable(appState)}
-        onBack={() => setScreen("home")}
-      />
-    )
-  }
+    if (screen === "growth") {
+      return (
+        <TaneGrowthScreen
+          zukanCount={appState.zukan.length}
+          subjectStats={subjectStats(appState)}
+          mostStudied={mostStudiedDiscoverable(appState)}
+          onBack={() => setScreen("home")}
+        />
+      )
+    }
 
-  if (screen === "detail" && selectedJob) {
-    const entry = appState.zukan.find((e) => e.jobId === selectedJob.job_id)
-    return (
-      <JobDetailScreen
-        job={selectedJob}
-        subject={entry?.subject}
-        isTane={appState.taneIds.includes(selectedJob.job_id)}
-        onToggleTane={() => handleToggleTaneFor(selectedJob.job_id)}
-        onBack={() => setScreen(detailReturnScreen)}
-      />
-    )
-  }
+    if (screen === "detail" && selectedJob) {
+      const entry = appState.zukan.find((e) => e.jobId === selectedJob.job_id)
+      return (
+        <JobDetailScreen
+          job={selectedJob}
+          subject={entry?.subject}
+          isTane={appState.taneIds.includes(selectedJob.job_id)}
+          onToggleTane={() => handleToggleTaneFor(selectedJob.job_id)}
+          onBack={() => setScreen(detailReturnScreen)}
+        />
+      )
+    }
 
-  return null
+    return null
+  })()
+
+  // 画面の切り替えは全画面で同じ短いフェードにそろえる。位置を動かすと中の固定表示
+  // （記録パネル）の基準がずれるため、透明度だけを動かす。端末で「視差効果を減らす」を
+  // オンにしている人には、framer-motionの動きを控えめにする
+  return (
+    <MotionConfig reducedMotion="user">
+      <motion.div key={screen} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={baseTransition}>
+        {content}
+      </motion.div>
+    </MotionConfig>
+  )
 }
 
 export default App
