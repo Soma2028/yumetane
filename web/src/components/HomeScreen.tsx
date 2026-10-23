@@ -144,36 +144,20 @@ export function HomeScreen({
 
       <InstallHint />
 
-      {/* 副次情報: 今日の記録一覧。箱で囲わず、行の集まりとして控えめに見せる */}
+      {/* 副次情報: 今日の記録。ホームを1画面に収めるため、教科と時間を1行にまとめる
+          （教材・単元・メモは、きろくのカレンダーでその日を開くと見られる） */}
       {todaysLogs.length > 0 && (
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-wide text-charcoal-muted">今日の記録</p>
-            <p className="text-xs text-charcoal-muted">合計 {todaysTotalMinutes}分</p>
-          </div>
-          <ul className="flex flex-col gap-2">
-            {todaysLogs.map((log, i) => (
-              <li
-                key={i}
-                className="rounded-3xl border border-border-soft bg-cream px-4 py-3 text-sm"
-              >
-                <div className="flex items-center justify-between font-medium">
-                  <span>{log.subject}</span>
-                  <span className="text-charcoal-muted">{log.minutes}分</span>
-                </div>
-                {(log.material || log.content) && (
-                  <p className="mt-1 truncate text-xs text-charcoal-muted">
-                    {[log.material, log.content].filter(Boolean).join(" ・ ")}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
+        <div className="flex items-baseline justify-between gap-3 rounded-2xl border border-border-soft bg-cream px-4 py-2.5 text-sm">
+          <p className="min-w-0">
+            <span className="mr-2 text-xs font-bold text-charcoal-muted">今日の記録</span>
+            {todaysLogs.map((log) => `${log.subject} ${log.minutes}分`).join("・")}
+          </p>
+          <p className="shrink-0 text-xs text-charcoal-muted">合計 {formatMinutes(todaysTotalMinutes)}</p>
         </div>
       )}
 
       {/* 比較ゾーン: ストリークと週間の記録状況を1枚にまとめ、控えめなトーンで置く */}
-      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4">
+      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4 [@media(max-height:740px)]:py-3">
         <p className="font-bold">この1週間</p>
         <div className="flex justify-between">
           {weekDates.map((date) => {
@@ -199,12 +183,12 @@ export function HomeScreen({
       </div>
 
       {/* 振り返り: 最近見つけた仕事。見つけて終わりにせず、もう一度開くきっかけにする。
-          今日の記録と同じく箱で囲わず、行の集まりとして置く */}
-      <div>
+          今日見つけた仕事が上に出ている日は1件に減らし、画面の低い端末では欄ごと隠す */}
+      <div className={todaysDiscoveredJob ? "[@media(max-height:740px)]:hidden" : undefined}>
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted">最近見つけた仕事</p>
         {recentJobs.length > 0 ? (
           <ul className="flex flex-col gap-2">
-            {recentJobs.map((job, i) => (
+            {recentJobs.slice(0, todaysDiscoveredJob ? 1 : 3).map((job, i) => (
               // 画面の低い端末（iPhone SEなど）では1件だけにして、ホームを1画面に収める
               <li key={job.jobId} className={i > 0 ? "[@media(max-height:740px)]:hidden" : undefined}>
                 <button
