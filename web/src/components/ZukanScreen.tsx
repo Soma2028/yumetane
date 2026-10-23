@@ -1,4 +1,5 @@
 import type { ZukanEntry } from "../storage"
+import { BackButton } from "./BackButton"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -19,13 +20,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
-      <button
-        type="button"
-        onClick={onBack}
-        className="self-start text-sm font-medium text-charcoal-muted transition hover:text-sage-700"
-      >
-        ← もどる
-      </button>
+      <BackButton onClick={onBack} />
 
       <div className="text-center">
         <h2 className="text-2xl font-bold tracking-tight">職業図鑑</h2>

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import { formatMinutes } from "../format"
 import type { SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
+import { BackButton } from "./BackButton"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
@@ -88,13 +89,7 @@ export function KirokuScreen({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
-      <button
-        type="button"
-        onClick={onBack}
-        className="self-start text-sm font-medium text-charcoal-muted transition hover:text-sage-700"
-      >
-        ← もどる
-      </button>
+      <BackButton onClick={onBack} />
 
       <h2 className="text-2xl font-bold tracking-tight">きろく</h2>
 

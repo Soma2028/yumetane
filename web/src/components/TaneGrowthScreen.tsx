@@ -5,6 +5,7 @@ import type { SubjectStat, SubjectTotal } from "../storage"
 import { taneComment } from "../taneComments"
 import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
+import { BackButton } from "./BackButton"
 
 interface Props {
   zukanCount: number
@@ -69,13 +70,7 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
         />
         <div className="absolute inset-x-0" style={{ top: WALL_HEIGHT, height: 2, backgroundColor: "#D4C4A8" }} />
 
-        <button
-          type="button"
-          onClick={() => setIsClosing(true)}
-          className="absolute left-4 top-4 text-sm font-medium text-charcoal-muted transition hover:text-sage-700"
-        >
-          ← もどる
-        </button>
+        <BackButton onClick={() => setIsClosing(true)} className="absolute left-4 top-4 z-10" />
 
         <div className="absolute right-4 top-4">
           <RoomWindow />

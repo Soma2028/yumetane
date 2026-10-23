@@ -1,5 +1,6 @@
 import { ExternalLink, Star } from "lucide-react"
 import type { Job } from "../types"
+import { BackButton } from "./BackButton"
 
 interface Props {
   job: Job
@@ -12,13 +13,7 @@ interface Props {
 export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: Props) {
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
-      <button
-        type="button"
-        onClick={onBack}
-        className="self-start text-sm font-medium text-charcoal-muted transition hover:text-sage-700"
-      >
-        ← もどる
-      </button>
+      <BackButton onClick={onBack} />
       <h2 className="text-2xl font-bold tracking-tight">{job.job_name}</h2>
 
       {subject && (

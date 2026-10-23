@@ -1,5 +1,6 @@
 import { Star } from "lucide-react"
 import type { ZukanEntry } from "../storage"
+import { BackButton } from "./BackButton"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -13,13 +14,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
-      <button
-        type="button"
-        onClick={onBack}
-        className="self-start text-sm font-medium text-charcoal-muted transition hover:text-sage-700"
-      >
-        ← もどる
-      </button>
+      <BackButton onClick={onBack} />
 
       <h2 className="text-2xl font-bold tracking-tight">タネ</h2>
       <p className="text-sm text-charcoal-muted">気になる、と保存した仕事。</p>
