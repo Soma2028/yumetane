@@ -11,6 +11,7 @@ export interface Job {
   awareness_label: string
   tags: string[]
   area: string
+  jobtag_url: string // job tag（厚労省）の職業詳細ページ。写真・動画・なり方などが載っている
 }
 
 export interface DiscoverResponse {

@@ -5,24 +5,10 @@ GET /subjects・GET /areas・GET /jobs/{id} の返す内容を事前計算する
 書き出しは scripts/export_web_data.py が行う。
 """
 
-import pandas as pd
-
-from .areas import area_counts, dominant_area
+from .areas import area_counts
 from .data import load_jobs
 from .discovery import ALL_SUBJECTS, SPECIAL_SUBJECTS, STUDIABLE_SUBJECTS, TOP_N_PER_SUBJECT, WEIGHT_BY_AWARENESS, score_column
-from .tags import select_tags
-
-
-def job_to_dict(row: pd.Series) -> dict:
-    return {
-        "job_id": int(row.job_id),
-        "job_name": row.job_name,
-        "description": row.description,
-        "riasec_source": row.riasec_source,
-        "awareness_label": row.awareness_label,
-        "tags": select_tags(row),
-        "area": dominant_area(row),
-    }
+from .job_dict import job_to_dict
 
 
 def build_web_data() -> dict:

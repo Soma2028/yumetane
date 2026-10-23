@@ -1,4 +1,4 @@
-import { Star } from "lucide-react"
+import { ExternalLink, Star } from "lucide-react"
 import type { Job } from "../types"
 
 interface Props {
@@ -41,6 +41,21 @@ export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: 
         </span>
       )}
       <p className="text-base leading-loose text-charcoal">{job.description}</p>
+
+      {/* もっと知りたくなったときの行き先。説明文はjob tagの要約なので、写真・動画・
+          なり方まで載っている元のページへ渡す */}
+      <a
+        href={job.jobtag_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-between gap-3 rounded-3xl border border-border-soft bg-white px-5 py-4 transition hover:border-sage-600"
+      >
+        <span>
+          <span className="block font-bold">写真や動画でもっと知る</span>
+          <span className="text-xs text-charcoal-muted">job tag（厚生労働省の職業情報サイト）</span>
+        </span>
+        <ExternalLink className="h-5 w-5 shrink-0 text-sage-600" strokeWidth={1.5} />
+      </a>
 
       <button
         type="button"

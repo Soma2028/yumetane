@@ -14,11 +14,11 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .areas import area_counts, dominant_area
+from .areas import area_counts
 from .data import load_jobs
 from .discovery import ALL_SUBJECTS, SPECIAL_SUBJECTS, discover_job
+from .job_dict import job_to_dict
 from .schemas import DiscoverRequest, DiscoverResponse, JobOut, SubjectOut
-from .tags import select_tags
 
 app = FastAPI(title="夢のタネ API")
 
@@ -86,13 +86,4 @@ def get_job(job_id: int) -> JobOut:
     match = jobs[jobs["job_id"] == job_id]
     if match.empty:
         raise HTTPException(status_code=404, detail="職業が見つかりません")
-    row = match.iloc[0]
-    return JobOut(
-        job_id=int(row.job_id),
-        job_name=row.job_name,
-        description=row.description,
-        riasec_source=row.riasec_source,
-        awareness_label=row.awareness_label,
-        tags=select_tags(row),
-        area=dominant_area(row),
-    )
+    return JobOut(**job_to_dict(match.iloc[0]))

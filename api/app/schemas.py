@@ -16,6 +16,7 @@ class JobOut(BaseModel):
     awareness_label: str
     tags: list[str] = []
     area: str
+    jobtag_url: str  # job tagの職業詳細ページ（写真・動画・なり方など）
 
 
 class DiscoverRequest(BaseModel):

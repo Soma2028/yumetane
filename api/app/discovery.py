@@ -7,9 +7,8 @@
 docs/design.mdに明記している。
 """
 
-from .areas import dominant_area
 from .data import load_jobs
-from .tags import select_tags
+from .job_dict import job_to_dict
 
 # discover対象の教科（8教科）。保健体育は対応する知識項目が無いため含まない。
 # GET /subjectsでは保健体育も含めた9教科を返すが、is_special=Trueとして
@@ -63,13 +62,4 @@ def discover_job(subject: str, known_job_ids: list[int]) -> dict | None:
 
     weights = candidates["awareness_label"].map(WEIGHT_BY_AWARENESS).fillna(1)
     row = candidates.sample(n=1, weights=weights).iloc[0]
-
-    return {
-        "job_id": int(row.job_id),
-        "job_name": row.job_name,
-        "description": row.description,
-        "riasec_source": row.riasec_source,
-        "awareness_label": row.awareness_label,
-        "tags": select_tags(row),
-        "area": dominant_area(row),
-    }
+    return job_to_dict(row)

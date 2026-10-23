@@ -28,3 +28,12 @@ def test_every_pool_job_has_details():
     job_ids = {j["job_id"] for j in data["jobs"]}
     for pool in data["pools"].values():
         assert {p["job_id"] for p in pool} <= job_ids
+
+
+def test_jobtag_url_uses_record_number_not_job_id():
+    """job_id（通し番号）ではなくjob tagの収録番号でURLを作っていること。
+    ブラウザで確認済み: Detail/3 が「洋菓子製造、パティシエ」のページ。"""
+    jobs = {j["job_name"]: j for j in build_web_data()["jobs"]}
+    patissier = jobs["洋菓子製造、パティシエ"]
+    assert patissier["job_id"] == 2
+    assert patissier["jobtag_url"] == "https://shigoto.mhlw.go.jp/User/Occupation/Detail/3"

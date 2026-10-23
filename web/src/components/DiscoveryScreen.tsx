@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Star } from "lucide-react"
+import { ExternalLink, Star } from "lucide-react"
 import { useState } from "react"
 import { TagIcon } from "../tagIcons"
 import { TaneCharacter } from "./TaneCharacter"
@@ -102,7 +102,18 @@ export function DiscoveryScreen({
               まだデータが少ないから、仕事の内容から予想したよ
             </span>
           )}
-          <p className="mt-4 text-xs font-medium text-sage-600">図鑑に登録したよ</p>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <p className="text-xs font-medium text-sage-600">図鑑に登録したよ</p>
+            <a
+              href={job.jobtag_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-medium text-charcoal-muted underline-offset-2 hover:underline"
+            >
+              写真や動画でもっと知る
+              <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
+          </div>
         </div>
       </motion.div>
 
