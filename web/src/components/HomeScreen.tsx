@@ -1,4 +1,4 @@
-import { ChevronRight, Flame } from "lucide-react"
+import { BarChart3, BookOpen, ChevronRight, Flame, Star } from "lucide-react"
 import { useState } from "react"
 import type { RecordDetails, StudyLogEntry } from "../storage"
 import { formatMinutes } from "../format"
@@ -235,23 +235,25 @@ export function HomeScreen({
       </div>
 
       {/* 行動する（次へ）: ほかの画面への導線。きろくのタブ（今週・カレンダー・教科ごと）と
-          同じ見た目の、丸い枠に3つが並ぶ形にそろえる */}
+          同じ、丸い枠に3つが並ぶ形にそろえる。ただしタブと違い「押すと移る」ボタンなので、
+          高さを指で押しやすい48pxにし、濃い文字とアイコンで押せることが分かるようにする */}
       <nav
         aria-label="ほかの画面"
-        className="mt-auto grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 lg:mt-2"
+        className="mt-auto grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 shadow-sm lg:mt-2"
       >
         {[
-          { label: "職業図鑑", onClick: onOpenZukan },
-          { label: "タネ", onClick: onOpenTane },
-          { label: "きろく", onClick: onOpenKiroku },
-        ].map((item) => (
+          { label: "職業図鑑", icon: BookOpen, onClick: onOpenZukan },
+          { label: "タネ", icon: Star, onClick: onOpenTane },
+          { label: "きろく", icon: BarChart3, onClick: onOpenKiroku },
+        ].map(({ label, icon: Icon, onClick }) => (
           <button
-            key={item.label}
+            key={label}
             type="button"
-            onClick={item.onClick}
-            className="h-10 rounded-full text-sm font-bold text-charcoal-muted transition hover:bg-sage-50 hover:text-sage-700"
+            onClick={onClick}
+            className="flex h-12 items-center justify-center gap-1.5 rounded-full text-sm font-bold text-charcoal transition hover:bg-sage-50 active:bg-sage-100"
           >
-            {item.label}
+            <Icon className="h-4 w-4 shrink-0 text-sage-600" strokeWidth={2} />
+            {label}
           </button>
         ))}
       </nav>
