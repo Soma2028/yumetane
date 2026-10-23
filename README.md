@@ -5,7 +5,7 @@
 <p>
   <img src="docs/images/screenshot_lp.png" width="220" alt="ランディングページのファーストビュー">
   <img src="docs/images/screenshot_home.png" width="220" alt="ホーム画面。今日勉強した教科を記録する">
-  <img src="docs/images/screenshot_discovery.png" width="220" alt="発見画面。見つかった職業とタグが表示される">
+  <img src="docs/images/screenshot_discovery.png" width="220" alt="発見画面。見つかった職業とタグ、job tagへのリンクが表示される">
   <img src="docs/images/screenshot_zukan.png" width="220" alt="職業図鑑画面。6エリアの発見状況が表示される">
 </p>
 
@@ -15,6 +15,25 @@
 今日勉強した教科を記録すると、その教科をよく使う職業が1件見つかり、職業図鑑に
 少しずつ登録されていく。「あなたに合う職業」を当てることを目的にしていない。
 **知らなかった職業にどれだけ出会えたか**を評価軸に置いている。
+
+## できること
+
+1. **勉強を記録する** — 教科と時間（10分以上）を記録する。教材名・単元・メモは任意。
+   1日に何回でも記録できる
+2. **仕事が1つ見つかる** — その日最初の記録のとき、その教科の知識をよく使う職業が
+   1件見つかる。まだ知らない職業ほど出やすい（認知度ラベルで3:2:1の重み付き抽選）。
+   「この教科を勉強すると就ける」ではなく「この仕事はこの教科をよく使う」と表示し、
+   相関を因果のように見せない
+3. **職業図鑑に集まる** — 見つけた職業は自動で図鑑に登録される。職業を6つのエリア
+   （RIASECの6因子）に分け、エリアごとに何件見つけたかを表示する
+4. **もっと知る** — 各職業から、job tag（厚生労働省の職業情報サイト）の職業ページへ
+   移動できる。仕事の写真・動画・なり方はそちらで見られる
+5. **タネが育つ** — 気になる職業は「タネ」に保存できる。見つけた職業の数に応じて
+   タネのキャラクターが5段階で育つ
+6. **振り返る** — 「きろく」画面で、過去30日のカレンダー、教科別の勉強時間、
+   教科ごとに見つけた職業を振り返れる
+
+ログインは無く、記録はすべて端末の`localStorage`だけに保存する。個人情報を取らない。
 
 ## なぜ作ったか
 
@@ -62,18 +81,38 @@
    RIASECも利用可能で、推薦対象として使っている。3つの案を棄却した経緯は
    [docs/design.md](docs/design.md)に記録している
 
-4. **3形式の転換の記録**
+4. **APIサーバーをやめて、事前計算したJSONに置き換えた**
+   当初はFastAPIをRenderの無料枠で動かしていたが、スリープ明けの初回アクセスに
+   50秒ほどかかり、デモを開いた人が最初の1分で離れてしまう状態だった。APIが状態を
+   持たず`jobs.csv`しか読まないことに着目し、乱数を使わない部分（教科ごとの候補
+   プール・抽選の重み・タグ・エリア）をPythonで事前計算してJSONに書き出す構成に
+   変えた。フロントは重み付き抽選だけを行う。ロジックの正本はPythonの1か所に保ち、
+   JSONの書き出し忘れはテストで検出する。あわせてグラフ用ライブラリを使う画面を
+   別ファイルに分け、最初に読み込むJSを701KBから379KB（gzip後214KB→119KB）に減らした
+
+5. **3形式の転換の記録**
    10問クイズ形式 → スワイプ形式 → 学習記録＋職業図鑑、という3段階の構造転換を
    経ている。いずれも設計・実装・検証まで行った上で次に移行しており、何を試し
    何が機能しなかったかという判断の過程は[docs/design.md](docs/design.md)・
    [docs/questions.md](docs/questions.md)に記録している
 
 その他の設計判断（相関を因果に見せない文言設計、`localStorage`のみで状態を持つ
-構成など）も[docs/design.md](docs/design.md)にまとめている。
+構成、API廃止の経緯など）も[docs/design.md](docs/design.md)にまとめている。
+
+## 技術スタック
+
+| 領域 | 使っているもの |
+| --- | --- |
+| フロント | React 19 / TypeScript / Vite / Tailwind CSS 4 / Framer Motion / Recharts / lucide-react |
+| データ分析・前処理 | Python 3.14 / pandas / NumPy / scikit-learn（Ridge回帰・PCA）/ Jupyter |
+| 職業選定ロジック・テスト | Python / FastAPI / pytest |
+| 配信 | Vercel（静的サイト。APIサーバーは無い） |
+| データ | job tag 職業情報ダウンロードデータ（簡易版数値系 ver.7.00 / 解説系 ver.7.01） |
 
 ## 未実施の検証
 
-想定ユーザーである中学生本人によるユーザビリティ検証は未実施。「勉強を記録する」
+想定ユーザーである中学生本人によるユーザビリティ検証は未実施（観察タスク・質問・
+判断の目安をまとめた検証計画は作成済みで、塾の生徒3〜5人に実施する予定）。「勉強を記録する」
 行為が続けたくなるものか、見つかった職業と教科の繋がりが正しく伝わるか
 （因果に読み違えられていないか）、抽選の重み3:2:1に納得感があるかなど、
 未確認の点は[docs/design.md](docs/design.md)に記録している。
@@ -88,19 +127,44 @@
 https://shigoto.mhlw.go.jp/User/download
 
 著作権はJILPTが保有。利用規約に基づき、出典明記のうえ二次利用している。
+アプリ内の「写真や動画でもっと知る」は、job tagの各職業詳細ページへのリンク
+（`https://shigoto.mhlw.go.jp/User/Occupation/Detail/{収録番号}`）で、
+写真・動画はアプリには含めていない。
 取得日・ファイル構成など詳細は[data/README.md](data/README.md)を参照。
 
 ## 構成
 
-web/（Vercel） api/ data/ notebooks/ docs/ scripts/
+### データの流れ
+
+```mermaid
+flowchart LR
+  raw["job tag 生CSV<br/>data/raw/（Git管理外）"] --> nb["notebooks/01〜08<br/>RIASEC補完・認知度ラベル・<br/>教科スコア"]
+  nb --> csv["data/processed/jobs.csv<br/>167職業"]
+  csv --> logic["api/app/<br/>候補プール・重み・タグ・エリア"]
+  logic --> export["scripts/export_web_data.py"]
+  export --> json["web/src/data/jobs.json"]
+  json --> web["web/（Vercel）<br/>重み付き抽選・画面"]
+  web --> ls[("localStorage<br/>記録・図鑑・タネ")]
+  logic -. テスト .- tests["api/tests/"]
+```
 
 職業を選ぶロジック（教科ごとの候補プール・認知度の重み・タグ・エリア）は
 `api/app/`のPythonで書いている。ただし本番ではAPIサーバーを使わない。
 `scripts/export_web_data.py`でこのロジックの結果を`web/src/data/jobs.json`に
-書き出し、フロントはそのJSONから重み付きの抽選だけを行う
-（`web/src/api.ts`）。以前はAPIをRenderの無料枠で動かしていたが、スリープ明けの
-初回アクセスに50秒ほどかかっていた。APIは状態を持たず`jobs.csv`しか読まないため、
-静的なJSONで置き換えても機能は変わらない。
+書き出し、フロントはそのJSONから重み付きの抽選だけを行う（`web/src/api.ts`）。
+経緯は上の「技術的な見どころ」4と[docs/design.md](docs/design.md)を参照。
+
+### ディレクトリ
+
+| パス | 中身 |
+| --- | --- |
+| `web/` | フロント（React）。`src/components/`に画面、`src/data/jobs.json`に書き出した職業データ |
+| `api/app/` | 職業選定ロジック（`discovery.py`・`tags.py`・`areas.py`）と、JSON書き出し用の組み立て（`export.py`）。FastAPIのサーバー（`main.py`）はテストと手元確認用 |
+| `api/tests/` | pytest。選定ロジックと、書き出したJSONが最新かを検証する |
+| `notebooks/` | データ探索から特徴量の最終組み立てまで（01 探索 → 02 RIASEC欠損補完 → 03〜04 認知度 → 05〜07 質問設計（旧形式） → 08 特徴量・`jobs.csv`出力） |
+| `data/` | job tagの生データ（Git管理外）と加工済みデータ |
+| `scripts/` | `export_web_data.py`（JSON書き出し）ほか |
+| `docs/` | 設計判断の記録（`design.md`）、旧形式の質問設計（`questions.md`）、大人の語彙→子どもの語彙の変換表（`vocab.md`） |
 
 `jobs.csv`や`api/app/`のロジックを変えたら、JSONを書き出し直す。書き出し忘れは
 `api/tests/test_export.py`が検出する。
