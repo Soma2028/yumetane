@@ -39,6 +39,29 @@ export const DAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 export type Timetable = Record<number, (string | null)[]>
 
 const STORAGE_KEY = "yumetane_timetable_v1"
+/** 土曜日を表示するか。時間割とは別のキーに持ち、オフにしても土曜日の中身は消さない。 */
+const SHOW_SATURDAY_KEY = "yumetane_timetable_show_saturday_v1"
+
+export function loadShowSaturday(): boolean {
+  try {
+    return localStorage.getItem(SHOW_SATURDAY_KEY) !== "0"
+  } catch {
+    return true
+  }
+}
+
+export function saveShowSaturday(show: boolean): void {
+  try {
+    localStorage.setItem(SHOW_SATURDAY_KEY, show ? "1" : "0")
+  } catch {
+    // 保存に失敗しても画面表示は継続する
+  }
+}
+
+/** 表に出す曜日。土曜日をオフにしていれば月〜金。 */
+export function activeDays(showSaturday: boolean): number[] {
+  return SCHOOL_DAYS.filter((d) => showSaturday || d !== 6)
+}
 
 function emptyTimetable(): Timetable {
   return Object.fromEntries(SCHOOL_DAYS.map((d) => [d, Array(PERIODS).fill(null)]))
@@ -68,18 +91,26 @@ export function setPeriod(timetable: Timetable, day: number, period: number, sub
   return { ...timetable, [day]: row }
 }
 
-export function hasAnyPeriod(timetable: Timetable): boolean {
-  return SCHOOL_DAYS.some((d) => (timetable[d] ?? []).some((s) => s !== null))
+export function hasAnyPeriod(timetable: Timetable, days: readonly number[] = SCHOOL_DAYS): boolean {
+  return days.some((d) => (timetable[d] ?? []).some((s) => s !== null))
 }
 
 /**
- * ホームに出す時間割。月〜土は今日の分、日曜日は翌日（月曜）の分を「あした」として出す。
- * 1つも登録が無ければnull。
+ * ホームに出す時間割。表に出している曜日なら今日の分を出す。日曜日（と、土曜日を
+ * オフにしているときの土曜日）は、次の月曜日の分を「あした」「あさって」として出す。
+ * 表に出している曜日に1つも登録が無ければnull。
  */
-export function timetableForHome(timetable: Timetable, now = new Date()): { heading: string; periods: (string | null)[] } | null {
-  if (!hasAnyPeriod(timetable)) return null
+export function timetableForHome(
+  timetable: Timetable,
+  showSaturday: boolean,
+  now = new Date(),
+): { heading: string; periods: (string | null)[] } | null {
+  const days = activeDays(showSaturday)
+  if (!hasAnyPeriod(timetable, days)) return null
   const today = now.getDay()
-  const day = today === 0 ? 1 : today
-  const heading = today === 0 ? "あした（月）の時間割" : `今日（${DAY_LABELS[day]}）の時間割`
-  return { heading, periods: timetable[day] ?? Array(PERIODS).fill(null) }
+  if (days.includes(today)) {
+    return { heading: `今日（${DAY_LABELS[today]}）の時間割`, periods: timetable[today] ?? Array(PERIODS).fill(null) }
+  }
+  const heading = today === 0 ? "あした（月）の時間割" : "あさって（月）の時間割"
+  return { heading, periods: timetable[1] ?? Array(PERIODS).fill(null) }
 }

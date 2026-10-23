@@ -33,7 +33,7 @@ import {
 import { reloadForStaleChunk, takeResumeScreen } from "./staleChunk"
 import { baseTransition } from "./motion"
 import { stageFromCount } from "./taneStage"
-import { loadTimetable, saveTimetable, setPeriod, timetableForHome, type Timetable } from "./timetable"
+import { loadShowSaturday, loadTimetable, saveShowSaturday, saveTimetable, setPeriod, timetableForHome, type Timetable } from "./timetable"
 import type { KirokuTab } from "./components/KirokuScreen"
 import type { DiscoverResponse, Job, Subject } from "./types"
 
@@ -111,6 +111,7 @@ function App() {
 
   const [homeToast, setHomeToast] = useState<string | null>(null)
   const [timetable, setTimetable] = useState<Timetable>(loadTimetable)
+  const [showSaturday, setShowSaturday] = useState(loadShowSaturday)
   // きろく画面のタブと選んだ日。職業の詳細を開いて戻ってきたときに元の表示に戻すため
   const [kirokuTab, setKirokuTab] = useState<KirokuTab>("week")
   const [kirokuDate, setKirokuDate] = useState<string | null>(null)
@@ -268,7 +269,7 @@ function App() {
             setKirokuDate(null)
             setScreen("kiroku")
           }}
-          todayTimetable={timetableForHome(timetable)}
+          todayTimetable={timetableForHome(timetable, showSaturday)}
           onOpenTimetable={() => setScreen("timetable")}
           onOpenDay={(date) => {
             setKirokuTab("calendar")
@@ -352,6 +353,11 @@ function App() {
       return (
         <TimetableScreen
           timetable={timetable}
+          showSaturday={showSaturday}
+          onToggleSaturday={(show) => {
+            setShowSaturday(show)
+            saveShowSaturday(show)
+          }}
           onChange={(day, period, subject) => {
             const next = setPeriod(timetable, day, period, subject)
             setTimetable(next)
