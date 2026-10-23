@@ -87,6 +87,7 @@ export function KirokuScreen({
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const selectedLogs = selectedDate ? logs.filter((l) => l.date === selectedDate) : []
+  const selectedTotalMinutes = selectedLogs.reduce((sum, l) => sum + l.minutes, 0)
   const flavor = mostStudied ? (SUBJECT_FLAVOR[mostStudied.subject] ?? "いろいろな") : null
   const weeks = buildCalendarWeeks(calendarDates)
 
@@ -184,7 +185,14 @@ export function KirokuScreen({
         {/* 選んだ日の記録。カレンダーの点だけでは何をした日か分からないため、押して開けるようにする */}
         {selectedDate ? (
           <div className="mt-4 rounded-2xl bg-cream p-4">
-            <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
+              {selectedLogs.length > 0 && (
+                <p className="text-sm text-charcoal-muted">
+                  合計 <span className="text-xl font-bold text-charcoal">{formatMinutes(selectedTotalMinutes)}</span>
+                </p>
+              )}
+            </div>
             {selectedLogs.length === 0 ? (
               <p className="mt-2 text-sm text-charcoal-muted">この日の記録はないよ</p>
             ) : (
