@@ -3,6 +3,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import type { RecordDetails, StudyLogEntry } from "../storage"
 import { formatMinutes } from "../format"
+import { InstallHint } from "./InstallHint"
 import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
@@ -249,6 +250,8 @@ export function HomeScreen({
           </button>
         )}
       </div>
+
+      <InstallHint />
 
       {/* 副次情報: 今日の記録一覧。箱で囲わず、行の集まりとして控えめに見せる */}
       {todaysLogs.length > 0 && (

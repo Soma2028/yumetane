@@ -36,6 +36,13 @@ import type { DiscoverResponse, Job, Subject } from "./types"
 
 // きろく画面だけがグラフ（recharts）を使い、バンドルの大半を占める。LPとホームを
 // 軽くするため別チャンクに分け、ホームを開いた時点で裏で先読みしておく。
+function isStandaloneApp(): boolean {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    (navigator as Navigator & { standalone?: boolean }).standalone === true
+  )
+}
+
 const loadKirokuScreen = () => import("./components/KirokuScreen")
 const KirokuScreen = lazy(() => loadKirokuScreen().then((m) => ({ default: m.KirokuScreen })))
 
@@ -43,7 +50,8 @@ type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiro
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
 
 function App() {
-  const [screen, setScreen] = useState<Screen>("top")
+  // ホーム画面に追加したアプリとして開いたときは、毎回LPを通さずホームから始める
+  const [screen, setScreen] = useState<Screen>(() => (isStandaloneApp() ? "home" : "top"))
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

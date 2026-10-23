@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ホーム画面に追加できるようにする。iOSのSafariは、7日間操作の無いサイトの
+         localStorageを消す（https://webkit.org/tracking-prevention/）が、ホーム画面に
+         追加したWebアプリはその対象外のため、記録を守る手段として使う -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#fbf8f3" />
+    <meta name="apple-mobile-web-app-title" content="夢のタネ" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>夢のタネ — 今日の勉強が、まだ知らない仕事との出会いになる</title>
     <meta name="description" content="勉強した教科を記録すると、その教科をよく使う仕事がひとつ見つかる。中学生のための、学習記録と職業図鑑のアプリ。" />
 

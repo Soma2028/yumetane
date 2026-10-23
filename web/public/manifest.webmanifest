@@ -1,0 +1,16 @@
+{
+  "name": "夢のタネ",
+  "short_name": "夢のタネ",
+  "description": "勉強した教科を記録すると、その教科をよく使う仕事がひとつ見つかる。中学生のための、学習記録と職業図鑑のアプリ。",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbf8f3",
+  "theme_color": "#fbf8f3",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

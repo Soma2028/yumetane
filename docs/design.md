@@ -460,6 +460,27 @@ job tagの「知識」33項目のうち、中学校の教科に対応づけら�
 実質ログインに近づくかのどちらかだと判断した。図鑑データをJSON書き出しできる
 「エクスポート」機能は、将来必要になれば追加する（MVPには含めない）。
 
+**[更新] iOSのSafariでは、端末を変えなくても7日で記録が消えうる。** WebKitの
+Intelligent Tracking Preventionは、そのサイトでタップ・クリック・キー入力が7日間ない
+と、localStorageを含むスクリプトで書き込んだデータをすべて消す
+（[Tracking Prevention in WebKit](https://webkit.org/tracking-prevention/)「7-Day Cap on
+All Script-Writeable Storage」）。1週間勉強を休んだ生徒が開き直すと、図鑑もタネも
+消えていることになる。「端末を変えたら消える」とは別の、このアプリの継続の設計と
+真っ向からぶつかる問題として扱う。
+
+同じページで、ホーム画面に追加したWebアプリはこの削除の対象外とされている
+（「ITP always skips that domain in its website data removal algorithm」）。そこで
+次の対策を取った。
+
+- `manifest.webmanifest`とアイコン（タネのキャラクター）を用意し、ホーム画面に
+  追加できるようにした。ホーム画面から開いたときはLPを通さずホームから始める
+- iPhone・iPadのブラウザで開いていて、ホーム画面から開いていないときだけ、ホームに
+  追加の手順を案内する。閉じてもそのタブの間だけ隠し、次に開いたときはまた出す
+  （記録が消えるかどうかに関わるため）
+- ホーム画面のWebアプリのデータはSafariとは別に保存され、引き継がれない
+  （同ページ「kept isolated from Safari」）。案内にもそのことを書いた。Safariで
+  記録してきた分を移すには書き出し・読み込み機能が要る（未実装）
+
 ### 職業選定の実行場所：APIから事前計算したJSONへ
 
 **[更新] 本番ではAPIサーバーを使わず、選定ロジックの結果を事前計算したJSONを
