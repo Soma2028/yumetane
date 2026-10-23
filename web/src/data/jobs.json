@@ -1,0 +1,3199 @@
+{
+ "subjects": [
+  {
+   "name": "数学",
+   "is_special": false
+  },
+  {
+   "name": "国語",
+   "is_special": false
+  },
+  {
+   "name": "理科",
+   "is_special": false
+  },
+  {
+   "name": "社会",
+   "is_special": false
+  },
+  {
+   "name": "英語",
+   "is_special": false
+  },
+  {
+   "name": "美術",
+   "is_special": false
+  },
+  {
+   "name": "音楽",
+   "is_special": false
+  },
+  {
+   "name": "技術・家庭",
+   "is_special": false
+  },
+  {
+   "name": "保健体育",
+   "is_special": true
+  }
+ ],
+ "areas": {
+  "現実的": 35,
+  "研究的": 21,
+  "芸術的": 29,
+  "社会的": 25,
+  "企業的": 23,
+  "慣習的": 34
+ },
+ "pools": {
+  "数学": [
+   {
+    "job_id": 255,
+    "weight": 3
+   },
+   {
+    "job_id": 351,
+    "weight": 3
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 21,
+    "weight": 3
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 266,
+    "weight": 2
+   },
+   {
+    "job_id": 482,
+    "weight": 2
+   },
+   {
+    "job_id": 88,
+    "weight": 3
+   },
+   {
+    "job_id": 263,
+    "weight": 2
+   },
+   {
+    "job_id": 264,
+    "weight": 3
+   },
+   {
+    "job_id": 293,
+    "weight": 3
+   },
+   {
+    "job_id": 267,
+    "weight": 3
+   },
+   {
+    "job_id": 227,
+    "weight": 3
+   },
+   {
+    "job_id": 26,
+    "weight": 3
+   },
+   {
+    "job_id": 25,
+    "weight": 1
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 256,
+    "weight": 3
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   },
+   {
+    "job_id": 311,
+    "weight": 3
+   },
+   {
+    "job_id": 309,
+    "weight": 3
+   },
+   {
+    "job_id": 47,
+    "weight": 3
+   },
+   {
+    "job_id": 299,
+    "weight": 2
+   },
+   {
+    "job_id": 295,
+    "weight": 3
+   },
+   {
+    "job_id": 428,
+    "weight": 2
+   },
+   {
+    "job_id": 33,
+    "weight": 3
+   },
+   {
+    "job_id": 323,
+    "weight": 1
+   },
+   {
+    "job_id": 186,
+    "weight": 3
+   },
+   {
+    "job_id": 28,
+    "weight": 3
+   },
+   {
+    "job_id": 296,
+    "weight": 3
+   }
+  ],
+  "国語": [
+   {
+    "job_id": 470,
+    "weight": 3
+   },
+   {
+    "job_id": 143,
+    "weight": 3
+   },
+   {
+    "job_id": 205,
+    "weight": 2
+   },
+   {
+    "job_id": 139,
+    "weight": 2
+   },
+   {
+    "job_id": 88,
+    "weight": 3
+   },
+   {
+    "job_id": 141,
+    "weight": 1
+   },
+   {
+    "job_id": 211,
+    "weight": 1
+   },
+   {
+    "job_id": 206,
+    "weight": 1
+   },
+   {
+    "job_id": 510,
+    "weight": 3
+   },
+   {
+    "job_id": 320,
+    "weight": 3
+   },
+   {
+    "job_id": 166,
+    "weight": 3
+   },
+   {
+    "job_id": 407,
+    "weight": 3
+   },
+   {
+    "job_id": 351,
+    "weight": 3
+   },
+   {
+    "job_id": 180,
+    "weight": 3
+   },
+   {
+    "job_id": 347,
+    "weight": 3
+   },
+   {
+    "job_id": 311,
+    "weight": 3
+   },
+   {
+    "job_id": 346,
+    "weight": 3
+   },
+   {
+    "job_id": 174,
+    "weight": 1
+   },
+   {
+    "job_id": 299,
+    "weight": 2
+   },
+   {
+    "job_id": 309,
+    "weight": 3
+   },
+   {
+    "job_id": 319,
+    "weight": 2
+   },
+   {
+    "job_id": 315,
+    "weight": 1
+   },
+   {
+    "job_id": 133,
+    "weight": 3
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 427,
+    "weight": 3
+   },
+   {
+    "job_id": 50,
+    "weight": 1
+   },
+   {
+    "job_id": 482,
+    "weight": 2
+   },
+   {
+    "job_id": 218,
+    "weight": 1
+   },
+   {
+    "job_id": 387,
+    "weight": 1
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   }
+  ],
+  "理科": [
+   {
+    "job_id": 296,
+    "weight": 3
+   },
+   {
+    "job_id": 88,
+    "weight": 3
+   },
+   {
+    "job_id": 295,
+    "weight": 3
+   },
+   {
+    "job_id": 352,
+    "weight": 2
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 283,
+    "weight": 2
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 293,
+    "weight": 3
+   },
+   {
+    "job_id": 218,
+    "weight": 1
+   },
+   {
+    "job_id": 155,
+    "weight": 1
+   },
+   {
+    "job_id": 364,
+    "weight": 1
+   },
+   {
+    "job_id": 255,
+    "weight": 3
+   },
+   {
+    "job_id": 227,
+    "weight": 3
+   },
+   {
+    "job_id": 482,
+    "weight": 2
+   },
+   {
+    "job_id": 158,
+    "weight": 3
+   },
+   {
+    "job_id": 21,
+    "weight": 3
+   },
+   {
+    "job_id": 351,
+    "weight": 3
+   },
+   {
+    "job_id": 366,
+    "weight": 1
+   },
+   {
+    "job_id": 286,
+    "weight": 2
+   },
+   {
+    "job_id": 288,
+    "weight": 3
+   },
+   {
+    "job_id": 264,
+    "weight": 3
+   },
+   {
+    "job_id": 139,
+    "weight": 2
+   },
+   {
+    "job_id": 186,
+    "weight": 3
+   },
+   {
+    "job_id": 263,
+    "weight": 2
+   },
+   {
+    "job_id": 266,
+    "weight": 2
+   },
+   {
+    "job_id": 60,
+    "weight": 3
+   },
+   {
+    "job_id": 214,
+    "weight": 2
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   },
+   {
+    "job_id": 152,
+    "weight": 1
+   }
+  ],
+  "社会": [
+   {
+    "job_id": 180,
+    "weight": 3
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 214,
+    "weight": 2
+   },
+   {
+    "job_id": 211,
+    "weight": 1
+   },
+   {
+    "job_id": 339,
+    "weight": 1
+   },
+   {
+    "job_id": 149,
+    "weight": 1
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 21,
+    "weight": 3
+   },
+   {
+    "job_id": 33,
+    "weight": 3
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   },
+   {
+    "job_id": 323,
+    "weight": 1
+   },
+   {
+    "job_id": 205,
+    "weight": 2
+   },
+   {
+    "job_id": 206,
+    "weight": 1
+   },
+   {
+    "job_id": 510,
+    "weight": 3
+   },
+   {
+    "job_id": 292,
+    "weight": 3
+   },
+   {
+    "job_id": 32,
+    "weight": 2
+   },
+   {
+    "job_id": 315,
+    "weight": 1
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 311,
+    "weight": 3
+   },
+   {
+    "job_id": 346,
+    "weight": 3
+   },
+   {
+    "job_id": 141,
+    "weight": 1
+   },
+   {
+    "job_id": 227,
+    "weight": 3
+   },
+   {
+    "job_id": 96,
+    "weight": 1
+   },
+   {
+    "job_id": 320,
+    "weight": 3
+   },
+   {
+    "job_id": 50,
+    "weight": 1
+   },
+   {
+    "job_id": 371,
+    "weight": 2
+   },
+   {
+    "job_id": 189,
+    "weight": 1
+   },
+   {
+    "job_id": 428,
+    "weight": 2
+   },
+   {
+    "job_id": 221,
+    "weight": 1
+   }
+  ],
+  "英語": [
+   {
+    "job_id": 88,
+    "weight": 3
+   },
+   {
+    "job_id": 510,
+    "weight": 3
+   },
+   {
+    "job_id": 351,
+    "weight": 3
+   },
+   {
+    "job_id": 400,
+    "weight": 3
+   },
+   {
+    "job_id": 352,
+    "weight": 2
+   },
+   {
+    "job_id": 205,
+    "weight": 2
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 139,
+    "weight": 2
+   },
+   {
+    "job_id": 189,
+    "weight": 1
+   },
+   {
+    "job_id": 311,
+    "weight": 3
+   },
+   {
+    "job_id": 296,
+    "weight": 3
+   },
+   {
+    "job_id": 283,
+    "weight": 2
+   },
+   {
+    "job_id": 482,
+    "weight": 2
+   },
+   {
+    "job_id": 407,
+    "weight": 3
+   },
+   {
+    "job_id": 364,
+    "weight": 1
+   },
+   {
+    "job_id": 180,
+    "weight": 3
+   },
+   {
+    "job_id": 206,
+    "weight": 1
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 211,
+    "weight": 1
+   },
+   {
+    "job_id": 293,
+    "weight": 3
+   },
+   {
+    "job_id": 320,
+    "weight": 3
+   },
+   {
+    "job_id": 295,
+    "weight": 3
+   },
+   {
+    "job_id": 299,
+    "weight": 2
+   },
+   {
+    "job_id": 309,
+    "weight": 3
+   },
+   {
+    "job_id": 366,
+    "weight": 1
+   },
+   {
+    "job_id": 149,
+    "weight": 1
+   },
+   {
+    "job_id": 346,
+    "weight": 3
+   },
+   {
+    "job_id": 428,
+    "weight": 2
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   }
+  ],
+  "美術": [
+   {
+    "job_id": 119,
+    "weight": 1
+   },
+   {
+    "job_id": 208,
+    "weight": 2
+   },
+   {
+    "job_id": 315,
+    "weight": 1
+   },
+   {
+    "job_id": 292,
+    "weight": 3
+   },
+   {
+    "job_id": 319,
+    "weight": 2
+   },
+   {
+    "job_id": 323,
+    "weight": 1
+   },
+   {
+    "job_id": 180,
+    "weight": 3
+   },
+   {
+    "job_id": 320,
+    "weight": 3
+   },
+   {
+    "job_id": 124,
+    "weight": 2
+   },
+   {
+    "job_id": 174,
+    "weight": 1
+   },
+   {
+    "job_id": 211,
+    "weight": 1
+   },
+   {
+    "job_id": 333,
+    "weight": 1
+   },
+   {
+    "job_id": 339,
+    "weight": 1
+   },
+   {
+    "job_id": 205,
+    "weight": 2
+   },
+   {
+    "job_id": 125,
+    "weight": 1
+   },
+   {
+    "job_id": 330,
+    "weight": 1
+   },
+   {
+    "job_id": 115,
+    "weight": 1
+   },
+   {
+    "job_id": 206,
+    "weight": 1
+   },
+   {
+    "job_id": 96,
+    "weight": 1
+   },
+   {
+    "job_id": 346,
+    "weight": 3
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 162,
+    "weight": 3
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 117,
+    "weight": 1
+   },
+   {
+    "job_id": 470,
+    "weight": 3
+   },
+   {
+    "job_id": 17,
+    "weight": 3
+   },
+   {
+    "job_id": 214,
+    "weight": 2
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 235,
+    "weight": 3
+   }
+  ],
+  "音楽": [
+   {
+    "job_id": 119,
+    "weight": 1
+   },
+   {
+    "job_id": 208,
+    "weight": 2
+   },
+   {
+    "job_id": 315,
+    "weight": 1
+   },
+   {
+    "job_id": 292,
+    "weight": 3
+   },
+   {
+    "job_id": 319,
+    "weight": 2
+   },
+   {
+    "job_id": 323,
+    "weight": 1
+   },
+   {
+    "job_id": 180,
+    "weight": 3
+   },
+   {
+    "job_id": 320,
+    "weight": 3
+   },
+   {
+    "job_id": 124,
+    "weight": 2
+   },
+   {
+    "job_id": 174,
+    "weight": 1
+   },
+   {
+    "job_id": 211,
+    "weight": 1
+   },
+   {
+    "job_id": 333,
+    "weight": 1
+   },
+   {
+    "job_id": 339,
+    "weight": 1
+   },
+   {
+    "job_id": 205,
+    "weight": 2
+   },
+   {
+    "job_id": 125,
+    "weight": 1
+   },
+   {
+    "job_id": 330,
+    "weight": 1
+   },
+   {
+    "job_id": 115,
+    "weight": 1
+   },
+   {
+    "job_id": 206,
+    "weight": 1
+   },
+   {
+    "job_id": 96,
+    "weight": 1
+   },
+   {
+    "job_id": 346,
+    "weight": 3
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 162,
+    "weight": 3
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 117,
+    "weight": 1
+   },
+   {
+    "job_id": 470,
+    "weight": 3
+   },
+   {
+    "job_id": 17,
+    "weight": 3
+   },
+   {
+    "job_id": 214,
+    "weight": 2
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 235,
+    "weight": 3
+   }
+  ],
+  "技術・家庭": [
+   {
+    "job_id": 255,
+    "weight": 3
+   },
+   {
+    "job_id": 227,
+    "weight": 3
+   },
+   {
+    "job_id": 297,
+    "weight": 1
+   },
+   {
+    "job_id": 298,
+    "weight": 2
+   },
+   {
+    "job_id": 267,
+    "weight": 3
+   },
+   {
+    "job_id": 21,
+    "weight": 3
+   },
+   {
+    "job_id": 88,
+    "weight": 3
+   },
+   {
+    "job_id": 266,
+    "weight": 2
+   },
+   {
+    "job_id": 482,
+    "weight": 2
+   },
+   {
+    "job_id": 264,
+    "weight": 3
+   },
+   {
+    "job_id": 309,
+    "weight": 3
+   },
+   {
+    "job_id": 311,
+    "weight": 3
+   },
+   {
+    "job_id": 12,
+    "weight": 2
+   },
+   {
+    "job_id": 47,
+    "weight": 3
+   },
+   {
+    "job_id": 256,
+    "weight": 3
+   },
+   {
+    "job_id": 323,
+    "weight": 1
+   },
+   {
+    "job_id": 299,
+    "weight": 2
+   },
+   {
+    "job_id": 263,
+    "weight": 2
+   },
+   {
+    "job_id": 293,
+    "weight": 3
+   },
+   {
+    "job_id": 351,
+    "weight": 3
+   },
+   {
+    "job_id": 26,
+    "weight": 3
+   },
+   {
+    "job_id": 28,
+    "weight": 3
+   },
+   {
+    "job_id": 186,
+    "weight": 3
+   },
+   {
+    "job_id": 229,
+    "weight": 3
+   },
+   {
+    "job_id": 339,
+    "weight": 1
+   },
+   {
+    "job_id": 507,
+    "weight": 3
+   },
+   {
+    "job_id": 90,
+    "weight": 3
+   },
+   {
+    "job_id": 25,
+    "weight": 1
+   },
+   {
+    "job_id": 295,
+    "weight": 3
+   },
+   {
+    "job_id": 274,
+    "weight": 3
+   }
+  ]
+ },
+ "jobs": [
+  {
+   "job_id": 2,
+   "job_name": "洋菓子製造、パティシエ",
+   "description": "洋菓子店や菓子工場で洋菓子を製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "コツコツ続ける",
+    "立ち仕事",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 11,
+   "job_name": "ハム・ソーセージ・ベーコン製造",
+   "description": "原料肉を分割・整形した後、塩づけ、くん煙などの加工をして、ハム・ソーセージ・ベーコンを製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 12,
+   "job_name": "ワイン製造",
+   "description": "ブドウからワインを醸造する作業に従事する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "毎日ちがう",
+    "外で働く",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 13,
+   "job_name": "ビール製造",
+   "description": "ビール醸造所（ブルワリー）において、ビールの製造に従事する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "機械と働く",
+    "特別な装備を使う",
+    "しくみを調べる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 15,
+   "job_name": "野菜つけ物製造",
+   "description": "野菜を材料にしたつけ物を製造するため、材料の選別、洗浄、カット、漬け込み、塩抜き、計量、殺菌、検査、包装などの作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 17,
+   "job_name": "ガラス食器製造",
+   "description": "毎日の生活で使われるコップや皿などガラス製の食器を成形する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "表現する",
+    "コツコツ続ける"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 18,
+   "job_name": "プラスチック成形",
+   "description": "プラスチックに熱を加えて成形機で成形し、さまざまな製品を作る。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "機械と働く",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 21,
+   "job_name": "土木設計技術者",
+   "description": "橋、道路、鉄道、ダム、トンネルなど土木工事を進めるにあたって、調査・計画・設計を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "毎日ちがう",
+    "しくみを調べる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 25,
+   "job_name": "大工",
+   "description": "一般住宅、とりわけ木造住宅の新築や増改築の計画、構造施工の中核的な作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "毎日ちがう",
+    "ものづくり",
+    "手先を使う"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 26,
+   "job_name": "型枠大工",
+   "description": "鉄筋コンクリートの鋳型の役割を果たす型枠を作り、工事現場で組み立てる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "外で働く",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 27,
+   "job_name": "鉄筋工",
+   "description": "鉄筋コンクリート構造物の骨組みとなるかご状の鉄筋を加工して組み立てる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "歩き回る仕事",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 28,
+   "job_name": "鉄骨工",
+   "description": "高層ビルをはじめ大規模な建築物や構造物を支える鉄骨を工場で製作する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "ものづくり",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 32,
+   "job_name": "潜水士",
+   "description": "潜水具を着用して水中に潜り、海底や川底の調査や測量、護岸や防波堤の建設工事、船底の状況の調査や破損修理、沈没船の解体や引揚げなどの水中作業をする。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "毎日ちがう",
+    "外で働く",
+    "チームで動く"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 33,
+   "job_name": "さく井工/ボーリング工",
+   "description": "掘削機などを操作して地下に向かって穴を掘削し、井戸、温泉、油井などを掘る。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "外で働く",
+    "毎日ちがう",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 40,
+   "job_name": "建築塗装工",
+   "description": "建築物の外部や内部に塗料を塗って美しく彩り、日光や雨、湿気、大気汚染などで傷んだり汚れたりするのを防ぎ、快適な室内空間となるように仕上げる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "毎日ちがう",
+    "特別な装備を使う",
+    "外で働く"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 47,
+   "job_name": "送電線工事",
+   "description": "架空送電線の架設、敷設、接続の作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "外で働く",
+    "人の安全を守る"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 48,
+   "job_name": "解体工",
+   "description": "既存の建築物や工作物を道具や機械を用いて取り壊し（解体工事）、特定の建材については分別を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "特別な装備を使う",
+    "外で働く",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 50,
+   "job_name": "銀行支店長",
+   "description": "金融機関の支店全体の運営管理と業務活動の立案・推進をする。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "結果に責任を持つ",
+    "機械と働く",
+    "リーダーになる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 52,
+   "job_name": "スーパー店長",
+   "description": "食料品や家庭用品など、日常生活で必要となる様々な品物を扱うスーパーで、商品の管理と従業員の人事管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "歩き回る仕事",
+    "人と関わる",
+    "リーダーになる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 53,
+   "job_name": "スーパーレジ係",
+   "description": "スーパーなどのレジカウンターで買い上げ品の代金を計算し、商品と代金の受け渡しを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "きちんと進める",
+    "機械と働く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 60,
+   "job_name": "医薬情報担当者（MR）",
+   "description": "製薬会社に勤務し、自社の医薬品を中心に、医療従事者に対し、医薬品の効果、使い方などの情報を提供するとともに、医療現場からの情報収集等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "リーダーになる",
+    "お客さんと話す",
+    "外で働く"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 65,
+   "job_name": "書店員",
+   "description": "書店で新刊書籍や雑誌のレイアウトや販売、取次との連絡業務を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "決まった予定で動く",
+    "立ち仕事",
+    "人と関わる"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 69,
+   "job_name": "ペットショップ店員",
+   "description": "ペットショップで、ペットや、ペットに関する様々な用具・用品を販売するほか、ペットに関する相談へのアドバイスなどを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "お客さんと話す",
+    "決まった予定で動く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 70,
+   "job_name": "衣料品販売",
+   "description": "洋服を中心とする服飾用品雑貨を販売する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人を助ける",
+    "立ち仕事",
+    "決まった予定で動く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 71,
+   "job_name": "検針員",
+   "description": "担当地域の顧客を戸別に巡回して、水道、電気、ガスなどのメーターの数字を読み取って情報端末に入力し、使用量を算出した検針票を顧客に渡す。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "歩き回る仕事",
+    "きちんと進める",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 74,
+   "job_name": "駅構内売店店員",
+   "description": "駅の構内やホームの売店で、新聞、雑誌、タバコ、飲食物などを販売する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "人を助ける",
+    "お客さんと話す"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 79,
+   "job_name": "ファイナンシャル・プランナー",
+   "description": "相談者の生活設計、貯蓄計画、投資、保険など、総合的な資産設計（ファイナンシャル・プランニング）を企画立案し、その実行を支援する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "自分で決められる",
+    "リーダーになる",
+    "座って集中"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 88,
+   "job_name": "弁理士",
+   "description": "知的財産に関する専門知識を活かし、特許庁への手続き等をはじめ企業の産業財産権全般についての業務に携わる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "しくみを調べる",
+    "正確さが大事"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 89,
+   "job_name": "税理士",
+   "description": "企業や個人の依頼により、所得税、法人税、住民税などの税金についての相談を受けたり、申告や申請に伴う税務書類の作成や手続きの代行を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "機械と働く",
+    "コツコツ続ける",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 90,
+   "job_name": "不動産鑑定士",
+   "description": "不動産鑑定評価基準に基づいて土地や建物の経済的価値を判断し、適正な価格を決める。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "結果に責任を持つ",
+    "外で働く",
+    "スピード勝負"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 92,
+   "job_name": "ビル施設管理",
+   "description": "オフィスビルや商業ビルなどにおいて、電力設備、空調設備、給排水設備などの運転・調整や管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "ものづくり",
+    "外で働く",
+    "決まった予定で動く"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 93,
+   "job_name": "駐車場管理",
+   "description": "駐車場に駐車する車の出入り・配置などを管理し、利用者の車を安全に保管する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "決まった予定で動く",
+    "外で働く",
+    "きちんと進める"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 96,
+   "job_name": "西洋料理調理人（コック）",
+   "description": "ホテルのレストランや西洋料理専門店で、フランス料理などの洋食料理を、味だけでなく、見た目にも美しく作り上げる。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "手先を使う",
+    "立ち仕事",
+    "表現する"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 104,
+   "job_name": "バーテンダー",
+   "description": "バー、パブなどのカウンターでお客の注文に応じて、カクテルを作ったり、その他の酒類等を提供する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "自分で決められる",
+    "人を助ける",
+    "立ち仕事"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 110,
+   "job_name": "キャディ",
+   "description": "ゴルフ場でプレーヤーと一緒にコースをまわり、スムーズにプレーが進むように手助けをする。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "歩き回る仕事",
+    "人を助ける",
+    "毎日ちがう"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 114,
+   "job_name": "エステティシャン",
+   "description": "顔や身体の手入れなどの「全身美容」を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人を助ける",
+    "人の安全を守る",
+    "お客さんと話す"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 115,
+   "job_name": "メイクアップアーティスト",
+   "description": "メイクアップやヘアセットの技術を駆使して、個性やイメージを表現し、人をより美しく演出する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "手先を使う",
+    "お客さんと話す"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 117,
+   "job_name": "スポーツインストラクター",
+   "description": "健康志向から競技志向までの様々な目的を持った人に対して、運動・スポーツの実技を中心に指導を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人の安全を守る",
+    "歩き回る仕事",
+    "みんなをまとめる"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 118,
+   "job_name": "自動車教習指導員",
+   "description": "自動車教習所で、法律に定められたカリキュラムに沿って自動車の安全運転に必要な技能と知識を教える。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "きちんと進める",
+    "決まった予定で動く",
+    "人の安全を守る"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 119,
+   "job_name": "音楽教室講師",
+   "description": "ピアノ、バイオリン、フルート、ギターなど各種の楽器を自分で演奏できるようになりたい、という人々のために、音楽や楽器の基礎を教える。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "自分で決められる",
+    "決まった予定で動く"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 120,
+   "job_name": "ビデオレンタル店店員",
+   "description": "ビデオレンタル店で、映画やドラマなどのDVD、ブルーレイ、音楽CDなどの貸出と返却の受付を行うほか、商品管理や顧客情報の管理などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "機械と働く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 124,
+   "job_name": "ピアノ調律師",
+   "description": "ピアノの構造や性質等を踏まえピアノの音の調節を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "表現する",
+    "手先を使う",
+    "自分で決められる"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 125,
+   "job_name": "ネイリスト",
+   "description": "爪の施術を通して爪を整え美しく装う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "手先を使う",
+    "座って集中"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 129,
+   "job_name": "介護支援専門員/ケアマネジャー",
+   "description": "介護を必要とする人にニーズに応じた介護サービスを提供するために、現状の調査やサービスの計画を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "みんなをまとめる",
+    "人の安全を守る",
+    "人を助ける"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 133,
+   "job_name": "キャリアカウンセラー/キャリアコンサルタント",
+   "description": "相談者の職業の選択、職業生活の設計、職業能力の開発・向上に関する相談に応じ、助言や指導を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人を助ける",
+    "座って集中",
+    "自分で決められる"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 134,
+   "job_name": "福祉用具専門相談員",
+   "description": "車椅子や特殊ベッドなどの福祉用具の貸与サービス・販売を行う事業所に勤務し、利用者や家族に対して適切な用具の選び方、使い方をアドバイスする。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "外で働く",
+    "人と関わる",
+    "人の安全を守る"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 139,
+   "job_name": "麻薬取締官",
+   "description": "特別司法警察員として、非合法に取引されている薬物の取締り、中毒者対策、薬物乱用防止の啓発活動を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "チームで動く",
+    "人を助ける",
+    "スピード勝負"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 141,
+   "job_name": "裁判官",
+   "description": "裁判所に訴えられる様々な事件について、憲法及び法律に基づいて判断を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "自分で決められる",
+    "スピード勝負",
+    "結果に責任を持つ"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 143,
+   "job_name": "家庭裁判所調査官",
+   "description": "行動科学等の専門的な知見や技法を活用して、家庭内の紛争解決や非行少年の立ち直りに向けた調査活動を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人を助ける",
+    "みんなをまとめる",
+    "正確さが大事"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 149,
+   "job_name": "陸上自衛官",
+   "description": "日本の平和と安全を保つため、外国の侵略を未然に防止し、万一侵略があった場合に対処するほか、大規模な自然災害などに対応し、人命や財産の保護にあたる。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "チームで動く",
+    "外で働く",
+    "特別な装備を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 152,
+   "job_name": "消防官",
+   "description": "火災や交通事故、地震、水害などのさまざまな災害現場に急行し、火災の消火や人命救助にあたる。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "特別な装備を使う",
+    "人の安全を守る",
+    "外で働く"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 154,
+   "job_name": "助産師",
+   "description": "出産の介助、妊産婦の相談、妊娠から産後までの母子の保健指導を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人の安全を守る",
+    "チームで動く",
+    "人を助ける"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 155,
+   "job_name": "薬剤師",
+   "description": "薬学の専門家として、病院や薬局などで薬の調合や服薬指導、管理などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人の安全を守る",
+    "機械と働く",
+    "コツコツ続ける"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 158,
+   "job_name": "臨床検査技師",
+   "description": "医師又は歯科医師の指示の下に、主に医療機関で臨床検査を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "機械と働く",
+    "コツコツ続ける",
+    "決まった予定で動く"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 162,
+   "job_name": "歯科技工士",
+   "description": "歯科医師の指示にしたがって、人工的な歯を作ったり、修繕したりする。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "スピード勝負",
+    "手先を使う",
+    "表現する"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 166,
+   "job_name": "言語聴覚士",
+   "description": "ことばによるコミュニケーションや嚥下（えんげ）に困難を抱える人を対象に、問題の程度、発生のメカニズムを評価し、その結果に基づいて訓練、指導等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人の安全を守る",
+    "人を助ける",
+    "決まった予定で動く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 168,
+   "job_name": "栄養士",
+   "description": "病院、社会福祉施設、企業、学校、行政機関などで、栄養に関する指導・助言や食事の管理などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "決まった予定で動く",
+    "きちんと進める",
+    "チームで動く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 172,
+   "job_name": "はり師・きゅう師",
+   "description": "東洋医学や現代医学に基づき、患者の症状の改善のためにはりやきゅうでツボを刺激する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "人の安全を守る",
+    "自分で決められる",
+    "しくみを調べる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 174,
+   "job_name": "幼稚園教員",
+   "description": "小学校に上がる前の幼児が通う幼稚園での生活全体を通して、子どもたちの心身の発達を促すための教育を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "人の安全を守る",
+    "チームで動く"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 180,
+   "job_name": "学芸員",
+   "description": "学芸員資格を持った専門職員として、博物館や美術館などで、歴史、芸術、民俗、産業、自然科学についての資料を収集、保管、展示するとともに関係する調査研究を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "自分で決められる",
+    "人と関わる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 186,
+   "job_name": "船舶機関士",
+   "description": "船舶の機関部で機関員を指揮しながら、エンジン（主機関）、発電機、ボイラー、その他の各種機器の管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "コツコツ続ける",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 188,
+   "job_name": "鉄道車掌",
+   "description": "列車に乗務し、乗客が目的地まで安全・快適に乗車できるよう各種のサービスを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "コツコツ続ける",
+    "外で働く",
+    "きちんと進める"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 189,
+   "job_name": "空港グランドスタッフ",
+   "description": "空港での旅客の搭乗手続（カウンター業務）と、飛行機への搭乗の案内・誘導（ゲート業務）を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "スピード勝負",
+    "チームで動く",
+    "歩き回る仕事"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 191,
+   "job_name": "鉄道運転計画・運行管理",
+   "description": "社会経済動向や鉄道会社の経営方針を踏まえ、列車の運転計画を立て、列車ダイヤを作成する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "きちんと進める",
+    "人の安全を守る",
+    "人と関わる"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 193,
+   "job_name": "ガソリンスタンド・スタッフ",
+   "description": "ガソリンスタンドにおいて、ガソリン・軽油や灯油の販売を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "きちんと進める",
+    "決まった予定で動く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 195,
+   "job_name": "タクシー配車オペレーター",
+   "description": "タクシー会社で利用客からの電話を受け、無線設備や車両検索用端末、電話機など通信関係機器を操作して送迎の手配をする。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "決まった予定で動く",
+    "座って集中",
+    "お客さんと話す"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 196,
+   "job_name": "引越作業員",
+   "description": "転居や移転などの時に、家財道具などを運び出し、転居先へ輸送し、再びセッティングをする引越作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "歩き回る仕事",
+    "チームで動く",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 205,
+   "job_name": "図書編集者",
+   "description": "様々な本（書籍）を発行する出版社で本をつくるための企画書の作成や原稿の整理・編集などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "しくみを調べる",
+    "座って集中",
+    "正確さが大事"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 206,
+   "job_name": "雑誌編集者",
+   "description": "出版社の雑誌編集部や編集プロダクションにおいて、雑誌の企画や編集の作業に携わる。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "座って集中",
+    "正確さが大事"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 208,
+   "job_name": "録音エンジニア",
+   "description": "音楽コンテンツ等を制作するために録音作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "表現する",
+    "毎日ちがう",
+    "手先を使う"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 211,
+   "job_name": "アナウンサー",
+   "description": "テレビやラジオの番組などで、必要な情報を伝えたり、司会などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "スピード勝負",
+    "結果に責任を持つ",
+    "表現する"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 213,
+   "job_name": "厩舎スタッフ",
+   "description": "競走馬の調教や飼養管理を行い、出走体制の整った馬を競走に出走させる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "外で働く",
+    "ものづくり",
+    "決まった予定で動く"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 214,
+   "job_name": "アウトドアインストラクター",
+   "description": "キャンプや、自然保護や環境教育を目的とした野外活動等を通じて、自然との関わり方について利用者に指導・助言を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "外で働く",
+    "自分で決められる",
+    "特別な装備を使う"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 217,
+   "job_name": "造園工",
+   "description": "日本庭園や集合住宅等の緑地を設計し又は設計図により工事を指揮監督するとともに,自ら作業を行い、完成後はその維持管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "外で働く",
+    "表現する",
+    "特別な装備を使う"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 218,
+   "job_name": "獣医師",
+   "description": "犬や猫などのペット、牛や馬などの家畜鶏などの家きんについて、病気や傷の治療、出産介助伝染病の予防などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "自分で決められる",
+    "ものづくり",
+    "特別な装備を使う"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 221,
+   "job_name": "犬訓練士",
+   "description": "犬の特性や嗅覚などの能力を活用するために専門的な訓練を行うほか、家庭用の犬のしつけも行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "自分で決められる",
+    "毎日ちがう",
+    "外で働く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 227,
+   "job_name": "産業用ロボットの設置・設定",
+   "description": "工場などの生産ラインに産業用ロボットを設置し稼働させるための機械の据え付け調整、初期設定、システムの構築等を行う。",
+   "riasec_source": "predicted",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "みんなをまとめる",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 229,
+   "job_name": "太陽光発電の企画・調査",
+   "description": "太陽光発電の設置場所、設備等を企画し、必要な調査を行う。",
+   "riasec_source": "predicted",
+   "awareness_label": "知らない",
+   "tags": [
+    "自分で決められる",
+    "座って集中",
+    "リーダーになる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 234,
+   "job_name": "ネット通販の運営",
+   "description": "ネット通販事業において、Webサイトや商品の管理、受注・発注の処理や、顧客への対応を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "リーダーになる",
+    "座って集中",
+    "自分で決められる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 235,
+   "job_name": "Webマーケティング（ネット広告・販売促進）",
+   "description": "WebサイトやWeb技術を利用してマーケティングを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "表現する",
+    "自分で決められる",
+    "座って集中"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 236,
+   "job_name": "施設警備員",
+   "description": "警備会社に雇用され、顧客の事務所や工場、商業施設などに常駐等又は巡回により、事故や火災、不法侵入などの防止、早期発見、事故の対応を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "決まった予定で動く",
+    "人と関わる"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 240,
+   "job_name": "老人福祉施設生活相談員",
+   "description": "老人福祉施設に入所あるいは通所している利用者が、快適に、可能な範囲で自立的に日常生活を送ることができるように、相談、援助や連絡調整などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "チームで動く",
+    "人の安全を守る",
+    "コツコツ続ける"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 242,
+   "job_name": "植物工場の栽培管理",
+   "description": "植物工場内で野菜等の栽培、管理、収穫を行う。",
+   "riasec_source": "predicted",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "立ち仕事",
+    "ものづくり"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 244,
+   "job_name": "鋳造工/鋳造設備オペレーター",
+   "description": "金属を溶かして鋳型に注ぎ込み、冷えて固まった後で鋳型から取り出し、目的に応じた鋳物製品に仕上げる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "立ち仕事",
+    "スピード勝負"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 247,
+   "job_name": "金属プレス工",
+   "description": "プレス機械に製品の原型となる金型を取り付け、金属板に必要に応じて圧力を加え、様々な形に成形する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "コツコツ続ける",
+    "手先を使う",
+    "立ち仕事"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 255,
+   "job_name": "機械設計技術者",
+   "description": "市場の様々なニーズに応え、最新の技術を駆使して、機械製品を開発・設計する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "人と関わる",
+    "正確さが大事"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 256,
+   "job_name": "光学機器組立",
+   "description": "望遠鏡、顕微鏡、カメラ、測定機器などの光学機器を組み立てる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "スピード勝負",
+    "コツコツ続ける"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 257,
+   "job_name": "自動車組立",
+   "description": "自動車のボディ（車体）にドアやエンジンなどを組み付けて、完成車を組み立てる。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "決まった予定で動く",
+    "コツコツ続ける",
+    "立ち仕事"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 259,
+   "job_name": "計器組立",
+   "description": "長さ、質量、温度、圧力、流量、体積などの量を表示、指示、記録する器具である計器を組み立てる。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "ものづくり",
+    "手先を使う",
+    "コツコツ続ける"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 262,
+   "job_name": "物流設備管理・保全",
+   "description": "自動化、大型化が進む物流倉庫の設備の管理・保全を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "歩き回る仕事",
+    "機械と働く"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 263,
+   "job_name": "自動車技術者",
+   "description": "自動車製造に関する企画、設計・開発、実験、生産ラインにおける工程の管理と生産従事者への技術的な指導・監督を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "スピード勝負",
+    "人と関わる",
+    "しくみを調べる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 264,
+   "job_name": "精密機器技術者",
+   "description": "精密測定機器、光学機器、医療用機器など高い精度が要求される機械の研究開発、設計、及び製造工程の技術開発、管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "機械と働く",
+    "正確さが大事",
+    "スピード勝負"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 266,
+   "job_name": "電子機器技術者",
+   "description": "携帯電話、テレビ、パソコンから産業用の各種機器・装置等までの電子機器の開発、設計及び製造工程の技術開発、管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "ものづくり",
+    "座って集中",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 267,
+   "job_name": "電気通信技術者",
+   "description": "電気通信のインフラ（ネットワークの基盤）の構築と維持・運用を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "みんなをまとめる",
+    "機械と働く"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 272,
+   "job_name": "染色工/染色設備オペレーター",
+   "description": "各種の染料、薬品などを用いて、機械装置により、糸や織編物（おりあみもの）に染色整理加工（染色と仕上げ）を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "毎日ちがう",
+    "手先を使う",
+    "立ち仕事"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 273,
+   "job_name": "ミシン縫製",
+   "description": "ミシンを使って布地などの素材を縫い合わせ、衣服などの製品を完成させる。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "手先を使う",
+    "ものづくり",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 274,
+   "job_name": "木材製造",
+   "description": "製材工場、製材所において、国内で生産された原木や海外から輸入された原木を、用途に応じて、製材機械により板や角材等の材木にする。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "きちんと進める",
+    "立ち仕事"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 280,
+   "job_name": "靴製造",
+   "description": "皮革靴のデザイン、設計、パーツの型づくり、皮革の裁断、縫製、釣り込み・底付け、仕上げの作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "手先を使う",
+    "表現する",
+    "コツコツ続ける"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 283,
+   "job_name": "医薬品製造",
+   "description": "製薬工場において製造ラインを運転し、医薬品を製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "正確さが大事",
+    "結果に責任を持つ",
+    "機械と働く"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 285,
+   "job_name": "タイヤ製造",
+   "description": "ゴム、繊維・スチールワイヤなど様々な部材を組み合わせて大小各種のタイヤを製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "特別な装備を使う",
+    "機械と働く",
+    "スピード勝負"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 286,
+   "job_name": "化粧品製造",
+   "description": "化粧水、ファンデーション、口紅など各種の化粧品を製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "決まった予定で動く",
+    "特別な装備を使う",
+    "コツコツ続ける"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 288,
+   "job_name": "化学製品製造オペレーター",
+   "description": "化学工場で各種装置を運転・制御して合成樹脂、化学肥料、化学繊維、洗剤、塗料などの化学製品を製造する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "特別な装備を使う",
+    "コツコツ続ける",
+    "歩き回る仕事"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 292,
+   "job_name": "陶磁器技術者",
+   "description": "陶磁器製品の開発、製造工程や品質の管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "毎日ちがう",
+    "自分で決められる",
+    "表現する"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 293,
+   "job_name": "ファインセラミックス製造技術者",
+   "description": "ファインセラミックス製品の開発、製造工程や品質の管理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "特別な装備を使う",
+    "毎日ちがう"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 295,
+   "job_name": "高分子化学技術者",
+   "description": "プラスチック、化学繊維などの高分子材料や高分子の合成などの研究開発、製品化技術の開発・改良などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "自分で決められる",
+    "毎日ちがう"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 296,
+   "job_name": "バイオテクノロジー技術者",
+   "description": "生物を利用して有用な物質を作り出す研究や開発を行い、生産工程で技術的な指導等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "毎日ちがう",
+    "正確さが大事"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 297,
+   "job_name": "宇宙開発技術者",
+   "description": "宇宙開発にかかわる研究開発、衛星や打上げロケットなどの開発、設計、製作、運用等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "機械と働く",
+    "特別な装備を使う",
+    "しくみを調べる"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 298,
+   "job_name": "航空機開発エンジニア（ジェットエンジン）",
+   "description": "航空機のジェットエンジンを研究開発する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "特別な装備を使う",
+    "機械と働く",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 299,
+   "job_name": "システムエンジニア（受託開発）",
+   "description": "顧客の情報システムの開発を受託し、ソフトウェアを開発する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "座って集中",
+    "機械と働く",
+    "みんなをまとめる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 307,
+   "job_name": "ヘルプデスク（IT）",
+   "description": "システムや情報機器などを使用している時に生じる疑問やトラブル等の利用者からの問い合わせに電話、メール、あるいは出向いて対応する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "機械と働く",
+    "正確さが大事"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 309,
+   "job_name": "プロジェクトマネージャ（IT）",
+   "description": "IT分野での開発を行うプロジェクトチームの責任者として、プロジェクト実行計画の作成、予算、要員、進捗の管理などを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "みんなをまとめる",
+    "結果に責任を持つ",
+    "座って集中"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 311,
+   "job_name": "DXプロデューサー",
+   "description": "IT（情報技術）を含むデジタルの技術によって社会やビジネスの変革を目指す。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "リーダーになる",
+    "毎日ちがう",
+    "機械と働く"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 315,
+   "job_name": "動画制作",
+   "description": "動画を撮影し作品として制作する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "自分で決められる",
+    "毎日ちがう"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 319,
+   "job_name": "広告デザイナー",
+   "description": "広告会社等において、テレビCMやポスター、新聞や雑誌、Webなど様々な媒体の広告のデザインを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "表現する",
+    "座って集中",
+    "スピード勝負"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 320,
+   "job_name": "広告ディレクター",
+   "description": "広告会社等において、広告デザイナー、コピーライター、CMプランナー等の制作メンバーをまとめ、テレビCMや新聞など様々な広告を制作する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "リーダーになる",
+    "みんなをまとめる",
+    "座って集中"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 323,
+   "job_name": "インテリアデザイナー",
+   "description": "住宅、オフィス、ホテル、旅館、店舗などの室内装飾のデザインを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "毎日ちがう",
+    "座って集中"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 330,
+   "job_name": "スタイリスト",
+   "description": "テレビの番組、映画や雑誌、広告の写真などの撮影のために、俳優やモデルの衣装や小物を用意し、コーディネートする。",
+   "riasec_source": "predicted",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "表現する",
+    "自分で決められる"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 333,
+   "job_name": "フラワーデザイナー",
+   "description": "ディスプレイ用やプレゼントに使われる、生花を中心とした装飾作品を制作する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "表現する",
+    "自分で決められる",
+    "手先を使う"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 339,
+   "job_name": "テレビカメラマン",
+   "description": "テレビで放送する映像をテレビカメラで撮影する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "毎日ちがう",
+    "表現する",
+    "手先を使う"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 343,
+   "job_name": "印刷オペレーター",
+   "description": "印刷機を操作して、紙などの素材に印刷する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "手先を使う",
+    "ものづくり",
+    "コツコツ続ける"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 346,
+   "job_name": "広報コンサルタント",
+   "description": "広告会社等に所属し、企業や団体などの広報活動について、目的や課題を分析し戦略を立て、実施について助言する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "リーダーになる",
+    "みんなをまとめる",
+    "自分で決められる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 347,
+   "job_name": "人事コンサルタント",
+   "description": "コンサルティング会社等において組織や人材に関してコンサルティングを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "結果に責任を持つ",
+    "お客さんと話す",
+    "自分で決められる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 351,
+   "job_name": "情報工学研究者",
+   "description": "コンピュータや情報機器等に関する研究を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "自分で決められる",
+    "機械と働く"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 352,
+   "job_name": "医学研究者",
+   "description": "医師として臨床業務に従事しながら、又は大学医学部や研究機関において研究専従で、研究を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "しくみを調べる",
+    "自分で決められる",
+    "結果に責任を持つ"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 361,
+   "job_name": "職業訓練指導員",
+   "description": "公共職業能力開発施設や、認定職業訓練施設などにおいて、訓練生に対して、技能や技術、専門知識などの訓練指導や就職支援を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人を助ける",
+    "決まった予定で動く",
+    "人の安全を守る"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 364,
+   "job_name": "外科医",
+   "description": "主に手術等により、患者の病気や外傷の治療を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人の安全を守る",
+    "特別な装備を使う",
+    "自分で決められる"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 366,
+   "job_name": "内科医",
+   "description": "内臓、神経、血液等の病気について診断し、薬物治療、食事療法などにより治療を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "人の安全を守る",
+    "自分で決められる",
+    "特別な装備を使う"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 371,
+   "job_name": "福祉ソーシャルワーカー",
+   "description": "福祉等に関する専門知識を活かし、社会生活に困難がある人々の相談に乗ったり、社会的支援を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "チームで動く",
+    "人の安全を守る",
+    "自分で決められる"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 378,
+   "job_name": "接客担当（ホテル・旅館）",
+   "description": "ホテルや旅館に滞在する宿泊客等が快適に過ごせるように荷物の運搬、問い合わせへの対応等きめ細やかなサービスを提供する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "歩き回る仕事",
+    "お客さんと話す",
+    "決まった予定で動く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 379,
+   "job_name": "ホールスタッフ（レストラン）",
+   "description": "外食店舗、特にレストラン等で来店するお客と直接接し、料理やサービスを提供する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "歩き回る仕事",
+    "人と関わる",
+    "決まった予定で動く"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 383,
+   "job_name": "リフレクソロジスト",
+   "description": "主に手指を用いてお客の足の裏や手、耳を刺激する施術を行い、健康を維持し、疲労回復を助ける。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "自分で決められる",
+    "人の安全を守る",
+    "立ち仕事"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 387,
+   "job_name": "秘書",
+   "description": "企業や団体の社長、役員などの幹部が職務に専念できるように、幹部を補佐する様々な仕事を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "決まった予定で動く",
+    "きちんと進める",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 389,
+   "job_name": "一般事務",
+   "description": "特定の分野の事務を専門的に行うものではなく、様々な定型的な事務の仕事を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "決まった予定で動く",
+    "コツコツ続ける",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 396,
+   "job_name": "調剤薬局事務",
+   "description": "医師の指定した薬を買い求めに来店する患者の処方箋を受け付け、レセコンに入力するなど窓口業務を処理する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "コツコツ続ける",
+    "機械と働く",
+    "決まった予定で動く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 397,
+   "job_name": "介護事務",
+   "description": "介護報酬請求事務（レセプト作成）を中心に介護施設の事務全般を担当する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "コツコツ続ける",
+    "決まった予定で動く",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 400,
+   "job_name": "貿易事務",
+   "description": "原材料や商品の輸出・輸入といった海外との取引を行う際に、営業部門と連携しながら、必要なデータや情報を整理して、契約に必要な書類を作成したり、貨物輸送の手配を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "コツコツ続ける",
+    "機械と働く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 401,
+   "job_name": "損害保険事務",
+   "description": "自動車事故による物的損害や死傷災害、火災や台風等による建物や家財への損害が生じた保険の契約者に対し、保険金請求の受付から支払いまでの一連の業務を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "決まった予定で動く",
+    "コツコツ続ける",
+    "座って集中"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 403,
+   "job_name": "学校事務",
+   "description": "学校において、教育と関連活動が円滑に行われるように、必要な事務を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "リーダーになる",
+    "決まった予定で動く",
+    "座って集中"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 407,
+   "job_name": "企業法務担当",
+   "description": "企業活動に伴う法的リスクの最小化など、企業が直面する法律問題への対処を担当する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "リーダーになる",
+    "正確さが大事"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 413,
+   "job_name": "コンサルティング営業（IT）",
+   "description": "顧客の方針と課題を確認し、その解決策として情報システムや情報サービスを提案し、販売する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人と関わる",
+    "機械と働く",
+    "座って集中"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 414,
+   "job_name": "保険営業（生命保険、損害保険）",
+   "description": "一般家庭や会社を訪問し、個人のライフスタイルや家庭・生活環境に適合する保険商品を紹介・提案する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "お客さんと話す",
+    "正確さが大事",
+    "機械と働く"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 419,
+   "job_name": "商品企画開発（チェーンストア）",
+   "description": "消費者のニーズを掴み、自社で取り扱う商品の幅を広げ、よく売れそうな商品を企画開発する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "機械と働く",
+    "リーダーになる",
+    "みんなをまとめる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 420,
+   "job_name": "OA機器営業",
+   "description": "コピー機、パソコンなどのOA機器を販売したり、レンタル契約を結ぶなどの営業活動を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "毎日ちがう",
+    "お客さんと話す",
+    "リーダーになる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 425,
+   "job_name": "自転車販売",
+   "description": "お客の希望と使用目的を聞いて自転車を販売したり、持ち込まれた自転車の修理をする。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "お客さんと話す",
+    "歩き回る仕事",
+    "手先を使う"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 427,
+   "job_name": "内部監査人",
+   "description": "組織における内部統制の整備及び運用状況を調査、検討、評価し、その結果を組織トップ（社長や取締役会）に報告し、改善を提言する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "決まった予定で動く",
+    "機械と働く"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 428,
+   "job_name": "ファンドマネージャー",
+   "description": "投資信託会社、投資顧問会社、機関投資家等の資金運用機関において資金（ファンド）の運用を担当する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "しくみを調べる",
+    "座って集中",
+    "機械と働く"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 430,
+   "job_name": "代理店営業（保険会社）",
+   "description": "保険会社の社員として、保険商品の販売・契約の代理・媒介を行う代理店に対して、商品情報の提供、販売や経営に関するアドバイス等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "お客さんと話す",
+    "正確さが大事",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 433,
+   "job_name": "雑踏・交通誘導警備員",
+   "description": "イベントやお祭りなどでの警備や誘導や、道路工事や建設現場、駐車場での交通整理を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "毎日ちがう",
+    "特別な装備を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 441,
+   "job_name": "宅配便配達員",
+   "description": "担当する地域内で荷物の集荷・配達を行う業務のほか、営業活動や集金も行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "スピード勝負",
+    "コツコツ続ける"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 442,
+   "job_name": "新聞配達員",
+   "description": "購読契約をしている家庭や職場などに新聞を配達する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "歩き回る仕事",
+    "決まった予定で動く",
+    "きちんと進める"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 444,
+   "job_name": "ピッキング作業員",
+   "description": "倉庫や工場等に搬入された商品を、伝票又は指示書に従って取り集めや仕分けをし、搬出準備を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "歩き回る仕事",
+    "きちんと進める",
+    "決まった予定で動く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 447,
+   "job_name": "製品包装作業員",
+   "description": "製品を保護・保存するため、各種の材料を用いて包装する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "きちんと進める",
+    "立ち仕事",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 449,
+   "job_name": "バックヤード作業員（スーパー食品部門）",
+   "description": "スーパーのバックヤードで主に食品のパッケージングや品出しなどの作業を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "手先を使う"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 450,
+   "job_name": "調理補助",
+   "description": "調理場で調理師の指示に従って、食材の洗浄と切込み、食器の準備や洗浄、調理器具の用意・片付けなどを行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "手先を使う"
+   ],
+   "area": "芸術的"
+  },
+  {
+   "job_id": 451,
+   "job_name": "給食調理員",
+   "description": "給食施設の調理場において献立表等に基づき、給食用料理を調理する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "立ち仕事",
+    "決まった予定で動く",
+    "手先を使う"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 454,
+   "job_name": "産業廃棄物収集運搬作業員",
+   "description": "建設現場、病院、工場などから出る産業廃棄物を集め、収集車で処分場まで運ぶ。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "外で働く",
+    "特別な装備を使う",
+    "決まった予定で動く"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 462,
+   "job_name": "果樹栽培者",
+   "description": "露地の果樹園やビニールハウス等の施設、観光果樹園などで、果物を生産する。",
+   "riasec_source": "observed",
+   "awareness_label": "知っている",
+   "tags": [
+    "外で働く",
+    "ものづくり",
+    "自分で決められる"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 463,
+   "job_name": "花き栽培者",
+   "description": "観賞用の花や観葉植物などの「花卉（き）」を生産する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "ものづくり",
+    "外で働く",
+    "毎日ちがう"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 470,
+   "job_name": "法務技官（心理）（矯正心理専門職）",
+   "description": "少年鑑別所や少年院、刑事施設などに勤務し、心理学の知識を生かして、非行・犯罪臨床の最前線で働く。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "スピード勝負",
+    "人を助ける",
+    "正確さが大事"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 482,
+   "job_name": "自動運転開発エンジニア（自動車）",
+   "description": "一般公道を走る自動車の自動運転に関する設計、開発、評価等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "リーダーになる",
+    "みんなをまとめる",
+    "結果に責任を持つ"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 485,
+   "job_name": "キッティング作業員（PCセットアップ作業員）",
+   "description": "パソコンやタブレットなどの情報機器をユーザーがすぐに業務に使えるようセットアップする作業（「キッティング」という）を行う。",
+   "riasec_source": "predicted",
+   "awareness_label": "知らない",
+   "tags": [
+    "コツコツ続ける",
+    "手先を使う",
+    "座って集中"
+   ],
+   "area": "慣習的"
+  },
+  {
+   "job_id": 489,
+   "job_name": "人事課長",
+   "description": "国・地方公共団体・会社・社団法人・財団法人等の法人組織において、人事課(課相当を含む)の業務を管理・監督する仕事に従事する。",
+   "riasec_source": "observed",
+   "awareness_label": "名前は聞いたことがある",
+   "tags": [
+    "リーダーになる",
+    "結果に責任を持つ",
+    "人と関わる"
+   ],
+   "area": "企業的"
+  },
+  {
+   "job_id": 492,
+   "job_name": "デバッグ作業",
+   "description": "ソフトウェアの誤り（バグ）を見つけ修正する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "座って集中",
+    "コツコツ続ける",
+    "決まった予定で動く"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 503,
+   "job_name": "訪問介護のサービス提供責任者",
+   "description": "訪問介護が適切に行われるよう、サービス内容の管理について必要な業務等を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "人の安全を守る",
+    "みんなをまとめる",
+    "スピード勝負"
+   ],
+   "area": "社会的"
+  },
+  {
+   "job_id": 507,
+   "job_name": "配電盤・制御盤等組立",
+   "description": "主に機械器具・道具等を用いて、配電盤・制御盤・分電盤・監視制御装置等を組み立て、配線し、仕様・規格どおりになっているかの試験を行う。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "ものづくり",
+    "手先を使う",
+    "座って集中"
+   ],
+   "area": "現実的"
+  },
+  {
+   "job_id": 508,
+   "job_name": "社会学研究者",
+   "description": "社会の仕組みやさまざまな現象、動向について、人間が行う社会的な行為と関連付けて、実地調査や資料・データの分析等を通じて研究する。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "しくみを調べる",
+    "お客さんと話す",
+    "手先を使う"
+   ],
+   "area": "研究的"
+  },
+  {
+   "job_id": 510,
+   "job_name": "検疫官（看護師）",
+   "description": "国際線の発着がある空港や港湾で、海外からの入国者・帰国者に対する検疫、感染症を媒介する動物の捕獲調査、国際航行する船舶内の衛生状態の確認等を行い、海外からの感染症の流入やまん延を防ぐ。",
+   "riasec_source": "observed",
+   "awareness_label": "知らない",
+   "tags": [
+    "きちんと進める",
+    "チームで動く",
+    "人の安全を守る"
+   ],
+   "area": "慣習的"
+  }
+ ]
+}

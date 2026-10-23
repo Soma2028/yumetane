@@ -1,46 +1,74 @@
 import type { DiscoverResponse, Job, Subject } from "./types"
 
-// 本番はVercelの環境変数 VITE_API_BASE_URL（Renderのapi URL）から読む。
-// 未設定時はローカル開発用に127.0.0.1へフォールバックする。
-// "localhost"だとIPv6(::1)に先に解決される環境があり、別プロセスがそちらの
-// ポートを掴んでいると誤接続するため、127.0.0.1を明示する。
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"
+// 以前はRenderにデプロイしたAPIを呼んでいたが、無料枠のスリープで初回アクセスに
+// 50秒ほどかかっていた。APIはステートレスでjobs.csvしか読まないため、
+// 候補プール・重み・タグ・エリアをscripts/export_web_data.pyで事前計算した
+// data/jobs.jsonを読み、抽選（重み付きサンプリング）だけをここで行う。
+// 選定ロジックの正本はapi/app/（discovery.py / tags.py / areas.py）。
+
+interface PoolEntry {
+  job_id: number
+  weight: number
+}
+
+interface WebData {
+  subjects: Subject[]
+  areas: Record<string, number>
+  pools: Record<string, PoolEntry[]>
+  jobs: Job[]
+}
+
+// LPの表示を軽くするため、JSONは最初に必要になった時点で別チャンクとして読む。
+let dataPromise: Promise<{ data: WebData; jobsById: Map<number, Job> }> | null = null
+
+function loadData() {
+  dataPromise ??= import("./data/jobs.json").then((mod) => {
+    const data = mod.default as WebData
+    return { data, jobsById: new Map(data.jobs.map((j) => [j.job_id, j])) }
+  })
+  return dataPromise
+}
 
 export async function fetchSubjects(): Promise<Subject[]> {
-  const res = await fetch(`${API_BASE}/subjects`)
-  if (!res.ok) throw new Error("教科の取得に失敗しました")
-  return res.json()
+  const { data } = await loadData()
+  return data.subjects
 }
 
 export async function fetchAreas(): Promise<Record<string, number>> {
-  const res = await fetch(`${API_BASE}/areas`)
-  if (!res.ok) throw new Error("エリア情報の取得に失敗しました")
-  return res.json()
-}
-
-export async function discover(subject: string, knownJobIds: number[]): Promise<DiscoverResponse> {
-  const res = await fetch(`${API_BASE}/discover`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ subject, known_job_ids: knownJobIds }),
-  })
-  if (!res.ok) throw new Error("職業を見つけられませんでした")
-  return res.json()
-}
-
-export async function fetchJob(jobId: number): Promise<Job> {
-  const res = await fetch(`${API_BASE}/jobs/${jobId}`)
-  if (!res.ok) throw new Error("職業情報の取得に失敗しました")
-  return res.json()
+  const { data } = await loadData()
+  return data.areas
 }
 
 /**
- * Renderの無料枠はアイドル時にスリープするため、画面表示直後に
- * APIを一度たたいて起こしておく。結果は使わず、失敗しても画面表示には
- * 影響させない（catchで握りつぶす）。
+ * 今日勉強した教科の候補プールから、まだ図鑑に無い職業を認知度の重みで1件選ぶ
+ * （api/app/discovery.pyのdiscover_jobと同じ）。プールを使い切っていれば
+ * job=null・exhausted=trueを返す。
  */
-export function warmupApi(): void {
-  fetch(`${API_BASE}/health`).catch(() => {
-    // ウォームアップ失敗は無視する。
-  })
+export async function discover(subject: string, knownJobIds: number[]): Promise<DiscoverResponse> {
+  const { data, jobsById } = await loadData()
+  const pool = data.pools[subject]
+  if (!pool) throw new Error("職業を見つけられませんでした")
+
+  const known = new Set(knownJobIds)
+  const candidates = pool.filter((p) => !known.has(p.job_id))
+  if (candidates.length === 0) return { job: null, exhausted: true }
+
+  const total = candidates.reduce((sum, p) => sum + p.weight, 0)
+  let r = Math.random() * total
+  let picked = candidates[candidates.length - 1]
+  for (const p of candidates) {
+    r -= p.weight
+    if (r < 0) {
+      picked = p
+      break
+    }
+  }
+  return { job: jobsById.get(picked.job_id)!, exhausted: false }
+}
+
+export async function fetchJob(jobId: number): Promise<Job> {
+  const { jobsById } = await loadData()
+  const job = jobsById.get(jobId)
+  if (!job) throw new Error("職業情報の取得に失敗しました")
+  return job
 }

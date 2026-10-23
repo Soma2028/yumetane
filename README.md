@@ -1,8 +1,6 @@
 # 夢のタネ
 
 **[デモを見る](https://web-soma2028.vercel.app)**
-（Renderの無料枠を使っているため、しばらくアクセスが無いとスリープします。
-初回アクセスは起動に50秒ほどかかることがあります）
 
 <p>
   <img src="docs/images/screenshot_lp.png" width="220" alt="ランディングページのファーストビュー">
@@ -52,7 +50,7 @@
    音楽・技術/家庭の8教科に対応づけた。美術と音楽はjob tag側では「芸術」1項目分
    のスコアしか無いため、同じ候補プールを共有する。保健体育は対応する知識項目が
    構造的にゼロで、埋める手段も無い。「選択肢から外す」のではなく「記録はできるが
-   職業発見の対象外」という扱いにし、APIのレスポンスに`is_special`フラグを
+   職業発見の対象外」という扱いにし、教科データに`is_special`フラグを
    持たせて表現した
 
 3. **認知度ラベルの設計**
@@ -94,23 +92,24 @@ https://shigoto.mhlw.go.jp/User/download
 
 ## 構成
 
-web/（Vercel） api/（Render） data/ notebooks/ docs/
+web/（Vercel） api/ data/ notebooks/ docs/ scripts/
 
-## ローカルで動かす
+職業を選ぶロジック（教科ごとの候補プール・認知度の重み・タグ・エリア）は
+`api/app/`のPythonで書いている。ただし本番ではAPIサーバーを使わない。
+`scripts/export_web_data.py`でこのロジックの結果を`web/src/data/jobs.json`に
+書き出し、フロントはそのJSONから重み付きの抽選だけを行う
+（`web/src/api.ts`）。以前はAPIをRenderの無料枠で動かしていたが、スリープ明けの
+初回アクセスに50秒ほどかかっていた。APIは状態を持たず`jobs.csv`しか読まないため、
+静的なJSONで置き換えても機能は変わらない。
 
-### API
+`jobs.csv`や`api/app/`のロジックを変えたら、JSONを書き出し直す。書き出し忘れは
+`api/tests/test_export.py`が検出する。
 
 ```bash
-cd api
-source .venv/bin/activate
-pip install -r requirements-dev.txt  # 初回のみ（notebooks実行やテストも含むフル環境）
-uvicorn app.main:app --reload
+api/.venv/bin/python3 scripts/export_web_data.py
 ```
 
-`http://127.0.0.1:8000` で起動する。`data/processed/jobs.csv`（Git管理対象）
-だけで動くため、これだけならjob tagの生CSVは不要。notebooksを実行して
-データを作り直す場合のみ、job tagの生CSVを`data/raw/`に手動配置する必要が
-ある（取得元・手順は[data/README.md](data/README.md)参照）。
+## ローカルで動かす
 
 ### フロント
 
@@ -120,25 +119,23 @@ npm install
 npm run dev
 ```
 
-`http://localhost:5173` で起動する。ローカルでは環境変数を設定しなくても
-`http://127.0.0.1:8000` のAPIに接続する（`web/.env.example`参照）。
+`http://localhost:5173` で起動する。APIサーバーの起動は不要。
+
+### API・テスト
+
+```bash
+cd api
+source .venv/bin/activate
+pip install -r requirements-dev.txt  # 初回のみ（notebooks実行やテストも含むフル環境）
+pytest
+uvicorn app.main:app --reload  # 選定ロジックをHTTP経由で確かめたい場合のみ
+```
+
+`data/processed/jobs.csv`（Git管理対象）だけで動くため、これだけならjob tagの
+生CSVは不要。notebooksを実行してデータを作り直す場合のみ、job tagの生CSVを
+`data/raw/`に手動配置する必要がある（取得元・手順は[data/README.md](data/README.md)参照）。
 
 ## デプロイ
-
-### API → Render
-
-- Root Directory: `api`
-- Build Command: `pip install -r requirements.txt`（本番用の最小依存関係。
-  notebooks用の`requirements-dev.txt`とは別）
-- Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-- 環境変数:
-  - `ALLOWED_ORIGINS` — フロントのオリジンをカンマ区切りで指定
-    （例: `https://yumetane.vercel.app`）。ローカル開発用の
-    `http://localhost:5173` は常に許可されるため設定不要
-- Renderの無料枠はアイドル時にスリープし、初回アクセスに数十秒かかることが
-  ある。フロント側がトップ画面表示時にウォームアップ用のリクエストを
-  送るようになっている（`web/src/api.ts`の`warmupApi`、結果は使わず
-  失敗しても画面表示には影響しない）
 
 ### フロント → Vercel
 
@@ -146,6 +143,4 @@ npm run dev
 - Framework Preset: Vite（自動検出）
 - Build Command: `npm run build`
 - Output Directory: `dist`
-- 環境変数:
-  - `VITE_API_BASE_URL` — RenderにデプロイしたAPIのURL
-    （例: `https://yumetane-api.onrender.com`）
+- 環境変数: 不要

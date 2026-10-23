@@ -38,8 +38,8 @@ app.add_middleware(
 
 @app.get("/health")
 def get_health() -> dict:
-    """Renderの無料枠がスリープしていても起こせるよう、フロントの
-    ウォームアップ用リクエスト先として使う（web/src/api.tsのwarmupApi）。"""
+    """死活確認用。本番のフロントはこのAPIを使わず、scripts/export_web_data.pyで
+    書き出したJSONを読む（README「構成」参照）。"""
     return {"status": "ok"}
 
 

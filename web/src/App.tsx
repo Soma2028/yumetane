@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { discover, fetchAreas, fetchJob, fetchSubjects, warmupApi } from "./api"
+import { discover, fetchAreas, fetchJob, fetchSubjects } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
@@ -60,7 +60,6 @@ function App() {
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    warmupApi()
     fetchSubjects()
       .then(setSubjects)
       .catch(() => setError("教科の一覧を取得できませんでした"))
