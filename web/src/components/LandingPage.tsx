@@ -3,7 +3,9 @@ import { ArrowDown, ArrowRight, BookMarked, BookOpen, Search } from "lucide-reac
 import screenshotDiscovery from "../assets/lp/screenshot_discovery.png"
 import screenshotHome from "../assets/lp/screenshot_home.png"
 import screenshotZukan from "../assets/lp/screenshot_zukan.png"
+import { iconForTags } from "../tagIcons"
 import { SproutIcon } from "./SproutIcon"
+import { TaneCharacter } from "./TaneCharacter"
 
 interface Props {
   onStart: () => void
@@ -31,71 +33,55 @@ const viewport = { once: true, amount: 0.25 } as const
 export function LandingPage({ onStart }: Props) {
   return (
     <div className="text-charcoal">
-      {/* 1. ファーストビュー — PC(lg, 1024px+)は左右2カラム、モバイルは縦積み */}
-      <section
-        className="relative flex min-h-screen flex-col items-center justify-center gap-5 overflow-hidden px-6 py-14 text-center lg:h-screen lg:min-h-0 lg:px-12 lg:py-0 lg:text-left"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 90% 55% at 50% 0%, rgba(47,107,79,0.06), transparent 70%)",
-        }}
-      >
-        {/* PC版のみ: 左から右へ薄いセージ色にグラデーションし、境界線を作らずに
-            明るいモック画像を浮き上がらせる */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 hidden lg:block"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(47,107,79,0) 0%, rgba(47,107,79,0.08) 30%, rgba(47,107,79,0.08) 100%)",
-          }}
-        />
-
+      {/* 1. ファーストビュー — PC(lg, 1024px+)は左右2カラム、モバイルは縦積み。
+          右（モバイルでは下）には、ホーム画面のスクショではなく「記録すると仕事が
+          見つかる」瞬間そのものを、本物の発見画面と同じ部品で見せる */}
+      <section className="flex min-h-screen items-center px-6 py-14 lg:h-screen lg:min-h-0 lg:px-12 lg:py-0">
         <motion.div
           variants={stagger(0.12)}
           initial="hidden"
           animate="show"
-          className="relative z-10 flex w-full max-w-6xl flex-col items-center gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-16"
+          className="mx-auto flex w-full max-w-5xl flex-col items-center gap-12 lg:flex-row lg:justify-between lg:gap-16"
         >
-          <div className="flex flex-col items-center justify-center gap-5 lg:w-2/5 lg:items-start lg:self-stretch">
-            <motion.div variants={fadeUp}>
-              <SproutIcon className="h-12 w-12 text-sage-600" />
-            </motion.div>
-            <motion.h1 variants={fadeUp} className="text-4xl font-bold tracking-[-0.02em] lg:text-5xl">
+          <div className="flex flex-col items-center text-center lg:max-w-xl lg:items-start lg:text-left">
+            <motion.p
+              variants={fadeUp}
+              className="flex items-center gap-1.5 text-base font-bold text-sage-600 lg:text-lg"
+            >
+              <SproutIcon className="h-6 w-6" />
               夢のタネ
+            </motion.p>
+            <motion.h1
+              variants={fadeUp}
+              className="mt-5 text-[28px] font-bold leading-[1.45] tracking-[-0.02em] lg:text-[44px]"
+            >
+              今日の勉強が、
+              <br />
+              まだ知らない仕事との
+              <br />
+              出会いになる。
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="whitespace-nowrap text-[13px] leading-loose text-charcoal-muted lg:text-xl"
+              className="mt-5 max-w-md text-sm leading-loose text-charcoal-muted lg:text-base"
             >
-              今日の勉強が、まだ知らない仕事との出会いになる。
+              勉強した教科を記録すると、その教科をよく使う仕事がひとつ見つかる。中学生のための、学習記録と職業図鑑のアプリ。
             </motion.p>
-            <motion.div
-              variants={fadeUp}
-              className="mt-1 flex flex-col items-center gap-3 lg:flex-row lg:gap-4"
-            >
-              <FloatingTane
-                src="/images/tane/stage1.png"
-                alt="双葉が出たタネのキャラクター"
-                size={80}
-                sizeClassName="h-20 w-20 lg:h-32 lg:w-32"
-              />
+            <motion.div variants={fadeUp} className="mt-8 flex flex-col items-center gap-3 lg:items-start">
               <button
                 type="button"
                 onClick={onStart}
-                className="rounded-full bg-coral-500 px-10 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
+                className="rounded-full bg-coral-500 px-12 py-4 text-lg font-bold text-white shadow-sm transition active:bg-coral-600"
               >
                 はじめる
               </button>
+              <p className="text-xs text-charcoal-muted">登録なし・無料。記録はこの端末の中だけに保存されます</p>
             </motion.div>
           </div>
 
-          {/* PC: 右カラムに大きく、モバイル: ボタンの下に小さめに */}
-          <motion.img
-            variants={fadeUp}
-            src={screenshotHome}
-            alt="アプリのホーム画面。今日勉強した教科を選ぶ画面"
-            className="mt-4 max-h-[36vh] w-auto rounded-2xl border border-border-soft object-contain shadow-sm lg:mt-0 lg:max-h-[78vh] lg:w-3/5"
-          />
+          <motion.div variants={fadeUp}>
+            <DiscoveryDemo />
+          </motion.div>
         </motion.div>
       </section>
 
@@ -359,6 +345,65 @@ export function LandingPage({ onStart }: Props) {
           はじめる
         </motion.button>
       </motion.section>
+    </div>
+  )
+}
+
+// ファーストビューで見せる発見の例。jobs.json（約15KB）をLPで読み込まないよう、
+// 数学の候補プールにある「知らない」ラベルの職業を1件だけ書き写している。
+const DEMO_JOB = {
+  name: "精密機器技術者",
+  tags: ["機械と働く", "正確さが大事", "スピード勝負"],
+  description:
+    "精密測定機器、光学機器、医療用機器など高い精度が要求される機械の研究開発、設計、及び製造工程の技術開発、管理を行う。",
+}
+const DemoIcon = iconForTags(DEMO_JOB.tags)
+
+/** 「数学を記録 → 仕事が見つかる」の一連を、発見画面と同じ見た目で縮小して見せる。 */
+function DiscoveryDemo() {
+  const step = (delay: number) => ({
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.4, delay, ease: "easeOut" as const },
+  })
+
+  return (
+    <div
+      aria-label="使い方の例：数学を30分記録すると、精密機器技術者という仕事が見つかる"
+      className="w-[300px] rounded-[2.25rem] border border-border-soft bg-cream p-5 shadow-[0_16px_48px_rgba(43,38,32,0.10)] lg:w-[340px]"
+    >
+      <motion.div {...step(0.5)} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm">
+        <span className="font-bold">数学</span>
+        <span className="text-charcoal-muted">30分 記録した</span>
+      </motion.div>
+
+      <motion.div {...step(1.0)} className="mt-4 flex items-center gap-2">
+        <TaneCharacter count={1} size={64} />
+        <p className="relative flex-1 rounded-2xl border border-border-soft bg-white px-3 py-2 text-[13px] font-medium leading-relaxed">
+          {DEMO_JOB.name}という仕事を見つけたよ！
+        </p>
+      </motion.div>
+
+      <motion.div
+        {...step(1.4)}
+        className="mt-4 overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+      >
+        <div className="flex h-16 items-center justify-center bg-sage-100">
+          <DemoIcon className="h-9 w-9 text-sage-600" strokeWidth={1.5} />
+        </div>
+        <div className="px-4 pt-4 pb-5 text-left">
+          <h3 className="text-xl font-bold leading-snug tracking-tight">{DEMO_JOB.name}</h3>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {DEMO_JOB.tags.map((tag) => (
+              <span key={tag} className="rounded-full bg-sage-50 px-2.5 py-1 text-[11px] font-medium text-sage-700">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-charcoal-muted">{DEMO_JOB.description}</p>
+          <p className="mt-3 text-[11px] font-medium text-sage-600">図鑑に登録したよ</p>
+        </div>
+      </motion.div>
     </div>
   )
 }
