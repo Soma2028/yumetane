@@ -4,6 +4,7 @@ import screenshotDiscovery from "../assets/lp/screenshot_discovery.png"
 import screenshotHome from "../assets/lp/screenshot_home.png"
 import screenshotZukan from "../assets/lp/screenshot_zukan.png"
 import { iconForTags } from "../tagIcons"
+import { STAGE_MIN } from "../taneStage"
 import { SproutIcon } from "./SproutIcon"
 import { TaneCharacter } from "./TaneCharacter"
 
@@ -378,7 +379,8 @@ function DiscoveryDemo() {
       </motion.div>
 
       <motion.div {...step(1.0)} className="mt-4 flex items-center gap-2">
-        <TaneCharacter count={1} size={64} />
+        {/* 図鑑1件目はまだ種（stage0）で絵が小さいため、双葉の出たstage1（10件〜）で見せる */}
+        <TaneCharacter count={STAGE_MIN[1]} size={88} className="-my-2 -ml-1" />
         <p className="relative flex-1 rounded-2xl border border-border-soft bg-white px-3 py-2 text-[13px] font-medium leading-relaxed">
           {DEMO_JOB.name}という仕事を見つけたよ！
         </p>
