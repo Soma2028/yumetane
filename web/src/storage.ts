@@ -65,12 +65,24 @@ export function saveState(state: AppState): void {
   }
 }
 
+// 日付（YYYY-MM-DD）は端末の時刻（日本なら日本時間）で数える。以前はtoISOString()で
+// UTCの日付を使っていたため、日本時間の0〜9時に記録すると前日の記録になっていた。
+// 既存の記録の日付は書き換えない（過去の朝の記録は前日についたまま）
+function localDateStr(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
+  return `${y}-${m}-${day}`
+}
+
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10)
+  return localDateStr(new Date())
 }
 
 function dateNDaysAgo(n: number): string {
-  return new Date(Date.now() - n * 86400_000).toISOString().slice(0, 10)
+  const now = new Date()
+  // 日付で引く（ミリ秒で引くと、夏時間のある地域で1日ずれることがある）
+  return localDateStr(new Date(now.getFullYear(), now.getMonth(), now.getDate() - n))
 }
 
 export function todaysLogs(state: AppState): StudyLogEntry[] {
