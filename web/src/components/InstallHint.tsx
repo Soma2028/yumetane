@@ -46,7 +46,7 @@ export function InstallHint() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2 py-2.5 pr-11 pl-4 text-left font-bold text-sage-700"
+        className="flex w-full items-center gap-2 py-2.5 pr-11 pl-4 text-left font-bold text-sage-700 [@media(max-height:740px)]:py-1.5 [@media(max-height:740px)]:text-xs"
       >
         <Share className="h-4 w-4 shrink-0" />
         <span className="flex-1">ホーム画面に追加すると、記録が消えないよ</span>

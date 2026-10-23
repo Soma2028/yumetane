@@ -7,6 +7,7 @@ import { JobDetailScreen } from "./components/JobDetailScreen"
 import { LandingPage } from "./components/LandingPage"
 import { TaneGrowthScreen } from "./components/TaneGrowthScreen"
 import { TaneScreen } from "./components/TaneScreen"
+import { TimetableScreen } from "./components/TimetableScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
@@ -32,6 +33,7 @@ import {
 import { reloadForStaleChunk, takeResumeScreen } from "./staleChunk"
 import { baseTransition } from "./motion"
 import { stageFromCount } from "./taneStage"
+import { loadTimetable, saveTimetable, setPeriod, timetableForHome, type Timetable } from "./timetable"
 import type { KirokuTab } from "./components/KirokuScreen"
 import type { DiscoverResponse, Job, Subject } from "./types"
 
@@ -80,7 +82,7 @@ class LoadErrorBoundary extends Component<{ onBack: () => void; children: ReactN
   }
 }
 
-type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku" | "growth"
+type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku" | "growth" | "timetable"
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
 
 function App() {
@@ -108,6 +110,7 @@ function App() {
   const [detailReturnScreen, setDetailReturnScreen] = useState<DetailReturnScreen>("home")
 
   const [homeToast, setHomeToast] = useState<string | null>(null)
+  const [timetable, setTimetable] = useState<Timetable>(loadTimetable)
   // きろく画面のタブと選んだ日。職業の詳細を開いて戻ってきたときに元の表示に戻すため
   const [kirokuTab, setKirokuTab] = useState<KirokuTab>("week")
   const [kirokuDate, setKirokuDate] = useState<string | null>(null)
@@ -265,6 +268,8 @@ function App() {
             setKirokuDate(null)
             setScreen("kiroku")
           }}
+          todayTimetable={timetableForHome(timetable)}
+          onOpenTimetable={() => setScreen("timetable")}
           onOpenDay={(date) => {
             setKirokuTab("calendar")
             setKirokuDate(date)
@@ -340,6 +345,20 @@ function App() {
             />
           </Suspense>
         </LoadErrorBoundary>
+      )
+    }
+
+    if (screen === "timetable") {
+      return (
+        <TimetableScreen
+          timetable={timetable}
+          onChange={(day, period, subject) => {
+            const next = setPeriod(timetable, day, period, subject)
+            setTimetable(next)
+            saveTimetable(next)
+          }}
+          onBack={() => setScreen("home")}
+        />
       )
     }
 

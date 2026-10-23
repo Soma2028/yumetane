@@ -5,6 +5,7 @@ import { formatMinutes } from "../format"
 import { InstallHint } from "./InstallHint"
 import { RecordSheet } from "./RecordSheet"
 import { stageProgress } from "../taneStage"
+import { shortSubject } from "../timetable"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
@@ -28,6 +29,9 @@ interface Props {
   onOpenZukan: () => void
   onOpenTane: () => void
   onOpenKiroku: () => void
+  /** ホームに出す今日の時間割（未登録ならnull）。 */
+  todayTimetable: { heading: string; periods: (string | null)[] } | null
+  onOpenTimetable: () => void
   /** 「この1週間」の日付を押したとき。きろくのカレンダーでその日を開く。 */
   onOpenDay: (date: string) => void
   onOpenGrowth: () => void
@@ -52,10 +56,14 @@ export function HomeScreen({
   onOpenTane,
   onOpenKiroku,
   onOpenDay,
+  onOpenTimetable,
+  todayTimetable,
   onOpenGrowth,
   onSelectJob,
 }: Props) {
   const [showForm, setShowForm] = useState(false)
+  // 画面の低い端末（iPhone SEなど）では、タネを少し小さくしてホームを1画面に収める
+  const compact = typeof window !== "undefined" && window.matchMedia("(max-height: 740px) and (max-width: 1023px)").matches
 
   const { nextThreshold } = stageProgress(zukanCount)
   const growthLabel = nextThreshold !== null ? `あと${nextThreshold - zukanCount}件で育つ` : "タネの部屋"
@@ -68,8 +76,8 @@ export function HomeScreen({
   return (
     // スマホは1列で1画面に収める。パソコン（lg以上）は左に記録まわり、右に見つけた仕事と
     // ほかの画面への導線を置く2列にする
-    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col gap-4 px-6 pt-6 pb-6 max-lg:[@media(max-height:740px)]:gap-3 max-lg:[@media(max-height:740px)]:pt-4 max-lg:[@media(max-height:740px)]:pb-4 lg:grid lg:max-w-5xl lg:grid-cols-2 lg:content-center lg:items-start lg:gap-12 lg:px-10 lg:py-14">
-      <div className="flex flex-col gap-4 max-lg:[@media(max-height:740px)]:gap-3">
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col gap-3 px-6 pt-6 pb-6 lg:gap-4 max-lg:[@media(max-height:740px)]:gap-3 max-lg:[@media(max-height:740px)]:pt-4 max-lg:[@media(max-height:740px)]:pb-4 lg:grid lg:max-w-5xl lg:grid-cols-2 lg:content-center lg:items-start lg:gap-12 lg:px-10 lg:py-14">
+      <div className="flex flex-col gap-3 lg:gap-4">
       <div className="relative flex flex-col items-center gap-1 pt-2">
         {streak > 0 && (
           <span className="absolute right-0 top-5 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
@@ -86,7 +94,7 @@ export function HomeScreen({
           className="group flex cursor-pointer flex-col items-center gap-1 transition-transform"
           aria-label={`タネの部屋を見る（${growthLabel}）`}
         >
-          <TaneCharacter count={zukanCount} size={80} />
+          <TaneCharacter count={zukanCount} size={compact ? 64 : 80} />
           <span className="flex items-center gap-0.5 rounded-full border border-border-soft bg-white py-1 pr-2 pl-3 text-xs font-bold text-sage-700 shadow-sm transition group-hover:border-sage-600">
             {growthLabel}
             <ChevronRight className="h-3.5 w-3.5" />
@@ -157,7 +165,7 @@ export function HomeScreen({
         </div>
       )}
 
-      {/* 比較ゾーン: ストリークと週間の記録状況を1枚にまとめ、控えめなトーンで置く */}
+      {/* 比較ゾーン: 週間の記録状況と今日の時間割を1枚にまとめ、控えめなトーンで置く */}
       <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4 max-lg:[@media(max-height:740px)]:py-3">
         <p className="font-bold">この1週間</p>
         <div className="flex justify-between">
@@ -187,13 +195,51 @@ export function HomeScreen({
             )
           })}
         </div>
+
+        {/* 今日の時間割。ホームを1画面に収めるため、別のカードにせずこの1週間のカードの下に入れる。
+            押すと時間割の画面で登録・編集できる（記録や職業の発見とはつなげない） */}
+        <button
+          type="button"
+          onClick={onOpenTimetable}
+          className="-mx-2 mt-1 rounded-2xl border-t border-border-soft px-2 pt-2.5 pb-0.5 text-left transition hover:bg-sage-50"
+        >
+          {todayTimetable ? (
+            <>
+              <span className="flex items-center justify-between">
+                <span className="text-xs font-bold text-charcoal-muted">{todayTimetable.heading}</span>
+                <ChevronRight className="h-4 w-4 text-charcoal-muted" />
+              </span>
+              <span className="mt-1.5 grid grid-cols-6 gap-1">
+                {todayTimetable.periods.map((subject, i) => (
+                  <span
+                    key={i}
+                    className={
+                      "flex items-baseline justify-center gap-0.5 rounded-lg py-1 " +
+                      (subject ? "bg-sage-50 text-sage-700" : "text-charcoal-muted")
+                    }
+                  >
+                    <span className="text-xs">{i + 1}</span>
+                    <span className="text-sm font-bold">{subject ? shortSubject(subject) : "−"}</span>
+                  </span>
+                ))}
+              </span>
+            </>
+          ) : (
+            <span className="flex items-center justify-between gap-2 text-sm">
+              <span className="text-charcoal-muted">時間割を登録すると、今日の授業がここに出るよ</span>
+              <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
+            </span>
+          )}
+        </button>
       </div>
+
 
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 max-lg:[@media(max-height:740px)]:gap-3">
+      <div className="flex flex-1 flex-col gap-3 lg:gap-4">
       {/* 振り返り: 最近見つけた仕事。見つけて終わりにせず、もう一度開くきっかけにする。
-          スマホでは今日見つけた仕事が上に出ている日は1件に減らし、画面の低い端末では欄ごと隠す。
+          スマホでは今日見つけた仕事が上に出ている日は1件、時間割を登録しているときは2件に減らし、
+          画面の低い端末では欄ごと隠す。
           パソコンは右の列を使えるので5件まで出す */}
       <div className={todaysDiscoveredJob ? "max-lg:[@media(max-height:740px)]:hidden" : undefined}>
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted lg:text-sm">最近見つけた仕事</p>
@@ -204,7 +250,7 @@ export function HomeScreen({
               <li
                 key={job.jobId}
                 className={
-                  i >= (todaysDiscoveredJob ? 1 : 3)
+                  i >= (todaysDiscoveredJob ? 1 : todayTimetable ? 2 : 3)
                     ? "max-lg:hidden"
                     : i > 0
                       ? "max-lg:[@media(max-height:740px)]:hidden"
