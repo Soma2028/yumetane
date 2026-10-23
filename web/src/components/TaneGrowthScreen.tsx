@@ -15,7 +15,6 @@ interface Props {
 }
 
 const ROOM_HEIGHT = 320
-const WALL_HEIGHT = Math.round(ROOM_HEIGHT / 3)
 
 function PlantPot() {
   return (
@@ -44,6 +43,12 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
   const pct = Math.min(100, Math.round(((zukanCount - currentMin) / (goal - currentMin)) * 100))
   const remaining = Math.max(0, goal - zukanCount)
 
+  // 画面の低い端末（iPhone SEなど）では、部屋の絵と余白を小さくして1画面に収める
+  // （これまでの記録が7教科あると169pxはみ出していた）
+  const compact = typeof window !== "undefined" && window.matchMedia("(max-height: 740px)").matches
+  const roomHeight = compact ? 196 : ROOM_HEIGHT
+  const wallHeight = Math.round(roomHeight / 3)
+
   return (
     <motion.div
       className="mx-auto flex min-h-screen max-w-md flex-col"
@@ -55,20 +60,20 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
       }}
     >
       {/* タネの部屋 */}
-      <div className="relative shrink-0 overflow-hidden" style={{ height: ROOM_HEIGHT }}>
+      <div className="relative shrink-0 overflow-hidden" style={{ height: roomHeight }}>
         <h2 className="sr-only">タネの部屋</h2>
 
-        <div className="absolute inset-x-0 top-0" style={{ height: WALL_HEIGHT, backgroundColor: "#EBF2ED" }} />
+        <div className="absolute inset-x-0 top-0" style={{ height: wallHeight, backgroundColor: "#EBF2ED" }} />
         <div
           className="absolute inset-x-0 bottom-0"
           style={{
-            top: WALL_HEIGHT,
+            top: wallHeight,
             backgroundColor: "#F5EDD8",
             backgroundImage:
               "repeating-linear-gradient(to bottom, transparent 0px, transparent 20px, rgba(180,150,90,0.14) 20px, rgba(180,150,90,0.14) 22px)",
           }}
         />
-        <div className="absolute inset-x-0" style={{ top: WALL_HEIGHT, height: 2, backgroundColor: "#D4C4A8" }} />
+        <div className="absolute inset-x-0" style={{ top: wallHeight, height: 2, backgroundColor: "#D4C4A8" }} />
 
         <BackButton onClick={() => setIsClosing(true)} className="absolute left-4 top-4 z-10" />
 
@@ -76,18 +81,18 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
           <RoomWindow />
         </div>
 
-        <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: 20 }}>
-          <TaneCharacter count={zukanCount} size={160} />
-          <div style={{ marginTop: -44 }}>
+        <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: compact ? 10 : 20 }}>
+          <TaneCharacter count={zukanCount} size={compact ? 112 : 160} />
+          <div style={{ marginTop: compact ? -30 : -44, transform: compact ? "scale(0.75)" : undefined, transformOrigin: "top center" }}>
             <PlantPot />
           </div>
         </div>
       </div>
 
       {/* 情報パネル */}
-      <div className="flex-1 rounded-t-3xl bg-cream px-6 py-6 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
+      <div className="flex-1 rounded-t-3xl bg-cream px-6 py-6 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] [@media(max-height:740px)]:py-4">
         <div className="divide-y divide-border-soft">
-          <section className="pb-5">
+          <section className="pb-5 [@media(max-height:740px)]:pb-3">
             <p className="text-sm font-bold tracking-wide text-sage-600">STAGE {stage} / 4</p>
             <div className="mt-2 h-2.5 w-full rounded-full bg-sage-50">
               <div className="h-2.5 rounded-full bg-sage-600 transition-all" style={{ width: `${pct}%` }} />
@@ -104,12 +109,12 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
             </p>
           </section>
 
-          <section className="py-5">
+          <section className="py-5 [@media(max-height:740px)]:py-3">
             <p className="mb-2 text-xs font-bold text-sage-700">タネからのひとこと</p>
             <p className="text-base leading-relaxed text-charcoal">🌱「{taneComment(mostStudied)}」</p>
           </section>
 
-          <section className="pt-5">
+          <section className="pt-5 [@media(max-height:740px)]:pt-3">
             <p className="mb-3 font-bold">これまでの記録</p>
             {subjectStats.length === 0 ? (
               <p className="text-sm text-charcoal-muted">まだ記録がありません</p>

@@ -1,6 +1,7 @@
 import { Star } from "lucide-react"
 import type { ZukanEntry } from "../storage"
 import { BackButton } from "./BackButton"
+import { Phrase } from "./Phrase"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -20,9 +21,19 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
       <p className="text-sm text-charcoal-muted">気になる、と保存した仕事。</p>
 
       {tane.length === 0 ? (
-        <p className="text-center text-charcoal-muted">
-          まだタネがありません。見つけた仕事で「気になる」を押すと、ここに保存されます。
-        </p>
+        // 0件のときは、どのボタンを押せば保存されるかを、ボタンと同じ見た目で示す
+        <div className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-border-soft px-6 py-8 text-center">
+          <p className="leading-relaxed text-charcoal-muted">
+            <Phrase>まだタネがないよ。</Phrase>
+            <Phrase>見つけた仕事の画面で、</Phrase>
+            <Phrase>このボタンを押すと</Phrase>
+            <Phrase>ここに集まるよ。</Phrase>
+          </p>
+          <span className="flex items-center gap-2 rounded-full border border-border-soft bg-white px-5 py-2.5 text-sm font-bold text-charcoal-muted">
+            <Star className="h-4 w-4" strokeWidth={1.5} />
+            気になる（タネに保存）
+          </span>
+        </div>
       ) : (
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           {tane.map((entry) => (

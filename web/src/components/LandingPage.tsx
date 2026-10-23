@@ -7,6 +7,7 @@ import { TagIcon } from "../tagIcons"
 import { STAGE_MIN } from "../taneStage"
 import { SproutIcon } from "./SproutIcon"
 import { TaneCharacter } from "./TaneCharacter"
+import { Phrase } from "./Phrase"
 
 interface Props {
   onStart: () => void
@@ -127,10 +128,14 @@ export function LandingPage({ onStart }: Props) {
         </div>
 
         <motion.div variants={fadeUp} className="mt-12 text-center">
+          {/* 狭い画面で「ありませ／ん。」のように言葉が割れないよう、文節ごとに囲む（Phrase） */}
           <p className="text-base font-medium leading-loose lg:text-xl">
-            夢が無いのは、意欲が無いからではありません。
+            <Phrase>夢が無いのは、</Phrase>
+            <Phrase>意欲が無いからではありません。</Phrase>
             <br />
-            多くの場合、知っている職業の数がそもそも少ないだけです。
+            <Phrase>多くの場合、</Phrase>
+            <Phrase>知っている職業の数が</Phrase>
+            <Phrase>そもそも少ないだけです。</Phrase>
           </p>
           <p className="mt-3 text-xl font-bold leading-snug tracking-[-0.02em] lg:text-3xl">
             知らない選択肢は、選びようがない。
@@ -166,7 +171,7 @@ export function LandingPage({ onStart }: Props) {
               </span>
               <BookOpen className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
               <p className="font-bold lg:text-lg">勉強を記録する</p>
-              <p className="text-xs text-charcoal-muted lg:text-sm">今日勉強した教科を選ぶだけ</p>
+              <p className="text-xs text-charcoal-muted lg:text-sm"><Phrase>今日勉強した</Phrase><Phrase>教科を選ぶだけ</Phrase></p>
             </div>
           </motion.div>
 
@@ -188,8 +193,8 @@ export function LandingPage({ onStart }: Props) {
                 02
               </span>
               <Search className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
-              <p className="font-bold lg:text-lg">関連する職業が見つかる</p>
-              <p className="text-xs text-charcoal-muted lg:text-sm">その教科をよく使う仕事を紹介</p>
+              <p className="font-bold lg:text-lg"><Phrase>関連する職業が</Phrase><Phrase>見つかる</Phrase></p>
+              <p className="text-xs text-charcoal-muted lg:text-sm"><Phrase>その教科を</Phrase><Phrase>よく使う仕事を紹介</Phrase></p>
             </div>
           </motion.div>
 
@@ -212,7 +217,7 @@ export function LandingPage({ onStart }: Props) {
               </span>
               <BookMarked className="h-8 w-8 text-sage-600 lg:h-10 lg:w-10" strokeWidth={1.5} />
               <p className="font-bold lg:text-lg">図鑑が埋まっていく</p>
-              <p className="text-xs text-charcoal-muted lg:text-sm">気になった仕事は「タネ」に保存</p>
+              <p className="text-xs text-charcoal-muted lg:text-sm"><Phrase>気になった仕事は</Phrase><Phrase>「タネ」に保存</Phrase></p>
             </div>
           </motion.div>
         </div>
@@ -222,7 +227,8 @@ export function LandingPage({ onStart }: Props) {
           className="mx-auto mt-12 max-w-xl rounded-2xl bg-sage-50 px-6 py-5 text-center lg:max-w-2xl lg:py-6"
         >
           <p className="text-base font-medium leading-loose lg:text-lg">
-            勉強するたびに、新しい仕事に出会える。
+            <Phrase>勉強するたびに、</Phrase>
+            <Phrase>新しい仕事に出会える。</Phrase>
           </p>
         </motion.div>
       </motion.section>
@@ -249,11 +255,11 @@ export function LandingPage({ onStart }: Props) {
           >
             <img
               src={screenshotHome}
-              alt="ホーム画面。今日勉強した教科を選ぶ"
+              alt="ホーム画面。今日の勉強を記録するボタンと、最近見つけた仕事が並ぶ"
               className="w-full max-w-[220px] rounded-2xl border border-border-soft shadow-sm"
             />
             <figcaption className="text-sm text-charcoal-muted">
-              今日勉強した教科を選ぶだけ
+              毎日、勉強を記録するだけ
             </figcaption>
           </motion.figure>
           <motion.figure

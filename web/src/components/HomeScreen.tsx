@@ -272,13 +272,13 @@ function NavButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3 pb-2.5 transition hover:border-sage-600 active:scale-95"
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3 pb-2.5 transition hover:border-sage-600 active:scale-95 max-lg:[@media(max-height:740px)]:pt-2"
     >
       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sage-50">
         <Icon className="h-5 w-5 text-sage-600" strokeWidth={1.75} />
       </span>
       <span className="text-sm font-bold">{label}</span>
-      <span className="text-[11px] leading-tight text-charcoal-muted">{detail}</span>
+      <span className="text-xs leading-tight text-charcoal-muted">{detail}</span>
     </button>
   )
 }

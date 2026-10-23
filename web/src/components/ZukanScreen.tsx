@@ -1,5 +1,6 @@
 import type { ZukanEntry } from "../storage"
 import { BackButton } from "./BackButton"
+import { Phrase } from "./Phrase"
 
 interface Props {
   zukan: ZukanEntry[]
@@ -58,9 +59,22 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
       </div>
 
       {sorted.length === 0 ? (
-        <p className="text-center text-charcoal-muted">
-          まだ何も見つかっていません。ホームから勉強を記録しよう。
-        </p>
+        // 0件のときは、次に何をすればいいかと、その場所への導線を出す
+        <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-border-soft px-6 py-8 text-center">
+          <p className="leading-relaxed text-charcoal-muted">
+            <Phrase>まだ何も見つかっていないよ。</Phrase>
+            <Phrase>勉強を記録すると、</Phrase>
+            <Phrase>その教科をよく使う仕事が</Phrase>
+            <Phrase>ひとつずつ集まっていくよ。</Phrase>
+          </p>
+          <button
+            type="button"
+            onClick={onBack}
+            className="rounded-full bg-coral-500 px-8 py-3 font-bold text-white transition active:bg-coral-600"
+          >
+            ホームで記録する
+          </button>
+        </div>
       ) : (
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           {sorted.map((entry) => (

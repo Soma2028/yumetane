@@ -5,6 +5,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import { formatMinutes } from "../format"
 import type { StudyLogEntry, SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
 import { BackButton } from "./BackButton"
+import { Phrase } from "./Phrase"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
@@ -241,7 +242,8 @@ export function KirokuScreen({
             </p>
           ) : (
             <p className="text-sm font-medium leading-relaxed text-sage-700">
-              まだ記録がないよ。今日の勉強を記録してみよう。
+              <Phrase>まだ記録がないよ。</Phrase>
+              <Phrase>今日の勉強を記録してみよう。</Phrase>
             </p>
           )}
         </motion.div>
@@ -262,7 +264,7 @@ export function KirokuScreen({
           {/* パソコンでは、左にカレンダーと凡例、右に選んだ日の記録を並べる */}
           <div>
           <p className="font-bold">過去30日間</p>
-          <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[10px] text-charcoal-muted">
+          <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-xs text-charcoal-muted">
             {WEEKDAY_LABELS.map((label) => (
               <span key={label}>{label}</span>
             ))}
@@ -283,7 +285,7 @@ export function KirokuScreen({
                         (selectedDate === date ? "bg-sage-50 ring-2 ring-sage-600" : "hover:bg-sage-50")
                       }
                     >
-                      <span className="text-[10px] text-charcoal-muted">
+                      <span className="text-xs text-charcoal-muted">
                         {new Date(`${date}T00:00:00`).getDate()}
                       </span>
                       {/* 職業が見つかるのは勉強した日だけで、ほぼ毎日重なるため、色は「勉強した日」の1つに
