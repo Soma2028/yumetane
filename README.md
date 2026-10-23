@@ -35,6 +35,14 @@
 
 ログインは無く、記録はすべて端末の`localStorage`だけに保存する。個人情報を取らない。
 
+スマホのホーム画面に追加でき、追加したアイコンから開くとアプリのように全画面で
+ホームから始まる。iOSのSafariは、7日間操作の無いサイトの`localStorage`を消す
+（[WebKitのTracking Prevention](https://webkit.org/tracking-prevention/)）が、
+ホーム画面に追加したWebアプリはその対象外のため、iPhone・iPadのブラウザで開いている
+ときだけホームに追加の手順を案内している。ホーム画面のアプリとSafariのデータは別々に
+保存されるため、Safariで記録した分は引き継がれない（書き出し・読み込みは未実装）。
+経緯は[docs/design.md](docs/design.md)「データの持ち方」を参照。
+
 ## なぜ作ったか
 
 中学生のとき、将来の夢がありませんでした。高校は、
@@ -97,7 +105,7 @@
    [docs/questions.md](docs/questions.md)に記録している
 
 その他の設計判断（相関を因果に見せない文言設計、`localStorage`のみで状態を持つ
-構成、API廃止の経緯など）も[docs/design.md](docs/design.md)にまとめている。
+構成、API廃止の経緯、Safariで記録が消える問題への対策など）も[docs/design.md](docs/design.md)にまとめている。
 
 ## 技術スタック
 
