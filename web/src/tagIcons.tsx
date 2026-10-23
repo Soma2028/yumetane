@@ -1,3 +1,4 @@
+import { createElement } from "react"
 import {
   Armchair,
   Calendar,
@@ -57,7 +58,16 @@ const TAG_ICONS: Record<string, LucideIcon> = {
 
 const DEFAULT_ICON: LucideIcon = Wrench
 
-export function iconForTags(tags: string[]): LucideIcon {
+function iconForTags(tags: string[]): LucideIcon {
   const first = tags[0]
   return (first && TAG_ICONS[first]) || DEFAULT_ICON
+}
+
+/**
+ * タグに対応するアイコンを描く。描画中にiconForTagsの戻り値を<Icon />として
+ * 使うと、レンダーごとに別コンポーネント扱いになりうる（lint: static-components）
+ * ため、こちらを使う。
+ */
+export function TagIcon({ tags, className, strokeWidth }: { tags: string[]; className?: string; strokeWidth?: number }) {
+  return createElement(iconForTags(tags), { className, strokeWidth })
 }

@@ -3,7 +3,7 @@ import { ArrowDown, ArrowRight, BookMarked, BookOpen, Search } from "lucide-reac
 import screenshotDiscovery from "../assets/lp/screenshot_discovery.png"
 import screenshotHome from "../assets/lp/screenshot_home.png"
 import screenshotZukan from "../assets/lp/screenshot_zukan.png"
-import { iconForTags } from "../tagIcons"
+import { TagIcon } from "../tagIcons"
 import { STAGE_MIN } from "../taneStage"
 import { SproutIcon } from "./SproutIcon"
 import { TaneCharacter } from "./TaneCharacter"
@@ -358,7 +358,6 @@ const DEMO_JOB = {
   description:
     "精密測定機器、光学機器、医療用機器など高い精度が要求される機械の研究開発、設計、及び製造工程の技術開発、管理を行う。",
 }
-const DemoIcon = iconForTags(DEMO_JOB.tags)
 
 /** 「数学を記録 → 仕事が見つかる」の一連を、発見画面と同じ見た目で縮小して見せる。 */
 function DiscoveryDemo() {
@@ -391,7 +390,7 @@ function DiscoveryDemo() {
         className="mt-4 overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
       >
         <div className="flex h-16 items-center justify-center bg-sage-100">
-          <DemoIcon className="h-9 w-9 text-sage-600" strokeWidth={1.5} />
+          <TagIcon tags={DEMO_JOB.tags} className="h-9 w-9 text-sage-600" strokeWidth={1.5} />
         </div>
         <div className="px-4 pt-4 pb-5 text-left">
           <h3 className="text-xl font-bold leading-snug tracking-tight">{DEMO_JOB.name}</h3>

@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react"
+import { Suspense, lazy, useEffect, useRef, useState } from "react"
 import { discover, fetchAreas, fetchJob, fetchSubjects } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
-import { KirokuScreen } from "./components/KirokuScreen"
 import { LandingPage } from "./components/LandingPage"
 import { TaneGrowthScreen } from "./components/TaneGrowthScreen"
 import { TaneScreen } from "./components/TaneScreen"
@@ -32,6 +31,11 @@ import {
 } from "./storage"
 import { stageFromCount } from "./taneStage"
 import type { DiscoverResponse, Job, Subject } from "./types"
+
+// きろく画面だけがグラフ（recharts）を使い、バンドルの大半を占める。LPとホームを
+// 軽くするため別チャンクに分け、ホームを開いた時点で裏で先読みしておく。
+const loadKirokuScreen = () => import("./components/KirokuScreen")
+const KirokuScreen = lazy(() => loadKirokuScreen().then((m) => ({ default: m.KirokuScreen })))
 
 type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku" | "growth"
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
@@ -69,6 +73,10 @@ function App() {
         // 図鑑画面に入るまで使わないので、ここでの失敗は致命的ではない
       })
   }, [])
+
+  useEffect(() => {
+    if (screen === "home") void loadKirokuScreen()
+  }, [screen])
 
   function updateAppState(next: AppState) {
     setAppState(next)
@@ -249,19 +257,21 @@ function App() {
 
   if (screen === "kiroku") {
     return (
-      <KirokuScreen
-        calendarDates={last30Dates()}
-        studiedDates={studiedDatesSet(appState)}
-        discoveredDates={discoveredDatesSet(appState)}
-        thisWeek={weekSummary(appState, 0)}
-        lastWeek={weekSummary(appState, 1)}
-        weeklySubjectTotals={weeklySubjectTotals(appState)}
-        subjectJobHistory={subjectJobHistory(appState)}
-        mostStudied={mostStudiedDiscoverable(appState)}
-        specialSubjects={specialSubjectNames}
-        onBack={() => setScreen("home")}
-        onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
-      />
+      <Suspense fallback={null}>
+        <KirokuScreen
+          calendarDates={last30Dates()}
+          studiedDates={studiedDatesSet(appState)}
+          discoveredDates={discoveredDatesSet(appState)}
+          thisWeek={weekSummary(appState, 0)}
+          lastWeek={weekSummary(appState, 1)}
+          weeklySubjectTotals={weeklySubjectTotals(appState)}
+          subjectJobHistory={subjectJobHistory(appState)}
+          mostStudied={mostStudiedDiscoverable(appState)}
+          specialSubjects={specialSubjectNames}
+          onBack={() => setScreen("home")}
+          onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
+        />
+      </Suspense>
     )
   }
 

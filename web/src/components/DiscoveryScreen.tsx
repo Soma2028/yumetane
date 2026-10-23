@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { Star } from "lucide-react"
 import { useState } from "react"
-import { iconForTags } from "../tagIcons"
+import { TagIcon } from "../tagIcons"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 import type { Job } from "../types"
@@ -51,8 +51,6 @@ export function DiscoveryScreen({
     )
   }
 
-  const Icon = iconForTags(job.tags)
-
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
       {allDiscovered && <PetalConfetti />}
@@ -84,7 +82,7 @@ export function DiscoveryScreen({
         transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
       >
         <div className="flex h-24 items-center justify-center bg-sage-100">
-          <Icon className="h-12 w-12 text-sage-600" strokeWidth={1.5} />
+          <TagIcon tags={job.tags} className="h-12 w-12 text-sage-600" strokeWidth={1.5} />
         </div>
         <div className="px-5 pt-5 pb-6">
           <h3 className="text-2xl font-bold leading-snug tracking-tight">{job.job_name}</h3>
