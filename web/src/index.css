@@ -24,6 +24,14 @@
     system-ui, sans-serif;
 }
 
+/* iPhoneでは、画面に収まっているページでも引っぱると全体が上下に弾む（バウンス）。
+   アプリとして使う画面が指に合わせて動かないよう止める（スクロールできる長い画面は
+   これまでどおりスクロールできる） */
+html,
+body {
+  overscroll-behavior: none;
+}
+
 body {
   background-color: var(--color-cream);
   background-image: repeating-radial-gradient(
