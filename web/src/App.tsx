@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react"
+import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from "react"
 import { discover, fetchAreas, fetchJob, fetchSubjects } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
@@ -30,6 +30,7 @@ import {
   type AppState,
   type RecordDetails,
 } from "./storage"
+import { reloadForStaleChunk, takeResumeScreen } from "./staleChunk"
 import { stageFromCount } from "./taneStage"
 import type { KirokuTab } from "./components/KirokuScreen"
 import type { DiscoverResponse, Job, Subject } from "./types"
@@ -44,14 +45,50 @@ function isStandaloneApp(): boolean {
 }
 
 const loadKirokuScreen = () => import("./components/KirokuScreen")
-const KirokuScreen = lazy(() => loadKirokuScreen().then((m) => ({ default: m.KirokuScreen })))
+// 実際に開くときに読み込めなければ、デプロイで古いファイルが消えたとみなして読み込み直す
+const KirokuScreen = lazy(() =>
+  loadKirokuScreen().then(
+    (m) => ({ default: m.KirokuScreen }),
+    (err) => {
+      if (reloadForStaleChunk("kiroku")) return new Promise<never>(() => {}) // 読み込み直すまで待つ
+      throw err
+    },
+  ),
+)
+
+/** 読み込み直しても画面を読み込めなかったとき（通信が無い等）に、真っ白にせず案内を出す。 */
+class LoadErrorBoundary extends Component<{ onBack: () => void; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  render() {
+    if (!this.state.failed) return this.props.children
+    return (
+      <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
+        <p className="font-bold">画面を読み込めませんでした</p>
+        <p className="text-sm leading-relaxed text-charcoal-muted">通信のよいところで、もう一度ひらいてみてね。</p>
+        <button
+          type="button"
+          onClick={this.props.onBack}
+          className="rounded-full bg-sage-600 px-8 py-3 font-bold text-white transition active:bg-sage-700"
+        >
+          ホームにもどる
+        </button>
+      </div>
+    )
+  }
+}
 
 type Screen = "top" | "home" | "discovery" | "zukan" | "tane" | "detail" | "kiroku" | "growth"
 type DetailReturnScreen = "home" | "zukan" | "tane" | "kiroku"
 
 function App() {
   // ホーム画面に追加したアプリとして開いたときは、毎回LPを通さずホームから始める
-  const [screen, setScreen] = useState<Screen>(() => (isStandaloneApp() ? "home" : "top"))
+  const [screen, setScreen] = useState<Screen>(() => {
+    if (takeResumeScreen() === "kiroku") return "kiroku"
+    return isStandaloneApp() ? "home" : "top"
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -88,7 +125,8 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (screen === "home") void loadKirokuScreen()
+    // 先読みの失敗は無視する（実際に開いたときに読み込み直す）
+    if (screen === "home") loadKirokuScreen().catch(() => {})
   }, [screen])
 
   function updateAppState(next: AppState) {
@@ -276,27 +314,29 @@ function App() {
 
   if (screen === "kiroku") {
     return (
-      <Suspense fallback={null}>
-        <KirokuScreen
-          tab={kirokuTab}
-          onChangeTab={setKirokuTab}
-          selectedDate={kirokuDate}
-          onSelectDate={setKirokuDate}
-          calendarDates={last30Dates()}
-          studiedDates={studiedDatesSet(appState)}
-          discoveredDates={discoveredDatesSet(appState)}
-          thisWeek={weekSummary(appState, 0)}
-          lastWeek={weekSummary(appState, 1)}
-          weeklySubjectTotals={weeklySubjectTotals(appState)}
-          subjectJobHistory={subjectJobHistory(appState)}
-          mostStudied={mostStudiedDiscoverable(appState)}
-          specialSubjects={specialSubjectNames}
-          logs={appState.logs}
-          jobNames={new Map(appState.zukan.map((e) => [e.jobId, e.jobName]))}
-          onBack={() => setScreen("home")}
-          onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
-        />
-      </Suspense>
+      <LoadErrorBoundary onBack={() => setScreen("home")}>
+        <Suspense fallback={null}>
+          <KirokuScreen
+            tab={kirokuTab}
+            onChangeTab={setKirokuTab}
+            selectedDate={kirokuDate}
+            onSelectDate={setKirokuDate}
+            calendarDates={last30Dates()}
+            studiedDates={studiedDatesSet(appState)}
+            discoveredDates={discoveredDatesSet(appState)}
+            thisWeek={weekSummary(appState, 0)}
+            lastWeek={weekSummary(appState, 1)}
+            weeklySubjectTotals={weeklySubjectTotals(appState)}
+            subjectJobHistory={subjectJobHistory(appState)}
+            mostStudied={mostStudiedDiscoverable(appState)}
+            specialSubjects={specialSubjectNames}
+            logs={appState.logs}
+            jobNames={new Map(appState.zukan.map((e) => [e.jobId, e.jobName]))}
+            onBack={() => setScreen("home")}
+            onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
+          />
+        </Suspense>
+      </LoadErrorBoundary>
     )
   }
 
