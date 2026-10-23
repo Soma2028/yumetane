@@ -2,6 +2,7 @@ import { ChevronRight, Flame } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import type { RecordDetails, StudyLogEntry } from "../storage"
+import { stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
@@ -58,6 +59,9 @@ export function HomeScreen({
   const [content, setContent] = useState("")
   const [memo, setMemo] = useState("")
 
+  const { nextThreshold } = stageProgress(zukanCount)
+  const growthLabel = nextThreshold !== null ? `あと${nextThreshold - zukanCount}件で育つ` : "タネの部屋"
+
   const minutes = Number(minutesInput) || 0
   const canSubmit = subject !== null && minutes >= 10
 
@@ -81,15 +85,21 @@ export function HomeScreen({
             {streak}日連続
           </span>
         )}
+        <h1 className="sr-only">夢のタネ</h1>
+        {/* タネを押すとタネの部屋（育成画面）へ。キャラクターだけでは押せると分からない
+            ため、下に矢印付きのピルを添え、次に育つまでの件数を見せて押す理由にする */}
         <button
           type="button"
           onClick={onOpenGrowth}
-          className="cursor-pointer transition-transform active:scale-95"
-          aria-label="タネのせいちょうを見る"
+          className="group flex cursor-pointer flex-col items-center gap-1 transition-transform active:scale-95"
+          aria-label={`タネの部屋を見る（${growthLabel}）`}
         >
           <TaneCharacter count={zukanCount} size={96} />
+          <span className="flex items-center gap-0.5 rounded-full border border-border-soft bg-white py-1 pr-2 pl-3 text-xs font-bold text-sage-700 shadow-sm transition group-hover:border-sage-600">
+            {growthLabel}
+            <ChevronRight className="h-3.5 w-3.5" />
+          </span>
         </button>
-        <h1 className="text-lg font-bold tracking-tight">夢のタネ</h1>
       </div>
 
       {/* 主役: 今日の成果（見つかった仕事）。無ければ何も出さず、下のCTAが主役になる */}
