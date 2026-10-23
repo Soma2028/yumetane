@@ -137,7 +137,7 @@ https://shigoto.mhlw.go.jp/User/download
 ### データの流れ
 
 ```mermaid
-flowchart LR
+flowchart TD
   raw["job tag 生CSV<br/>data/raw/（Git管理外）"] --> nb["notebooks/01〜08<br/>RIASEC補完・認知度ラベル・<br/>教科スコア"]
   nb --> csv["data/processed/jobs.csv<br/>167職業"]
   csv --> logic["api/app/<br/>候補プール・重み・タグ・エリア"]
