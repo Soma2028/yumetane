@@ -1,8 +1,9 @@
-import { ChevronRight, Flame } from "lucide-react"
+import { BarChart3, BookOpen, ChevronRight, Flame, Star, type LucideIcon } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import type { RecordDetails, StudyLogEntry } from "../storage"
-import { stageProgress } from "../taneStage"
+import { formatMinutes } from "../format"
+import { MAX_JOB_COUNT, stageProgress } from "../taneStage"
 import { TaneCharacter } from "./TaneCharacter"
 import { TaneSpeech } from "./TaneSpeech"
 
@@ -16,6 +17,9 @@ interface Props {
   todaysTotalMinutes: number
   streak: number
   zukanCount: number
+  taneCount: number
+  /** 直近7日間の合計勉強時間（分）。きろくボタンに出す。 */
+  weeklyMinutes: number
   todaysDiscoveredJob: { jobId: number; jobName: string } | null
   /** 最近見つけた仕事（今日の分を除き、新しい順に最大3件）。 */
   recentJobs: { jobId: number; jobName: string; subject: string }[]
@@ -38,6 +42,8 @@ export function HomeScreen({
   todaysTotalMinutes,
   streak,
   zukanCount,
+  taneCount,
+  weeklyMinutes,
   todaysDiscoveredJob,
   recentJobs,
   toast,
@@ -330,32 +336,44 @@ export function HomeScreen({
       </div>
 
       {/* 行動する（次へ）: 深掘り先への導線 */}
-      <div className="mt-auto grid grid-cols-3 gap-3">
-        <button
-          type="button"
-          onClick={onOpenZukan}
-          className="rounded-2xl border border-border-soft bg-white py-4 text-center transition hover:border-sage-600"
-        >
-          <p className="text-lg font-bold">{zukanCount}</p>
-          <p className="text-xs text-charcoal-muted">職業図鑑</p>
-        </button>
-        <button
-          type="button"
-          onClick={onOpenTane}
-          className="rounded-2xl border border-border-soft bg-white py-4 text-center transition hover:border-sage-600"
-        >
-          <p className="text-lg font-bold">タネ</p>
-          <p className="text-xs text-charcoal-muted">気になる仕事</p>
-        </button>
-        <button
-          type="button"
+      {/* 3つとも「アイコン・名前・今の状態」の同じ形にそろえる（以前は図鑑だけ数字が主役で、
+          何のボタンか読み取りにくかった） */}
+      <nav aria-label="ほかの画面" className="mt-auto grid grid-cols-3 gap-3">
+        <NavButton icon={BookOpen} label="職業図鑑" detail={`${zukanCount}/${MAX_JOB_COUNT}件`} onClick={onOpenZukan} />
+        <NavButton icon={Star} label="タネ" detail={`保存${taneCount}件`} onClick={onOpenTane} />
+        <NavButton
+          icon={BarChart3}
+          label="きろく"
+          detail={weeklyMinutes > 0 ? `今週${formatMinutes(weeklyMinutes)}` : "今週まだなし"}
           onClick={onOpenKiroku}
-          className="rounded-2xl border border-border-soft bg-white py-4 text-center transition hover:border-sage-600"
-        >
-          <p className="text-lg font-bold">きろく</p>
-          <p className="text-xs text-charcoal-muted">記録の分析</p>
-        </button>
-      </div>
+        />
+      </nav>
     </div>
+  )
+}
+
+function NavButton({
+  icon: Icon,
+  label,
+  detail,
+  onClick,
+}: {
+  icon: LucideIcon
+  label: string
+  detail: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex flex-col items-center gap-1.5 rounded-2xl border border-border-soft bg-white px-1 pt-3.5 pb-3 transition hover:border-sage-600 active:scale-95"
+    >
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sage-50">
+        <Icon className="h-5 w-5 text-sage-600" strokeWidth={1.75} />
+      </span>
+      <span className="text-sm font-bold">{label}</span>
+      <span className="text-[11px] leading-tight text-charcoal-muted">{detail}</span>
+    </button>
   )
 }
