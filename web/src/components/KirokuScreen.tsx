@@ -1,9 +1,9 @@
 import { motion } from "framer-motion"
-import { ArrowDown, ArrowUp, ChevronDown, Minus } from "lucide-react"
+import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, Minus } from "lucide-react"
 import { useState } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import { formatMinutes } from "../format"
-import type { SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
+import type { StudyLogEntry, SubjectJobRow, SubjectTotal, WeekSummary } from "../storage"
 import { BackButton } from "./BackButton"
 
 const DONUT_COLORS = ["#2F6B4F", "#E8734A", "#24543d", "#d35f38", "#f0916a", "#6b6358", "#8a5a22"]
@@ -29,6 +29,11 @@ function formatShortDate(iso: string): string {
 function formatDateLabel(dateStr: string): string {
   const d = new Date(`${dateStr}T00:00:00`)
   return `${d.getMonth() + 1}/${d.getDate()}`
+}
+
+function formatDayHeading(dateStr: string): string {
+  const d = new Date(`${dateStr}T00:00:00`)
+  return `${d.getMonth() + 1}月${d.getDate()}日（${WEEKDAY_LABELS[d.getDay()]}）`
 }
 
 /** 30日分の日付を月カレンダー形式（週×7列）に並べる。先頭・末尾は曜日を揃えるnullパディング。 */
@@ -57,6 +62,9 @@ interface Props {
   subjectJobHistory: SubjectJobRow[]
   mostStudied: SubjectTotal | null
   specialSubjects: string[]
+  /** カレンダーで選んだ日の記録を出すための、全期間の学習ログと発見した職業名。 */
+  logs: StudyLogEntry[]
+  jobNames: Map<number, string>
   onBack: () => void
   onSelectJob: (jobId: number) => void
 }
@@ -71,10 +79,14 @@ export function KirokuScreen({
   subjectJobHistory,
   mostStudied,
   specialSubjects,
+  logs,
+  jobNames,
   onBack,
   onSelectJob,
 }: Props) {
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const selectedLogs = selectedDate ? logs.filter((l) => l.date === selectedDate) : []
   const flavor = mostStudied ? (SUBJECT_FLAVOR[mostStudied.subject] ?? "いろいろな") : null
   const weeks = buildCalendarWeeks(calendarDates)
 
@@ -135,7 +147,17 @@ export function KirokuScreen({
             <div key={wi} className="grid grid-cols-7 gap-1.5">
               {week.map((date, di) =>
                 date ? (
-                  <div key={date} className="flex flex-col items-center gap-0.5">
+                  <button
+                    key={date}
+                    type="button"
+                    onClick={() => setSelectedDate(selectedDate === date ? null : date)}
+                    aria-pressed={selectedDate === date}
+                    aria-label={`${formatDayHeading(date)}の記録を見る`}
+                    className={
+                      "flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl transition active:scale-95 " +
+                      (selectedDate === date ? "bg-sage-50 ring-2 ring-sage-600" : "hover:bg-sage-50")
+                    }
+                  >
                     <span className="text-[10px] text-charcoal-muted">
                       {new Date(`${date}T00:00:00`).getDate()}
                     </span>
@@ -151,7 +173,7 @@ export function KirokuScreen({
                               : { backgroundColor: "#e4dfd5" }
                       }
                     />
-                  </div>
+                  </button>
                 ) : (
                   <div key={`empty-${wi}-${di}`} />
                 ),
@@ -159,6 +181,48 @@ export function KirokuScreen({
             </div>
           ))}
         </div>
+        {/* 選んだ日の記録。カレンダーの点だけでは何をした日か分からないため、押して開けるようにする */}
+        {selectedDate ? (
+          <div className="mt-4 rounded-2xl bg-cream p-4">
+            <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
+            {selectedLogs.length === 0 ? (
+              <p className="mt-2 text-sm text-charcoal-muted">この日の記録はないよ</p>
+            ) : (
+              <ul className="mt-2 flex flex-col gap-2">
+                {selectedLogs.map((log, i) => (
+                  <li key={i} className="rounded-xl border border-border-soft bg-white px-3 py-2 text-sm">
+                    <div className="flex items-center justify-between font-medium">
+                      <span>{log.subject}</span>
+                      <span className="text-charcoal-muted">{formatMinutes(log.minutes)}</span>
+                    </div>
+                    {(log.material || log.content) && (
+                      <p className="mt-0.5 text-xs text-charcoal-muted">
+                        {[log.material, log.content].filter(Boolean).join(" ・ ")}
+                      </p>
+                    )}
+                    {log.memo && <p className="mt-0.5 text-xs text-charcoal-muted">「{log.memo}」</p>}
+                    {log.discoveredJobId !== null && jobNames.has(log.discoveredJobId) && (
+                      <button
+                        type="button"
+                        onClick={() => onSelectJob(log.discoveredJobId!)}
+                        className="mt-2 flex w-full items-center justify-between rounded-lg bg-coral-50 px-3 py-2 text-left text-xs font-bold text-charcoal transition hover:bg-coral-50/70"
+                      >
+                        <span>
+                          <span className="font-medium text-coral-600">見つけた仕事 </span>
+                          {jobNames.get(log.discoveredJobId)}
+                        </span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ) : (
+          <p className="mt-3 text-xs text-charcoal-muted">日付を押すと、その日の記録が見られるよ</p>
+        )}
+
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-muted">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />

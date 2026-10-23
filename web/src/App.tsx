@@ -268,6 +268,8 @@ function App() {
           subjectJobHistory={subjectJobHistory(appState)}
           mostStudied={mostStudiedDiscoverable(appState)}
           specialSubjects={specialSubjectNames}
+          logs={appState.logs}
+          jobNames={new Map(appState.zukan.map((e) => [e.jobId, e.jobName]))}
           onBack={() => setScreen("home")}
           onSelectJob={(jobId) => handleSelectJob(jobId, "kiroku")}
         />
