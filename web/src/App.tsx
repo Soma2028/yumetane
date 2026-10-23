@@ -235,10 +235,10 @@ function App() {
     const todaysDiscoveredJob = discoveredEntry
       ? { jobId: discoveredEntry.jobId, jobName: discoveredEntry.jobName }
       : null
-    // 今日見つけた仕事は上のカードに出ているので除き、新しい順に3件
+    // 今日見つけた仕事は上のカードに出ているので除き、新しい順に5件（スマホでは3件まで表示）
     const recentJobs = appState.zukan
       .filter((e) => e.jobId !== discoveredId)
-      .slice(-3)
+      .slice(-5)
       .reverse()
       .map((e) => ({ jobId: e.jobId, jobName: e.jobName, subject: e.subject }))
 

@@ -20,7 +20,7 @@ interface Props {
   /** 直近7日間の合計勉強時間（分）。きろくボタンに出す。 */
   weeklyMinutes: number
   todaysDiscoveredJob: { jobId: number; jobName: string } | null
-  /** 最近見つけた仕事（今日の分を除き、新しい順に最大3件）。 */
+  /** 最近見つけた仕事（今日の分を除き、新しい順に最大5件。スマホでは3件まで出す）。 */
   recentJobs: { jobId: number; jobName: string; subject: string }[]
   toast: string | null
   loading: boolean
@@ -68,7 +68,10 @@ export function HomeScreen({
   }
 
   return (
-    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col gap-4 px-6 pt-6 pb-6 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:pt-4 [@media(max-height:740px)]:pb-4">
+    // スマホは1列で1画面に収める。パソコン（lg以上）は左に記録まわり、右に見つけた仕事と
+    // ほかの画面への導線を置く2列にする
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col gap-4 px-6 pt-6 pb-6 max-lg:[@media(max-height:740px)]:gap-3 max-lg:[@media(max-height:740px)]:pt-4 max-lg:[@media(max-height:740px)]:pb-4 lg:grid lg:max-w-5xl lg:grid-cols-2 lg:content-center lg:items-start lg:gap-12 lg:px-10 lg:py-14">
+      <div className="flex flex-col gap-4 max-lg:[@media(max-height:740px)]:gap-3">
       <div className="relative flex flex-col items-center gap-1 pt-2">
         {streak > 0 && (
           <span className="absolute right-0 top-0 flex items-center gap-1 text-sm font-medium text-charcoal-muted">
@@ -157,7 +160,7 @@ export function HomeScreen({
       )}
 
       {/* 比較ゾーン: ストリークと週間の記録状況を1枚にまとめ、控えめなトーンで置く */}
-      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4 [@media(max-height:740px)]:py-3">
+      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4 max-lg:[@media(max-height:740px)]:py-3">
         <p className="font-bold">この1週間</p>
         <div className="flex justify-between">
           {weekDates.map((date) => {
@@ -182,15 +185,28 @@ export function HomeScreen({
         </div>
       </div>
 
+      </div>
+
+      <div className="flex flex-1 flex-col gap-4 max-lg:[@media(max-height:740px)]:gap-3">
       {/* 振り返り: 最近見つけた仕事。見つけて終わりにせず、もう一度開くきっかけにする。
-          今日見つけた仕事が上に出ている日は1件に減らし、画面の低い端末では欄ごと隠す */}
-      <div className={todaysDiscoveredJob ? "[@media(max-height:740px)]:hidden" : undefined}>
-        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted">最近見つけた仕事</p>
+          スマホでは今日見つけた仕事が上に出ている日は1件に減らし、画面の低い端末では欄ごと隠す。
+          パソコンは右の列を使えるので5件まで出す */}
+      <div className={todaysDiscoveredJob ? "max-lg:[@media(max-height:740px)]:hidden" : undefined}>
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted lg:text-sm">最近見つけた仕事</p>
         {recentJobs.length > 0 ? (
           <ul className="flex flex-col gap-2">
-            {recentJobs.slice(0, todaysDiscoveredJob ? 1 : 3).map((job, i) => (
-              // 画面の低い端末（iPhone SEなど）では1件だけにして、ホームを1画面に収める
-              <li key={job.jobId} className={i > 0 ? "[@media(max-height:740px)]:hidden" : undefined}>
+            {recentJobs.map((job, i) => (
+              // スマホの件数を超える分はパソコンだけで出す。画面の低い端末（iPhone SEなど）では1件だけ
+              <li
+                key={job.jobId}
+                className={
+                  i >= (todaysDiscoveredJob ? 1 : 3)
+                    ? "max-lg:hidden"
+                    : i > 0
+                      ? "max-lg:[@media(max-height:740px)]:hidden"
+                      : undefined
+                }
+              >
                 <button
                   type="button"
                   onClick={() => onSelectJob(job.jobId)}
@@ -217,7 +233,7 @@ export function HomeScreen({
       {/* 行動する（次へ）: 深掘り先への導線 */}
       {/* 3つとも「アイコン・名前・今の状態」の同じ形にそろえる（以前は図鑑だけ数字が主役で、
           何のボタンか読み取りにくかった） */}
-      <nav aria-label="ほかの画面" className="mt-auto grid grid-cols-3 gap-3">
+      <nav aria-label="ほかの画面" className="mt-auto grid grid-cols-3 gap-3 lg:mt-2">
         <NavButton icon={BookOpen} label="職業図鑑" detail={`${zukanCount}/${MAX_JOB_COUNT}件`} onClick={onOpenZukan} />
         <NavButton icon={Star} label="タネ" detail={`保存${taneCount}件`} onClick={onOpenTane} />
         <NavButton
@@ -227,6 +243,7 @@ export function HomeScreen({
           onClick={onOpenKiroku}
         />
       </nav>
+      </div>
     </div>
   )
 }

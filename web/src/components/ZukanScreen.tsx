@@ -19,10 +19,13 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
   const sorted = [...zukan].sort((a, b) => b.discoveredAt.localeCompare(a.discoveredAt))
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
-      <BackButton onClick={onBack} />
+    // パソコン（lg以上）は、左にタイトルとエリアの進み具合（スクロールしても残す）、
+    // 右に見つけた職業を2列で並べる
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:grid lg:max-w-6xl lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start lg:gap-x-10 lg:px-10">
+      <BackButton onClick={onBack} className="sticky top-3 z-10 self-start justify-self-start lg:col-span-2" />
 
-      <div className="text-center">
+      <div className="flex flex-col gap-6 lg:sticky lg:top-20">
+      <div className="text-center lg:text-left">
         <h2 className="text-2xl font-bold tracking-tight">職業図鑑</h2>
         <p className="mt-1 text-charcoal-muted">
           {zukan.length} / {total} 見つけた
@@ -52,12 +55,14 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
         })}
       </div>
 
+      </div>
+
       {sorted.length === 0 ? (
         <p className="text-center text-charcoal-muted">
           まだ何も見つかっていません。ホームから勉強を記録しよう。
         </p>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           {sorted.map((entry) => (
             <button
               key={entry.jobId}

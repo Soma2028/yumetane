@@ -55,7 +55,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-30 flex items-end justify-center">
+        <div className="fixed inset-0 z-30 flex items-end justify-center lg:items-center">
           <motion.button
             type="button"
             aria-label="記録をやめる"
@@ -69,7 +69,7 @@ export function RecordSheet({ open, subjects, loading, onSubmit, onClose }: Prop
             role="dialog"
             aria-modal="true"
             aria-label="今日の勉強を記録する"
-            className="relative flex max-h-[92dvh] w-full max-w-md flex-col gap-4 overflow-y-auto overscroll-contain rounded-t-3xl bg-white px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(43,38,32,0.15)]"
+            className="relative flex max-h-[92dvh] w-full max-w-md flex-col gap-4 overflow-y-auto overscroll-contain rounded-t-3xl bg-white px-5 pt-4 lg:max-w-lg lg:rounded-3xl lg:px-7 lg:pt-6 lg:pb-7 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(43,38,32,0.15)]"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}

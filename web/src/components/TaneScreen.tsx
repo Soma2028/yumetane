@@ -13,7 +13,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
   const tane = zukan.filter((e) => taneIds.includes(e.jobId))
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-4xl lg:px-10">
       <BackButton onClick={onBack} />
 
       <h2 className="text-2xl font-bold tracking-tight">タネ</h2>
@@ -24,7 +24,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
           まだタネがありません。見つけた仕事で「気になる」を押すと、ここに保存されます。
         </p>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           {tane.map((entry) => (
             <button
               key={entry.jobId}

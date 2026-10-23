@@ -117,13 +117,13 @@ export function KirokuScreen({
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-4xl lg:px-10">
       <BackButton onClick={onBack} />
 
       <h2 className="text-2xl font-bold tracking-tight">きろく</h2>
 
       {/* 1画面に収まらない長さだったため、見たいものごとにタブで分ける */}
-      <div role="tablist" aria-label="きろくの表示" className="grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1">
+      <div role="tablist" aria-label="きろくの表示" className="grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 lg:w-[480px]">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -142,7 +142,7 @@ export function KirokuScreen({
       </div>
 
       {tab === "week" && (
-        <>
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start">
         {/* 主役: 今週の数字。振り返り画面でまず伝えたい内容なので最初に大きく出す */}
         <motion.div
           initial="hidden"
@@ -235,7 +235,7 @@ export function KirokuScreen({
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-sage-50 p-5"
+          className="rounded-3xl border border-border-soft bg-sage-50 p-5 lg:col-span-2"
         >
           {mostStudied ? (
             <p className="text-sm font-medium leading-relaxed text-sage-700">
@@ -248,7 +248,7 @@ export function KirokuScreen({
           )}
         </motion.div>
 
-        </>
+        </div>
       )}
 
       {tab === "calendar" && (
@@ -259,8 +259,10 @@ export function KirokuScreen({
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5"
+          className="rounded-3xl border border-border-soft bg-white p-5 lg:grid lg:grid-cols-2 lg:gap-8 lg:p-7"
         >
+          {/* パソコンでは、左にカレンダーと凡例、右に選んだ日の記録を並べる */}
+          <div>
           <p className="font-bold">過去30日間</p>
           <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[10px] text-charcoal-muted">
             {WEEKDAY_LABELS.map((label) => (
@@ -306,9 +308,22 @@ export function KirokuScreen({
               </div>
             ))}
           </div>
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-muted">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />
+              勉強した日
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-coral-500" />
+              職業を発見した日
+            </span>
+          </div>
+          </div>
+
+          <div>
           {/* 選んだ日の記録。カレンダーの点だけでは何をした日か分からないため、押して開けるようにする */}
           {selectedDate ? (
-            <div className="mt-4 rounded-2xl bg-cream p-4">
+            <div className="mt-4 rounded-2xl bg-cream p-4 lg:mt-0">
               <div className="flex items-baseline justify-between gap-3">
                 <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
                 {selectedLogs.length > 0 && (
@@ -352,19 +367,10 @@ export function KirokuScreen({
               )}
             </div>
           ) : (
-            <p className="mt-3 text-xs text-charcoal-muted">日付を押すと、その日の記録が見られるよ</p>
+            <p className="mt-3 text-xs text-charcoal-muted lg:mt-0 lg:rounded-2xl lg:bg-cream lg:p-6 lg:text-center lg:text-sm">日付を押すと、その日の記録が見られるよ</p>
           )}
-
-          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-muted">
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />
-              勉強した日
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-coral-500" />
-              職業を発見した日
-            </span>
           </div>
+
         </motion.div>
 
         </>
@@ -376,7 +382,7 @@ export function KirokuScreen({
                   {subjectJobHistory.length === 0 ? (
             <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:items-start">
               {subjectJobHistory.map((row, i) => {
                 const isOpen = expanded.has(row.subject)
                 return (

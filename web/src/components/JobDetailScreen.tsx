@@ -12,7 +12,7 @@ interface Props {
 
 export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: Props) {
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10 lg:max-w-2xl lg:py-14">
       <BackButton onClick={onBack} />
       <h2 className="text-2xl font-bold tracking-tight">{job.job_name}</h2>
 
