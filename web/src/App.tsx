@@ -30,6 +30,7 @@ import {
   type RecordDetails,
 } from "./storage"
 import { stageFromCount } from "./taneStage"
+import type { KirokuTab } from "./components/KirokuScreen"
 import type { DiscoverResponse, Job, Subject } from "./types"
 
 // きろく画面だけがグラフ（recharts）を使い、バンドルの大半を占める。LPとホームを
@@ -61,6 +62,9 @@ function App() {
   const [detailReturnScreen, setDetailReturnScreen] = useState<DetailReturnScreen>("home")
 
   const [homeToast, setHomeToast] = useState<string | null>(null)
+  // きろく画面のタブと選んだ日。職業の詳細を開いて戻ってきたときに元の表示に戻すため
+  const [kirokuTab, setKirokuTab] = useState<KirokuTab>("week")
+  const [kirokuDate, setKirokuDate] = useState<string | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -208,7 +212,11 @@ function App() {
         onRecord={handleRecord}
         onOpenZukan={() => setScreen("zukan")}
         onOpenTane={() => setScreen("tane")}
-        onOpenKiroku={() => setScreen("kiroku")}
+        onOpenKiroku={() => {
+          setKirokuTab("week")
+          setKirokuDate(null)
+          setScreen("kiroku")
+        }}
         onOpenGrowth={() => setScreen("growth")}
         onSelectJob={(jobId) => handleSelectJob(jobId, "home")}
       />
@@ -259,6 +267,10 @@ function App() {
     return (
       <Suspense fallback={null}>
         <KirokuScreen
+          tab={kirokuTab}
+          onChangeTab={setKirokuTab}
+          selectedDate={kirokuDate}
+          onSelectDate={setKirokuDate}
           calendarDates={last30Dates()}
           studiedDates={studiedDatesSet(appState)}
           discoveredDates={discoveredDatesSet(appState)}

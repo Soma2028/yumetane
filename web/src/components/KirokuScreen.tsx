@@ -52,7 +52,20 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 }
 
+export type KirokuTab = "week" | "calendar" | "subjects"
+
+const TABS: { id: KirokuTab; label: string }[] = [
+  { id: "week", label: "今週" },
+  { id: "calendar", label: "カレンダー" },
+  { id: "subjects", label: "教科ごと" },
+]
+
 interface Props {
+  /** 開いているタブと、カレンダーで選んだ日。職業の詳細から戻ったときに保つためApp側で持つ。 */
+  tab: KirokuTab
+  onChangeTab: (tab: KirokuTab) => void
+  selectedDate: string | null
+  onSelectDate: (date: string | null) => void
   calendarDates: string[]
   studiedDates: Set<string>
   discoveredDates: Set<string>
@@ -70,6 +83,10 @@ interface Props {
 }
 
 export function KirokuScreen({
+  tab,
+  onChangeTab,
+  selectedDate,
+  onSelectDate,
   calendarDates,
   studiedDates,
   discoveredDates,
@@ -85,7 +102,6 @@ export function KirokuScreen({
   onSelectJob,
 }: Props) {
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const selectedLogs = selectedDate ? logs.filter((l) => l.date === selectedDate) : []
   const selectedTotalMinutes = selectedLogs.reduce((sum, l) => sum + l.minutes, 0)
   const flavor = mostStudied ? (SUBJECT_FLAVOR[mostStudied.subject] ?? "いろいろな") : null
@@ -106,306 +122,342 @@ export function KirokuScreen({
 
       <h2 className="text-2xl font-bold tracking-tight">きろく</h2>
 
-      {/* 主役: 今週の数字。振り返り画面でまず伝えたい内容なので最初に大きく出す */}
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
-        className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
-      >
-        <p className="mb-3 font-bold">週間サマリー</p>
-        <div className="flex flex-col gap-4">
-          <ComparisonRow
-            label="今週の合計勉強時間"
-            currentLabel={formatMinutes(thisWeek.totalMinutes)}
-            diff={thisWeek.totalMinutes - lastWeek.totalMinutes}
-          />
-          <ComparisonRow
-            label="今週見つけた職業数"
-            currentLabel={`${thisWeek.discoveredCount}件`}
-            diff={thisWeek.discoveredCount - lastWeek.discoveredCount}
-          />
-        </div>
-      </motion.div>
+      {/* 1画面に収まらない長さだったため、見たいものごとにタブで分ける */}
+      <div role="tablist" aria-label="きろくの表示" className="grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
+            onClick={() => onChangeTab(t.id)}
+            className={
+              "h-10 rounded-full text-sm font-bold transition " +
+              (tab === t.id ? "bg-sage-600 text-white" : "text-charcoal-muted hover:text-sage-700")
+            }
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
-      {/* 補足: 30日間の記録パターン */}
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
-        className="rounded-3xl border border-border-soft bg-white p-5"
-      >
-        <p className="font-bold">過去30日間</p>
-        <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[10px] text-charcoal-muted">
-          {WEEKDAY_LABELS.map((label) => (
-            <span key={label}>{label}</span>
-          ))}
-        </div>
-        <div className="mt-1 flex flex-col gap-1.5">
-          {weeks.map((week, wi) => (
-            <div key={wi} className="grid grid-cols-7 gap-1.5">
-              {week.map((date, di) =>
-                date ? (
-                  <button
-                    key={date}
-                    type="button"
-                    onClick={() => setSelectedDate(selectedDate === date ? null : date)}
-                    aria-pressed={selectedDate === date}
-                    aria-label={`${formatDayHeading(date)}の記録を見る`}
-                    className={
-                      "flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl transition active:scale-95 " +
-                      (selectedDate === date ? "bg-sage-50 ring-2 ring-sage-600" : "hover:bg-sage-50")
-                    }
-                  >
-                    <span className="text-[10px] text-charcoal-muted">
-                      {new Date(`${date}T00:00:00`).getDate()}
-                    </span>
-                    <span
-                      className="h-3 w-3 rounded-full"
-                      style={
-                        studiedDates.has(date) && discoveredDates.has(date)
-                          ? { background: "linear-gradient(90deg, #2F6B4F 50%, #E8734A 50%)" }
-                          : studiedDates.has(date)
-                            ? { backgroundColor: "#2F6B4F" }
-                            : discoveredDates.has(date)
-                              ? { backgroundColor: "#E8734A" }
-                              : { backgroundColor: "#e4dfd5" }
-                      }
+      {tab === "week" && (
+        <>
+        {/* 主役: 今週の数字。振り返り画面でまず伝えたい内容なので最初に大きく出す */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+        >
+          <p className="mb-3 font-bold">週間サマリー</p>
+          <div className="flex flex-col gap-4">
+            <ComparisonRow
+              label="今週の合計勉強時間"
+              currentLabel={formatMinutes(thisWeek.totalMinutes)}
+              diff={thisWeek.totalMinutes - lastWeek.totalMinutes}
+            />
+            <ComparisonRow
+              label="今週見つけた職業数"
+              currentLabel={`${thisWeek.discoveredCount}件`}
+              diff={thisWeek.discoveredCount - lastWeek.discoveredCount}
+            />
+          </div>
+        </motion.div>
+
+        {/* 補足: 今週の教科比率。1教科だけの週はグラフにせずテキストで済ませる */}
+        {weeklySubjectTotals.length === 1 && (
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+            className="rounded-3xl border border-border-soft bg-white p-5"
+          >
+            <p className="font-bold">教科別の時間比率（今週）</p>
+            <p className="mt-2 text-sm text-charcoal-muted">
+              今週は{weeklySubjectTotals[0].subject}だけ勉強したよ
+            </p>
+          </motion.div>
+        )}
+
+        {weeklySubjectTotals.length > 1 && (
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+            className="rounded-3xl border border-border-soft bg-white p-5"
+          >
+            <p className="font-bold">教科別の時間比率（今週）</p>
+            <div className="mt-2 flex items-center gap-4">
+              <div className="h-40 w-40 shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={weeklySubjectTotals}
+                      dataKey="minutes"
+                      nameKey="subject"
+                      innerRadius={40}
+                      outerRadius={70}
+                      paddingAngle={2}
+                    >
+                      {weeklySubjectTotals.map((entry, i) => (
+                        <Cell key={entry.subject} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value) => [`${value}分`, "勉強時間"]}
+                      contentStyle={{ borderRadius: 12, borderColor: "#e4dfd5", fontSize: 12 }}
                     />
-                  </button>
-                ) : (
-                  <div key={`empty-${wi}-${di}`} />
-                ),
-              )}
-            </div>
-          ))}
-        </div>
-        {/* 選んだ日の記録。カレンダーの点だけでは何をした日か分からないため、押して開けるようにする */}
-        {selectedDate ? (
-          <div className="mt-4 rounded-2xl bg-cream p-4">
-            <div className="flex items-baseline justify-between gap-3">
-              <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
-              {selectedLogs.length > 0 && (
-                <p className="text-sm text-charcoal-muted">
-                  合計 <span className="text-xl font-bold text-charcoal">{formatMinutes(selectedTotalMinutes)}</span>
-                </p>
-              )}
-            </div>
-            {selectedLogs.length === 0 ? (
-              <p className="mt-2 text-sm text-charcoal-muted">この日の記録はないよ</p>
-            ) : (
-              <ul className="mt-2 flex flex-col gap-2">
-                {selectedLogs.map((log, i) => (
-                  <li key={i} className="rounded-xl border border-border-soft bg-white px-3 py-2 text-sm">
-                    <div className="flex items-center justify-between font-medium">
-                      <span>{log.subject}</span>
-                      <span className="text-charcoal-muted">{formatMinutes(log.minutes)}</span>
-                    </div>
-                    {(log.material || log.content) && (
-                      <p className="mt-0.5 text-xs text-charcoal-muted">
-                        {[log.material, log.content].filter(Boolean).join(" ・ ")}
-                      </p>
-                    )}
-                    {log.memo && <p className="mt-0.5 text-xs text-charcoal-muted">「{log.memo}」</p>}
-                    {log.discoveredJobId !== null && jobNames.has(log.discoveredJobId) && (
-                      <button
-                        type="button"
-                        onClick={() => onSelectJob(log.discoveredJobId!)}
-                        className="mt-2 flex w-full items-center justify-between rounded-lg bg-coral-50 px-3 py-2 text-left text-xs font-bold text-charcoal transition hover:bg-coral-50/70"
-                      >
-                        <span>
-                          <span className="font-medium text-coral-600">見つけた仕事 </span>
-                          {jobNames.get(log.discoveredJobId)}
-                        </span>
-                        <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
-                      </button>
-                    )}
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <ul className="flex flex-1 flex-col gap-1.5 text-xs">
+                {weeklySubjectTotals.map((entry, i) => (
+                  <li key={entry.subject} className="flex items-center gap-1.5">
+                    <span
+                      className="h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length] }}
+                    />
+                    <span className="flex-1">{entry.subject}</span>
+                    <span className="text-charcoal-muted">{formatMinutes(entry.minutes)}</span>
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
-        ) : (
-          <p className="mt-3 text-xs text-charcoal-muted">日付を押すと、その日の記録が見られるよ</p>
-        )}
-
-        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-muted">
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />
-            勉強した日
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-coral-500" />
-            職業を発見した日
-          </span>
-        </div>
-      </motion.div>
-
-      {/* 補足: 今週の教科比率。1教科だけの週はグラフにせずテキストで済ませる */}
-      {weeklySubjectTotals.length === 1 && (
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5"
-        >
-          <p className="font-bold">教科別の時間比率（今週）</p>
-          <p className="mt-2 text-sm text-charcoal-muted">
-            今週は{weeklySubjectTotals[0].subject}だけ勉強したよ
-          </p>
-        </motion.div>
-      )}
-
-      {weeklySubjectTotals.length > 1 && (
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5"
-        >
-          <p className="font-bold">教科別の時間比率（今週）</p>
-          <div className="mt-2 flex items-center gap-4">
-            <div className="h-40 w-40 shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={weeklySubjectTotals}
-                    dataKey="minutes"
-                    nameKey="subject"
-                    innerRadius={40}
-                    outerRadius={70}
-                    paddingAngle={2}
-                  >
-                    {weeklySubjectTotals.map((entry, i) => (
-                      <Cell key={entry.subject} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => [`${value}分`, "勉強時間"]}
-                    contentStyle={{ borderRadius: 12, borderColor: "#e4dfd5", fontSize: 12 }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
             </div>
-            <ul className="flex flex-1 flex-col gap-1.5 text-xs">
-              {weeklySubjectTotals.map((entry, i) => (
-                <li key={entry.subject} className="flex items-center gap-1.5">
-                  <span
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length] }}
-                  />
-                  <span className="flex-1">{entry.subject}</span>
-                  <span className="text-charcoal-muted">{formatMinutes(entry.minutes)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          </motion.div>
+        )}
+
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          className="rounded-3xl border border-border-soft bg-sage-50 p-5"
+        >
+          {mostStudied ? (
+            <p className="text-sm font-medium leading-relaxed text-sage-700">
+              最近は{mostStudied.subject}が多いね。{flavor}の仕事にたくさん出会えそう！
+            </p>
+          ) : (
+            <p className="text-sm font-medium leading-relaxed text-sage-700">
+              まだ記録がないよ。今日の勉強を記録してみよう。
+            </p>
+          )}
         </motion.div>
+
+        </>
       )}
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
-        className="rounded-3xl border border-border-soft bg-sage-50 p-5"
-      >
-        {mostStudied ? (
-          <p className="text-sm font-medium leading-relaxed text-sage-700">
-            最近は{mostStudied.subject}が多いね。{flavor}の仕事にたくさん出会えそう！
-          </p>
-        ) : (
-          <p className="text-sm font-medium leading-relaxed text-sage-700">
-            まだ記録がないよ。今日の勉強を記録してみよう。
-          </p>
-        )}
-      </motion.div>
-
-      <div>
-        <p className="mb-3 font-bold">勉強した教科と見つかった職業</p>
-        {subjectJobHistory.length === 0 ? (
-          <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {subjectJobHistory.map((row, i) => {
-              const isOpen = expanded.has(row.subject)
-              return (
-                <motion.div
-                  key={row.subject}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={fadeUp}
-                  transition={{ delay: Math.min(i, 4) * 0.05 }}
-                  className="rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleExpanded(row.subject)}
-                    className="flex w-full items-center justify-between text-left"
-                  >
-                    <p className="font-bold">{row.subject}</p>
-                    <span className="flex items-center gap-2">
-                      <span className="text-sm text-charcoal-muted">合計{formatMinutes(row.minutes)}</span>
-                      <ChevronDown
-                        className={`h-4 w-4 text-charcoal-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </span>
-                  </button>
-
-                  <div className="mt-2 border-t border-border-soft pt-2">
-                    <p className="mb-1.5 text-xs text-charcoal-muted">見つかった仕事</p>
-                    {specialSubjects.includes(row.subject) ? (
-                      <p className="text-xs text-charcoal-muted">職業発見には未対応</p>
-                    ) : row.jobs.length === 0 ? (
-                      <p className="text-sm text-charcoal-muted">まだ見つかった仕事はないよ</p>
-                    ) : (
-                      <div className="flex flex-wrap gap-1.5">
-                        {row.jobs.map((job) => (
-                          <button
-                            key={job.jobId}
-                            type="button"
-                            onClick={() => onSelectJob(job.jobId)}
-                            className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700 transition hover:bg-sage-100"
-                          >
-                            {job.jobName} ・ {formatShortDate(job.discoveredAt)}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {isOpen && (
-                    <div className="mt-3 border-t border-border-soft pt-3">
-                      <p className="mb-1.5 text-xs text-charcoal-muted">記録ログ</p>
-                      <ul className="flex flex-col gap-2">
-                        {row.logs.map((log, li) => (
-                          <li key={li} className="rounded-2xl bg-cream px-3 py-2 text-xs">
-                            <div className="flex items-center justify-between font-medium">
-                              <span>{formatDateLabel(log.date)}</span>
-                              <span className="text-charcoal-muted">{log.minutes}分</span>
-                            </div>
-                            {(log.material || log.content) && (
-                              <p className="mt-0.5 text-charcoal-muted">
-                                {[log.material, log.content].filter(Boolean).join(" ・ ")}
-                              </p>
-                            )}
-                            {log.memo && <p className="mt-0.5 text-charcoal-muted">メモ: {log.memo}</p>}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </motion.div>
-              )
-            })}
+      {tab === "calendar" && (
+        <>
+        {/* 補足: 30日間の記録パターン */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          className="rounded-3xl border border-border-soft bg-white p-5"
+        >
+          <p className="font-bold">過去30日間</p>
+          <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[10px] text-charcoal-muted">
+            {WEEKDAY_LABELS.map((label) => (
+              <span key={label}>{label}</span>
+            ))}
           </div>
-        )}
-      </div>
+          <div className="mt-1 flex flex-col gap-1.5">
+            {weeks.map((week, wi) => (
+              <div key={wi} className="grid grid-cols-7 gap-1.5">
+                {week.map((date, di) =>
+                  date ? (
+                    <button
+                      key={date}
+                      type="button"
+                      onClick={() => onSelectDate(selectedDate === date ? null : date)}
+                      aria-pressed={selectedDate === date}
+                      aria-label={`${formatDayHeading(date)}の記録を見る`}
+                      className={
+                        "flex h-11 flex-col items-center justify-center gap-0.5 rounded-xl transition active:scale-95 " +
+                        (selectedDate === date ? "bg-sage-50 ring-2 ring-sage-600" : "hover:bg-sage-50")
+                      }
+                    >
+                      <span className="text-[10px] text-charcoal-muted">
+                        {new Date(`${date}T00:00:00`).getDate()}
+                      </span>
+                      <span
+                        className="h-3 w-3 rounded-full"
+                        style={
+                          studiedDates.has(date) && discoveredDates.has(date)
+                            ? { background: "linear-gradient(90deg, #2F6B4F 50%, #E8734A 50%)" }
+                            : studiedDates.has(date)
+                              ? { backgroundColor: "#2F6B4F" }
+                              : discoveredDates.has(date)
+                                ? { backgroundColor: "#E8734A" }
+                                : { backgroundColor: "#e4dfd5" }
+                        }
+                      />
+                    </button>
+                  ) : (
+                    <div key={`empty-${wi}-${di}`} />
+                  ),
+                )}
+              </div>
+            ))}
+          </div>
+          {/* 選んだ日の記録。カレンダーの点だけでは何をした日か分からないため、押して開けるようにする */}
+          {selectedDate ? (
+            <div className="mt-4 rounded-2xl bg-cream p-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm font-bold">{formatDayHeading(selectedDate)}</p>
+                {selectedLogs.length > 0 && (
+                  <p className="text-sm text-charcoal-muted">
+                    合計 <span className="text-xl font-bold text-charcoal">{formatMinutes(selectedTotalMinutes)}</span>
+                  </p>
+                )}
+              </div>
+              {selectedLogs.length === 0 ? (
+                <p className="mt-2 text-sm text-charcoal-muted">この日の記録はないよ</p>
+              ) : (
+                <ul className="mt-2 flex flex-col gap-2">
+                  {selectedLogs.map((log, i) => (
+                    <li key={i} className="rounded-xl border border-border-soft bg-white px-3 py-2 text-sm">
+                      <div className="flex items-center justify-between font-medium">
+                        <span>{log.subject}</span>
+                        <span className="text-charcoal-muted">{formatMinutes(log.minutes)}</span>
+                      </div>
+                      {(log.material || log.content) && (
+                        <p className="mt-0.5 text-xs text-charcoal-muted">
+                          {[log.material, log.content].filter(Boolean).join(" ・ ")}
+                        </p>
+                      )}
+                      {log.memo && <p className="mt-0.5 text-xs text-charcoal-muted">「{log.memo}」</p>}
+                      {log.discoveredJobId !== null && jobNames.has(log.discoveredJobId) && (
+                        <button
+                          type="button"
+                          onClick={() => onSelectJob(log.discoveredJobId!)}
+                          className="mt-2 flex w-full items-center justify-between rounded-lg bg-coral-50 px-3 py-2 text-left text-xs font-bold text-charcoal transition hover:bg-coral-50/70"
+                        >
+                          <span>
+                            <span className="font-medium text-coral-600">見つけた仕事 </span>
+                            {jobNames.get(log.discoveredJobId)}
+                          </span>
+                          <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-charcoal-muted">日付を押すと、その日の記録が見られるよ</p>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-muted">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />
+              勉強した日
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-coral-500" />
+              職業を発見した日
+            </span>
+          </div>
+        </motion.div>
+
+        </>
+      )}
+
+      {tab === "subjects" && (
+        <>
+        <div>
+                  {subjectJobHistory.length === 0 ? (
+            <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {subjectJobHistory.map((row, i) => {
+                const isOpen = expanded.has(row.subject)
+                return (
+                  <motion.div
+                    key={row.subject}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.3 }}
+                    variants={fadeUp}
+                    transition={{ delay: Math.min(i, 4) * 0.05 }}
+                    className="rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleExpanded(row.subject)}
+                      className="flex w-full items-center justify-between text-left"
+                    >
+                      <p className="font-bold">{row.subject}</p>
+                      <span className="flex items-center gap-2">
+                        <span className="text-sm text-charcoal-muted">
+                          合計{formatMinutes(row.minutes)}
+                          {!specialSubjects.includes(row.subject) && ` ・ 仕事${row.jobs.length}件`}
+                        </span>
+                        <ChevronDown
+                          className={`h-4 w-4 text-charcoal-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
+                        />
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <>
+                        <div className="mt-2 border-t border-border-soft pt-2">
+                          <p className="mb-1.5 text-xs text-charcoal-muted">見つかった仕事</p>
+                          {specialSubjects.includes(row.subject) ? (
+                            <p className="text-xs text-charcoal-muted">職業発見には未対応</p>
+                          ) : row.jobs.length === 0 ? (
+                            <p className="text-sm text-charcoal-muted">まだ見つかった仕事はないよ</p>
+                          ) : (
+                            <div className="flex flex-wrap gap-1.5">
+                              {row.jobs.map((job) => (
+                                <button
+                                  key={job.jobId}
+                                  type="button"
+                                  onClick={() => onSelectJob(job.jobId)}
+                                  className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700 transition hover:bg-sage-100"
+                                >
+                                  {job.jobName} ・ {formatShortDate(job.discoveredAt)}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-3 border-t border-border-soft pt-3">
+                          <p className="mb-1.5 text-xs text-charcoal-muted">記録ログ</p>
+                          <ul className="flex flex-col gap-2">
+                            {row.logs.map((log, li) => (
+                              <li key={li} className="rounded-2xl bg-cream px-3 py-2 text-xs">
+                                <div className="flex items-center justify-between font-medium">
+                                  <span>{formatDateLabel(log.date)}</span>
+                                  <span className="text-charcoal-muted">{log.minutes}分</span>
+                                </div>
+                                {(log.material || log.content) && (
+                                  <p className="mt-0.5 text-charcoal-muted">
+                                    {[log.material, log.content].filter(Boolean).join(" ・ ")}
+                                  </p>
+                                )}
+                                {log.memo && <p className="mt-0.5 text-charcoal-muted">メモ: {log.memo}</p>}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+        </>
+      )}
     </div>
   )
 }
