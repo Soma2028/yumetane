@@ -9,7 +9,6 @@ import { TaneScreen } from "./components/TaneScreen"
 import { ZukanScreen } from "./components/ZukanScreen"
 import {
   addToZukan,
-  discoveredDatesSet,
   knownJobIds,
   last30Dates,
   last7Dates,
@@ -328,7 +327,6 @@ function App() {
             onSelectDate={setKirokuDate}
             calendarDates={last30Dates()}
             studiedDates={studiedDatesSet(appState)}
-            discoveredDates={discoveredDatesSet(appState)}
             thisWeek={weekSummary(appState, 0)}
             lastWeek={weekSummary(appState, 1)}
             weeklySubjectTotals={weeklySubjectTotals(appState)}

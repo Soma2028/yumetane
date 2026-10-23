@@ -240,11 +240,6 @@ export function studiedDatesSet(state: AppState): Set<string> {
   return new Set(state.logs.map((l) => l.date))
 }
 
-/** 職業を発見した日付の集合（カレンダー表示の色付け判定用）。 */
-export function discoveredDatesSet(state: AppState): Set<string> {
-  return new Set(state.logs.filter((l) => l.discoveredJobId !== null).map((l) => l.date))
-}
-
 function logsInDates(state: AppState, dates: Set<string>): StudyLogEntry[] {
   return state.logs.filter((l) => dates.has(l.date))
 }

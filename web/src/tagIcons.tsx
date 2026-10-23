@@ -58,9 +58,30 @@ const TAG_ICONS: Record<string, LucideIcon> = {
 
 const DEFAULT_ICON: LucideIcon = Wrench
 
+// アイコンは職業の「中身」が伝わるタグから選ぶ。先頭のタグ（スコアの最も高いもの）は
+// 「座って集中」「毎日ちがう」のような働き方のタグであることが多く、そのままだと弁理士に
+// 椅子のアイコンが付くなど、仕事の内容とちぐはぐになっていた。上にあるタグほど優先する
+const ICON_PRIORITY = [
+  "特別な装備を使う",
+  "機械と働く",
+  "手先を使う",
+  "ものづくり",
+  "しくみを調べる",
+  "表現する",
+  "人の安全を守る",
+  "人を助ける",
+  "お客さんと話す",
+  "外で働く",
+  "みんなをまとめる",
+  "リーダーになる",
+  "正確さが大事",
+  "きちんと進める",
+]
+
 function iconForTags(tags: string[]): LucideIcon {
-  const first = tags[0]
-  return (first && TAG_ICONS[first]) || DEFAULT_ICON
+  const preferred = ICON_PRIORITY.find((tag) => tags.includes(tag))
+  const tag = preferred ?? tags[0]
+  return (tag && TAG_ICONS[tag]) || DEFAULT_ICON
 }
 
 /**

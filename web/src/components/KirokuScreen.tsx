@@ -68,7 +68,6 @@ interface Props {
   onSelectDate: (date: string | null) => void
   calendarDates: string[]
   studiedDates: Set<string>
-  discoveredDates: Set<string>
   thisWeek: WeekSummary
   lastWeek: WeekSummary
   weeklySubjectTotals: SubjectTotal[]
@@ -89,7 +88,6 @@ export function KirokuScreen({
   onSelectDate,
   calendarDates,
   studiedDates,
-  discoveredDates,
   thisWeek,
   lastWeek,
   weeklySubjectTotals,
@@ -288,17 +286,10 @@ export function KirokuScreen({
                       <span className="text-[10px] text-charcoal-muted">
                         {new Date(`${date}T00:00:00`).getDate()}
                       </span>
+                      {/* 職業が見つかるのは勉強した日だけで、ほぼ毎日重なるため、色は「勉強した日」の1つに
+                          まとめる（見つけた仕事は、日付を押すと開く記録に出る） */}
                       <span
-                        className="h-3 w-3 rounded-full"
-                        style={
-                          studiedDates.has(date) && discoveredDates.has(date)
-                            ? { background: "linear-gradient(90deg, #2F6B4F 50%, #E8734A 50%)" }
-                            : studiedDates.has(date)
-                              ? { backgroundColor: "#2F6B4F" }
-                              : discoveredDates.has(date)
-                                ? { backgroundColor: "#E8734A" }
-                                : { backgroundColor: "#e4dfd5" }
-                        }
+                        className={"h-3 w-3 rounded-full " + (studiedDates.has(date) ? "bg-sage-600" : "bg-border-soft")}
                       />
                     </button>
                   ) : (
@@ -312,10 +303,6 @@ export function KirokuScreen({
             <span className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-sage-600" />
               勉強した日
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-coral-500" />
-              職業を発見した日
             </span>
           </div>
           </div>
