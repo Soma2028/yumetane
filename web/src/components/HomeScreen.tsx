@@ -16,6 +16,8 @@ interface Props {
   streak: number
   zukanCount: number
   todaysDiscoveredJob: { jobId: number; jobName: string } | null
+  /** 最近見つけた仕事（今日の分を除き、新しい順に最大3件）。 */
+  recentJobs: { jobId: number; jobName: string; subject: string }[]
   toast: string | null
   loading: boolean
   error: string | null
@@ -36,6 +38,7 @@ export function HomeScreen({
   streak,
   zukanCount,
   todaysDiscoveredJob,
+  recentJobs,
   toast,
   loading,
   error,
@@ -283,6 +286,37 @@ export function HomeScreen({
             )
           })}
         </div>
+      </div>
+
+      {/* 振り返り: 最近見つけた仕事。見つけて終わりにせず、もう一度開くきっかけにする。
+          今日の記録と同じく箱で囲わず、行の集まりとして置く */}
+      <div>
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted">最近見つけた仕事</p>
+        {recentJobs.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {recentJobs.map((job) => (
+              <li key={job.jobId}>
+                <button
+                  type="button"
+                  onClick={() => onSelectJob(job.jobId)}
+                  className="flex w-full items-center justify-between gap-3 rounded-3xl border border-border-soft bg-cream px-4 py-3 text-left transition hover:border-sage-600"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-bold">{job.jobName}</span>
+                    <span className="text-xs text-charcoal-muted">{job.subject}の勉強から</span>
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-charcoal-muted" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="rounded-3xl border border-dashed border-border-soft px-4 py-5 text-center text-sm leading-relaxed text-charcoal-muted">
+            {todaysDiscoveredJob
+              ? "明日も記録すると、ここに仕事が並んでいくよ"
+              : "勉強を記録すると、見つけた仕事がここに並ぶよ"}
+          </p>
+        )}
       </div>
 
       {/* 行動する（次へ）: 深掘り先への導線 */}
