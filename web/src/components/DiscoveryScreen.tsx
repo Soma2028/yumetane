@@ -79,7 +79,7 @@ export function DiscoveryScreen({
 
       {/* 主役: 見つかった職業 */}
       <motion.div
-        className="overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+        className="ui-card ui-card-raised overflow-hidden"
         {...enter(0.3)}
       >
         <div className="flex h-24 items-center justify-center bg-sage-100 [@media(max-height:740px)]:h-16">
@@ -91,7 +91,7 @@ export function DiscoveryScreen({
             {job.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700"
+                className="ui-tag"
               >
                 {tag}
               </span>

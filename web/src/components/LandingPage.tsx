@@ -371,7 +371,7 @@ function DiscoveryDemo() {
 
       <motion.div
         {...enter(1.4)}
-        className="mt-4 overflow-hidden rounded-3xl border border-border-soft bg-white shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+        className="ui-card ui-card-raised mt-4 overflow-hidden"
       >
         <div className="flex h-16 items-center justify-center bg-sage-100">
           <TagIcon tags={DEMO_JOB.tags} className="h-9 w-9 text-sage-600" strokeWidth={1.5} />

@@ -39,16 +39,16 @@ export function TimetableScreen({ timetable, showSaturday, onToggleSaturday, onC
   const current = editing ? (timetable[editing.day]?.[editing.period] ?? null) : null
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-4 py-10 lg:max-w-3xl lg:px-10 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:py-4">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-3xl lg:px-10 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:py-4">
       <BackButton onClick={onBack} />
 
-      <div className="px-2">
-        <h2 className="text-2xl font-bold tracking-tight">時間割</h2>
+      <div>
+        <h2 className="ui-page-title">時間割</h2>
         <p className="mt-1 text-sm text-charcoal-muted">マスを押して教科を入れてね。今日の分がホームに出るよ。</p>
       </div>
 
       {/* 土曜日に授業がない学校向けに、土曜日の列を隠せるようにする（中身は消さない） */}
-      <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-border-soft bg-white px-4 py-3 [@media(max-height:740px)]:py-2">
+      <label className="ui-card flex cursor-pointer items-center justify-between px-4 py-3 [@media(max-height:740px)]:py-2">
         <span>
           <span className="block text-sm font-bold">土曜日も使う</span>
           <span className="text-xs text-charcoal-muted">オフにしても、入れた土曜日の時間割は消えないよ</span>
@@ -66,7 +66,7 @@ export function TimetableScreen({ timetable, showSaturday, onToggleSaturday, onC
         />
       </label>
 
-      <div className="rounded-3xl border border-border-soft bg-white p-3 lg:p-5">
+      <div className="ui-card p-3 lg:p-5">
         <div className="grid gap-1.5 [--period-col:1.5rem] lg:gap-2 lg:[--period-col:2rem]" style={columns}>
           <span />
           {days.map((d) => (

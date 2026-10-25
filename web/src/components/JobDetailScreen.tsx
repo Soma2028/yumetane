@@ -13,9 +13,9 @@ interface Props {
 
 export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: Props) {
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-5 px-6 py-10 lg:max-w-2xl lg:py-14">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-2xl lg:py-14">
       <BackButton onClick={onBack} />
-      <h2 className="text-2xl font-bold tracking-tight">{job.job_name}</h2>
+      <h2 className="ui-page-title">{job.job_name}</h2>
 
       {subject && (
         <p className="flex items-center gap-1.5 text-sm font-medium text-sage-700">
@@ -28,7 +28,7 @@ export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: 
         {job.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700"
+            className="ui-tag"
           >
             {tag}
           </span>
@@ -47,7 +47,7 @@ export function JobDetailScreen({ job, subject, isTane, onToggleTane, onBack }: 
         href={job.jobtag_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-between gap-3 rounded-3xl border border-border-soft bg-white px-5 py-4 transition hover:border-sage-600"
+        className="ui-card flex items-center justify-between gap-3 px-5 py-4 transition hover:border-sage-600"
       >
         <span>
           <span className="block font-bold">写真や動画でもっと知る</span>

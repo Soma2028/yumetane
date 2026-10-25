@@ -112,7 +112,7 @@ export function HomeScreen({
           className="flex items-center justify-between rounded-3xl border border-sage-600/20 bg-sage-50 px-5 py-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:bg-sage-100"
         >
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-wide text-sage-600">今日見つけた仕事</p>
+            <p className="ui-section-label text-sage-600">今日見つけた仕事</p>
             <p className="mt-0.5 line-clamp-2 text-lg leading-snug font-bold text-charcoal">{todaysDiscoveredJob.jobName}</p>
           </div>
           <ChevronRight className="h-5 w-5 shrink-0 text-sage-600" />
@@ -160,7 +160,7 @@ export function HomeScreen({
       {todaysLogs.length > 0 && (
         <div className="flex items-baseline justify-between gap-3 rounded-2xl border border-border-soft bg-cream px-4 py-2.5 text-sm">
           <p className="min-w-0">
-            <span className="mr-2 text-xs font-bold text-charcoal-muted">今日の記録</span>
+            <span className="ui-section-label mr-2">今日の記録</span>
             {todaysLogs.map((log) => `${log.subject} ${log.minutes}分`).join("・")}
           </p>
           <p className="shrink-0 text-xs text-charcoal-muted">合計 {formatMinutes(todaysTotalMinutes)}</p>
@@ -168,8 +168,8 @@ export function HomeScreen({
       )}
 
       {/* 比較ゾーン: 週間の記録状況と今日の時間割を1枚にまとめ、控えめなトーンで置く */}
-      <div className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white px-5 py-4 max-lg:[@media(max-height:740px)]:py-3">
-        <p className="font-bold">この1週間</p>
+      <div className="ui-card flex flex-col gap-2 px-5 py-4 max-lg:[@media(max-height:740px)]:py-3">
+        <p className="ui-card-title">この1週間</p>
         <div className="flex justify-between">
           {weekDates.map((date) => {
             const studied = studiedDates.has(date)
@@ -208,7 +208,7 @@ export function HomeScreen({
           {todayTimetable ? (
             <>
               <span className="flex items-center justify-between">
-                <span className="text-xs font-bold text-charcoal-muted">{todayTimetable.heading}</span>
+                <span className="ui-section-label">{todayTimetable.heading}</span>
                 <ChevronRight className="h-4 w-4 text-charcoal-muted" />
               </span>
               <span className="mt-1.5 grid grid-cols-6 gap-1">
@@ -242,7 +242,7 @@ export function HomeScreen({
           画面の低い端末では欄ごと隠す。
           パソコンは右の列を使えるので5件まで出す */}
       <div className={todaysDiscoveredJob ? "max-lg:[@media(max-height:740px)]:hidden" : undefined}>
-        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-charcoal-muted lg:text-sm">最近見つけた仕事</p>
+        <p className="ui-section-label mb-2">最近見つけた仕事</p>
         {recentJobs.length > 0 ? (
           <ul className="flex flex-col gap-2">
             {recentJobs.map((job, i) => (
@@ -260,7 +260,7 @@ export function HomeScreen({
                 <button
                   type="button"
                   onClick={() => onSelectJob(job.jobId)}
-                  className="flex w-full items-center justify-between gap-3 rounded-3xl border border-border-soft bg-cream px-4 py-2.5 text-left transition hover:border-sage-600"
+                  className="flex w-full items-center justify-between gap-3 rounded-2xl border border-border-soft bg-cream px-4 py-2.5 text-left transition hover:border-sage-600"
                 >
                   <span className="min-w-0">
                     <span className="line-clamp-2 block text-sm leading-snug font-bold">{job.jobName}</span>

@@ -32,6 +32,39 @@ body {
   overscroll-behavior: none;
 }
 
+/* 画面の部品の見た目をそろえる共通クラス。以前はカードの角の丸みが3通り・影が5通り、
+   カードの見出しが4通り、タグの大きさが2通りとばらばらだったため、ここに1つずつ決める。
+   各画面ではこのクラスを使い、位置や余白だけをTailwindのクラスで足す（components層なので、
+   後ろに書いたユーティリティのほうが優先される）。
+   角の丸み：大きなカード3xl / カードの中の行・入力欄2xl / 時間割のマスxl / ボタン・タグfull */
+@layer components {
+  /* 画面の見出し（左寄せ） */
+  .ui-page-title {
+    @apply text-2xl font-bold tracking-tight;
+  }
+  /* 白いカード。影はすべて同じ薄い影 */
+  .ui-card {
+    @apply rounded-3xl border border-border-soft bg-white;
+    box-shadow: 0 4px 16px rgba(47, 107, 79, 0.06);
+  }
+  /* 目立たせたいカード（発見した職業など）だけ、影を濃くする */
+  .ui-card-raised {
+    box-shadow: 0 8px 28px rgba(47, 107, 79, 0.12);
+  }
+  /* カードの中の見出し */
+  .ui-card-title {
+    @apply font-bold;
+  }
+  /* カードの外にある一覧の小見出し、カードの中のラベル */
+  .ui-section-label {
+    @apply text-xs font-bold tracking-wide text-charcoal-muted;
+  }
+  /* 職業のタグ */
+  .ui-tag {
+    @apply rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700;
+  }
+}
+
 /* 押したときの反応を全部のボタン・リンクでそろえる（以前は95%に縮むものと、何も起きない
    ものが混ざっていた）。長さはsrc/motion.tsのDURATION.tapと同じ0.15秒。画面全体を覆う
    幕のように縮んではいけないものには data-no-tap を付ける */

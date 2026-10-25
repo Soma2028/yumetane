@@ -116,7 +116,7 @@ export function KirokuScreen({
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-4xl lg:px-10">
       <BackButton onClick={onBack} />
 
-      <h2 className="text-2xl font-bold tracking-tight">きろく</h2>
+      <h2 className="ui-page-title">きろく</h2>
 
       {/* 1画面に収まらない長さだったため、見たいものごとにタブで分ける */}
       <div role="tablist" aria-label="きろくの表示" className="grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 lg:w-[480px]">
@@ -145,9 +145,9 @@ export function KirokuScreen({
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5 shadow-[0_8px_28px_rgba(47,107,79,0.12)]"
+          className="ui-card p-5"
         >
-          <p className="mb-3 font-bold">週間サマリー</p>
+          <p className="ui-card-title mb-3">週間サマリー</p>
           <div className="flex flex-col gap-4">
             <ComparisonRow
               label="今週の合計勉強時間"
@@ -169,9 +169,9 @@ export function KirokuScreen({
             whileInView="show"
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeUp}
-            className="rounded-3xl border border-border-soft bg-white p-5"
+            className="ui-card p-5"
           >
-            <p className="font-bold">教科別の時間比率（今週）</p>
+            <p className="ui-card-title">教科別の時間比率（今週）</p>
             <p className="mt-2 text-sm text-charcoal-muted">
               今週は{weeklySubjectTotals[0].subject}だけ勉強したよ
             </p>
@@ -184,9 +184,9 @@ export function KirokuScreen({
             whileInView="show"
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeUp}
-            className="rounded-3xl border border-border-soft bg-white p-5"
+            className="ui-card p-5"
           >
-            <p className="font-bold">教科別の時間比率（今週）</p>
+            <p className="ui-card-title">教科別の時間比率（今週）</p>
             <div className="mt-2 flex items-center gap-4">
               <div className="h-40 w-40 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
@@ -256,11 +256,11 @@ export function KirokuScreen({
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
-          className="rounded-3xl border border-border-soft bg-white p-5 lg:grid lg:grid-cols-2 lg:gap-8 lg:p-7"
+          className="ui-card p-5 lg:grid lg:grid-cols-2 lg:gap-8 lg:p-7"
         >
           {/* パソコンでは、左にカレンダーと凡例、右に選んだ日の記録を並べる */}
           <div>
-          <p className="font-bold">過去30日間</p>
+          <p className="ui-card-title">過去30日間</p>
           <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-xs text-charcoal-muted">
             {WEEKDAY_LABELS.map((label) => (
               <span key={label}>{label}</span>
@@ -378,7 +378,7 @@ export function KirokuScreen({
                   <motion.div
                     key={row.subject}
                     {...cardInView(i)}
-                    className="rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+                    className="ui-card p-4"
                   >
                     <button
                       type="button"
@@ -415,7 +415,7 @@ export function KirokuScreen({
                                   key={job.jobId}
                                   type="button"
                                   onClick={() => onSelectJob(job.jobId)}
-                                  className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-700 transition hover:bg-sage-100"
+                                  className="ui-tag transition hover:bg-sage-100"
                                 >
                                   {job.jobName} ・ {formatShortDate(job.discoveredAt)}
                                 </button>

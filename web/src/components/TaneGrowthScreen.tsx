@@ -84,7 +84,7 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
       <div className="flex-1 rounded-t-3xl bg-cream px-6 py-6 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] [@media(max-height:740px)]:py-4">
         <div className="divide-y divide-border-soft">
           <section className="pb-5 [@media(max-height:740px)]:pb-3">
-            <p className="text-sm font-bold tracking-wide text-sage-600">STAGE {stage} / 4</p>
+            <p className="ui-section-label text-sage-600">STAGE {stage} / 4</p>
             <div className="mt-2 h-2.5 w-full rounded-full bg-sage-50">
               <div className="h-2.5 rounded-full bg-sage-600 transition-all" style={{ width: `${pct}%` }} />
             </div>
@@ -101,12 +101,12 @@ export function TaneGrowthScreen({ zukanCount, subjectStats, mostStudied, onBack
           </section>
 
           <section className="py-5 [@media(max-height:740px)]:py-3">
-            <p className="mb-2 text-xs font-bold text-sage-700">タネからのひとこと</p>
+            <p className="ui-section-label mb-2">タネからのひとこと</p>
             <p className="text-base leading-relaxed text-charcoal">🌱「{taneComment(mostStudied)}」</p>
           </section>
 
           <section className="pt-5 [@media(max-height:740px)]:pt-3">
-            <p className="mb-3 font-bold">これまでの記録</p>
+            <p className="ui-card-title mb-3">これまでの記録</p>
             {subjectStats.length === 0 ? (
               <p className="text-sm text-charcoal-muted">まだ記録がありません</p>
             ) : (

@@ -20,8 +20,10 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-4xl lg:px-10">
       <BackButton onClick={onBack} />
 
-      <h2 className="text-2xl font-bold tracking-tight">タネ</h2>
-      <p className="text-sm text-charcoal-muted">気になる、と保存した仕事。</p>
+      <div>
+        <h2 className="ui-page-title">タネ</h2>
+        <p className="mt-1 text-sm text-charcoal-muted">気になる、と保存した仕事。</p>
+      </div>
 
       {tane.length === 0 ? (
         // 0件のときは、どのボタンを押せば保存されるかを、ボタンと同じ見た目で示す
@@ -45,7 +47,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
               key={entry.jobId}
               type="button"
               onClick={() => onSelectJob(entry.jobId)}
-              className="flex gap-3 rounded-3xl border border-l-4 border-border-soft border-l-sage-600 bg-white p-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:border-sage-600"
+              className="ui-card flex gap-3 p-4 text-left transition hover:border-sage-600"
             >
               <Star className="mt-0.5 h-5 w-5 shrink-0 text-sage-600" fill="currentColor" strokeWidth={1} />
               <div className="min-w-0 flex-1">
@@ -59,7 +61,7 @@ export function TaneScreen({ zukan, taneIds, onBack, onSelectJob }: Props) {
                     {entry.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-sage-50 px-2 py-0.5 text-xs font-medium text-sage-700"
+                        className="ui-tag"
                       >
                         {tag}
                       </span>

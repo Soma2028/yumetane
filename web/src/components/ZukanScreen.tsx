@@ -29,8 +29,8 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
       <BackButton onClick={onBack} className="sticky top-3 z-10 self-start justify-self-start lg:col-span-2" />
 
       <div className="flex flex-col gap-6 lg:sticky lg:top-20">
-      <div className="text-center lg:text-left">
-        <h2 className="text-2xl font-bold tracking-tight">職業図鑑</h2>
+      <div>
+        <h2 className="ui-page-title">職業図鑑</h2>
         <p className="mt-1 text-charcoal-muted">
           {zukan.length} / {total} 見つけた
         </p>
@@ -38,7 +38,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
 
       <motion.div
         {...cardInView(0)}
-        className="flex flex-col gap-2 rounded-3xl border border-border-soft bg-white p-4 shadow-[0_4px_16px_rgba(47,107,79,0.08)]"
+        className="ui-card flex flex-col gap-2 p-4"
       >
         {Object.entries(areaTotals).map(([area, areaTotal]) => {
           const known = knownByArea[area] ?? 0
@@ -89,7 +89,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
               key={entry.jobId}
               type="button"
               onClick={() => onSelectJob(entry.jobId)}
-              className="rounded-3xl border border-border-soft bg-white p-4 text-left shadow-[0_4px_16px_rgba(47,107,79,0.08)] transition hover:border-sage-600"
+              className="ui-card p-4 text-left transition hover:border-sage-600"
             >
               <p className="font-bold">{entry.jobName}</p>
               <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-charcoal-muted">
@@ -97,7 +97,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
                   <SubjectDot subject={entry.subject} className="h-2 w-2" />
                   {entry.subject}の勉強から見つけた
                 </span>
-                <span className="rounded-full bg-sage-50 px-2 py-0.5 font-medium text-sage-700">
+                <span className="ui-tag">
                   {entry.area}
                 </span>
               </div>
@@ -106,7 +106,7 @@ export function ZukanScreen({ zukan, areaTotals, onBack, onSelectJob }: Props) {
                   {entry.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-sage-50 px-2 py-0.5 text-xs font-medium text-sage-700"
+                      className="ui-tag"
                     >
                       {tag}
                     </span>
