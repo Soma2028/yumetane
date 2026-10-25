@@ -375,6 +375,8 @@ function App() {
       return (
         <TaneGrowthScreen
           zukanCount={appState.zukan.length}
+          streak={appState.streak}
+          totalMinutes={appState.totalMinutes}
           subjectStats={subjectStats(appState)}
           mostStudied={mostStudiedDiscoverable(appState)}
           onBack={() => setScreen("home")}
