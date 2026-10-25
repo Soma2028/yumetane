@@ -114,7 +114,8 @@ export function TaneGrowthScreen({ zukanCount, streak, totalMinutes, subjectStat
 
       {/* 情報（パソコンでは右） */}
       <div className="flex flex-1 flex-col gap-4 rounded-t-3xl bg-cream px-6 pt-5 pb-6 lg:rounded-none lg:bg-transparent lg:p-0 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:pt-3 [@media(max-height:740px)]:pb-4">
-        {/* 成長の道のり：5つの姿を並べ、今の姿を強調し、まだの姿は影で見せる */}
+        {/* 成長の道のり：5つの姿を並べ、今の姿を強調する。まだの姿は、育つまでのお楽しみとして
+            「？」で隠す（画像も読み込まない）。何件でその姿になるかだけを出す */}
         <motion.section {...cardInView(0)} className="ui-card px-4 pt-4 pb-4 [@media(max-height:740px)]:pt-3 [@media(max-height:740px)]:pb-3">
           <div className="flex items-baseline justify-between">
             <p className="ui-section-label text-sage-600">STAGE {stage} / 4</p>
@@ -133,19 +134,28 @@ export function TaneGrowthScreen({ zukanCount, streak, totalMinutes, subjectStat
                 <li key={s} className="relative flex flex-col items-center gap-0.5">
                   <span
                     className={
-                      "flex h-12 w-12 items-center justify-center rounded-full bg-white " +
-                      (s === stage ? "ring-2 ring-sage-600" : "ring-1 ring-border-soft")
+                      "flex h-12 w-12 items-center justify-center rounded-full " +
+                      (s === stage
+                        ? "bg-white ring-2 ring-sage-600"
+                        : reached
+                          ? "bg-white ring-1 ring-border-soft"
+                          : "border-2 border-dashed border-border-soft bg-cream")
                     }
                   >
-                    <img
-                      src={`/images/tane/stage${s}.png`}
-                      alt={reached ? STAGE_NAMES[s] : `まだの姿（${min}件で）`}
-                      width={44}
-                      height={44}
-                      className="h-11 w-11 object-contain"
-                      // まだの姿は、色を抜いて暗くした影にする（薄くするだけだと白い丸の上で見えない）
-                      style={{ mixBlendMode: "multiply", filter: reached ? undefined : "grayscale(1) brightness(0.55) opacity(0.35)" }}
-                    />
+                    {reached ? (
+                      <img
+                        src={`/images/tane/stage${s}.png`}
+                        alt={STAGE_NAMES[s]}
+                        width={44}
+                        height={44}
+                        className="h-11 w-11 object-contain"
+                        style={{ mixBlendMode: "multiply" }}
+                      />
+                    ) : (
+                      <span aria-label={`まだひみつの姿（${min}件で）`} className="text-lg font-bold text-charcoal-muted/60">
+                        ？
+                      </span>
+                    )}
                   </span>
                   <span className={"text-xs " + (s === stage ? "font-bold text-sage-700" : "text-charcoal-muted")}>
                     {s === stage ? "いま" : `${min}件`}
@@ -162,7 +172,7 @@ export function TaneGrowthScreen({ zukanCount, streak, totalMinutes, subjectStat
               ? remaining === 0
                 ? "全部の仕事に出会えたよ！"
                 : `花が咲いたよ。あと${remaining}件で全部の仕事に出会える`
-              : `あと${remaining}件で「${STAGE_NAMES[stage + 1]}」の姿になるよ（${zukanCount} / ${goal}件）`}
+              : `あと${remaining}件で次の姿に。お楽しみに（${zukanCount} / ${goal}件）`}
           </p>
         </motion.section>
 
