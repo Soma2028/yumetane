@@ -1,9 +1,7 @@
 import { BarChart3, BookOpen, ChevronRight, Flame, Star } from "lucide-react"
-import { useState } from "react"
-import type { RecordDetails, StudyLogEntry } from "../storage"
+import type { StudyLogEntry } from "../storage"
 import { formatMinutes } from "../format"
 import { InstallHint } from "./InstallHint"
-import { RecordSheet } from "./RecordSheet"
 import { stageProgress } from "../taneStage"
 import { shortSubject } from "../timetable"
 import { TaneCharacter } from "./TaneCharacter"
@@ -14,7 +12,6 @@ import { SubjectDot } from "./SubjectDot"
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"]
 
 interface Props {
-  subjects: string[]
   todaysLogs: StudyLogEntry[]
   todaysTotalMinutes: number
   streak: number
@@ -23,11 +20,11 @@ interface Props {
   /** 最近見つけた仕事（今日の分を除き、新しい順に最大5件。スマホでは3件まで出す）。 */
   recentJobs: { jobId: number; jobName: string; subject: string }[]
   toast: string | null
-  loading: boolean
   error: string | null
   weekDates: string[]
   studiedDates: Set<string>
-  onRecord: (subject: string, minutes: number, details: RecordDetails) => void
+  /** 記録パネルを開く（パネル自体はApp側にあり、パソコンの左メニューからも開ける）。 */
+  onOpenRecord: () => void
   onOpenZukan: () => void
   onOpenTane: () => void
   onOpenKiroku: () => void
@@ -41,7 +38,6 @@ interface Props {
 }
 
 export function HomeScreen({
-  subjects,
   todaysLogs,
   todaysTotalMinutes,
   streak,
@@ -49,11 +45,10 @@ export function HomeScreen({
   todaysDiscoveredJob,
   recentJobs,
   toast,
-  loading,
   error,
   weekDates,
   studiedDates,
-  onRecord,
+  onOpenRecord,
   onOpenZukan,
   onOpenTane,
   onOpenKiroku,
@@ -63,17 +58,11 @@ export function HomeScreen({
   onOpenGrowth,
   onSelectJob,
 }: Props) {
-  const [showForm, setShowForm] = useState(false)
   // 画面の低い端末（iPhone SEなど）では、タネを少し小さくしてホームを1画面に収める
   const compact = typeof window !== "undefined" && window.matchMedia("(max-height: 740px) and (max-width: 1023px)").matches
 
   const { nextThreshold } = stageProgress(zukanCount)
   const growthLabel = nextThreshold !== null ? `あと${nextThreshold - zukanCount}件で育つ` : "タネの部屋"
-
-  function handleRecord(subject: string, minutes: number, details: RecordDetails) {
-    onRecord(subject, minutes, details)
-    setShowForm(false)
-  }
 
   return (
     // スマホは1列で1画面に収める。パソコン（lg以上）は左に記録まわり、右に見つけた仕事と
@@ -135,7 +124,7 @@ export function HomeScreen({
 
         <button
           type="button"
-          onClick={() => setShowForm(true)}
+          onClick={onOpenRecord}
           className={
             "rounded-full bg-coral-500 text-center font-bold text-white shadow-sm transition active:bg-coral-600 " +
             (todaysLogs.length === 0 ? "py-4 text-lg" : "py-3 text-base")
@@ -144,14 +133,6 @@ export function HomeScreen({
           {todaysLogs.length === 0 ? "今日の勉強を記録する" : "＋ 記録を追加する"}
         </button>
       </div>
-
-      <RecordSheet
-        open={showForm}
-        subjects={subjects}
-        loading={loading}
-        onSubmit={handleRecord}
-        onClose={() => setShowForm(false)}
-      />
 
       <InstallHint />
 
@@ -288,7 +269,7 @@ export function HomeScreen({
           高さを指で押しやすい48pxにし、濃い文字とアイコンで押せることが分かるようにする */}
       <nav
         aria-label="ほかの画面"
-        className="mt-auto grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 shadow-sm lg:mt-2"
+        className="mt-auto grid grid-cols-3 gap-1 rounded-full border border-border-soft bg-white p-1 shadow-sm lg:hidden"
       >
         {[
           { label: "職業図鑑", icon: BookOpen, onClick: onOpenZukan },

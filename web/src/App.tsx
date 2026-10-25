@@ -4,7 +4,9 @@ import { discover, fetchAreas, fetchJob, fetchSubjects } from "./api"
 import { DiscoveryScreen } from "./components/DiscoveryScreen"
 import { HomeScreen } from "./components/HomeScreen"
 import { JobDetailScreen } from "./components/JobDetailScreen"
+import { DesktopNav, type NavKey } from "./components/DesktopNav"
 import { LandingPage } from "./components/LandingPage"
+import { RecordSheet } from "./components/RecordSheet"
 import { RotateNotice } from "./components/RotateNotice"
 import { TaneGrowthScreen } from "./components/TaneGrowthScreen"
 import { TaneScreen } from "./components/TaneScreen"
@@ -112,6 +114,8 @@ function App() {
 
   const [homeToast, setHomeToast] = useState<string | null>(null)
   const [timetable, setTimetable] = useState<Timetable>(loadTimetable)
+  // 記録パネル。スマホはホームの記録ボタンから、パソコンは左メニューからも開くため、App側に持つ
+  const [showRecord, setShowRecord] = useState(false)
   const [showSaturday, setShowSaturday] = useState(loadShowSaturday)
   // きろく画面のタブと選んだ日。職業の詳細を開いて戻ってきたときに元の表示に戻すため
   const [kirokuTab, setKirokuTab] = useState<KirokuTab>("week")
@@ -250,7 +254,6 @@ function App() {
 
       return (
         <HomeScreen
-          subjects={subjects.map((s) => s.name)}
           todaysLogs={todaysLogs(appState)}
           todaysTotalMinutes={todaysTotalMinutes(appState)}
           streak={appState.streak}
@@ -258,11 +261,10 @@ function App() {
               todaysDiscoveredJob={todaysDiscoveredJob}
           recentJobs={recentJobs}
           toast={homeToast}
-          loading={loading}
           error={error}
           weekDates={last7Dates()}
           studiedDates={studiedDatesSet(appState)}
-          onRecord={handleRecord}
+          onOpenRecord={() => setShowRecord(true)}
           onOpenZukan={() => setScreen("zukan")}
           onOpenTane={() => setScreen("tane")}
           onOpenKiroku={() => {
@@ -399,11 +401,55 @@ function App() {
   // 画面の切り替えは全画面で同じ短いフェードにそろえる。位置を動かすと中の固定表示
   // （記録パネル）の基準がずれるため、透明度だけを動かす。端末で「視差効果を減らす」を
   // オンにしている人には、framer-motionの動きを控えめにする
+  // パソコンの左メニューで、今いる画面として示すもの（LPでは左メニュー自体を出さない）
+  const navCurrent: NavKey | null =
+    screen === "home" || screen === "discovery" || screen === "growth"
+      ? "home"
+      : screen === "zukan" || screen === "tane" || screen === "kiroku" || screen === "timetable"
+        ? screen
+        : screen === "detail"
+          ? detailReturnScreen
+          : null
+
+  function navigate(key: NavKey) {
+    if (key === "kiroku") {
+      setKirokuTab("week")
+      setKirokuDate(null)
+    }
+    setScreen(key)
+  }
+
   return (
     <MotionConfig reducedMotion="user">
-      <motion.div key={screen} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={baseTransition}>
-        {content}
-      </motion.div>
+      {screen !== "top" && (
+        <DesktopNav
+          current={navCurrent}
+          onNavigate={navigate}
+          onRecord={() => {
+            setScreen("home")
+            setShowRecord(true)
+          }}
+          onOpenGrowth={() => setScreen("growth")}
+          zukanCount={appState.zukan.length}
+          streak={appState.streak}
+        />
+      )}
+      {/* パソコンでは左メニュー（幅15rem）の分だけ中身を右にずらす */}
+      <div className={screen !== "top" ? "lg:pl-60" : undefined}>
+        <motion.div key={screen} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={baseTransition}>
+          {content}
+        </motion.div>
+      </div>
+      <RecordSheet
+        open={showRecord}
+        subjects={subjects.map((s) => s.name)}
+        loading={loading}
+        onSubmit={(subject, minutes, details) => {
+          setShowRecord(false)
+          void handleRecord(subject, minutes, details)
+        }}
+        onClose={() => setShowRecord(false)}
+      />
       <RotateNotice />
     </MotionConfig>
   )

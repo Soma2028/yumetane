@@ -40,7 +40,7 @@ export function TimetableScreen({ timetable, showSaturday, onToggleSaturday, onC
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-3xl lg:px-10 [@media(max-height:740px)]:gap-3 [@media(max-height:740px)]:py-4">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={onBack} hideOnDesktop />
 
       <div>
         <h2 className="ui-page-title">時間割</h2>

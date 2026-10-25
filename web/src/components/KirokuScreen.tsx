@@ -114,7 +114,7 @@ export function KirokuScreen({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-6 px-6 py-10 lg:max-w-4xl lg:px-10">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={onBack} hideOnDesktop />
 
       <h2 className="ui-page-title">きろく</h2>
 
